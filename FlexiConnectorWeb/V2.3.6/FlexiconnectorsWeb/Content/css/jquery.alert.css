@@ -1,0 +1,123 @@
+﻿#popup_container {
+    font-size: 13px;
+    min-width: 300px; /* Dialog will be no smaller than this */
+    max-width: 600px; /* Dialog will wrap after this width */
+    background: #FFF;
+    border: solid 5px #999;
+    color: #000;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    opacity: 500;
+    filter: Alpha(Opacity=500);
+    z-index: 2000;
+}
+
+#popup_ok {
+    width: 70px;
+    display: inline-block;
+    padding: 4px 4px;
+    margin-bottom: 0;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #004831; /*Prema changed for theme changes on 29th march 2023*/
+    border-color: #004831;
+}
+
+    #popup_ok:hover {
+        color: #fff;
+        background-color: #c3d600;
+        border-color: #004831;
+    }
+
+#popup_title {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.75em;
+    color: #fff;
+    background: #337ab7 top repeat-x;
+    border: solid 1px #FFF;
+    border-bottom: solid 1px #999;
+    cursor: default;
+    padding: 0em;
+    margin: 0em;
+}
+
+#popup_cancel {
+    width: 70px;
+    display: inline-block;
+    padding: 4px 4px;
+    margin-bottom: 0;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #004831; /*Prema changed for theme changes on 29th march 2023*/
+    border-color: #004831;
+}
+
+    #popup_cancel:hover {
+        color: #fff;
+        background-color: #c3d600;
+        border-color: #004831;
+    }
+
+#popup_content {
+    background: 16px 16px no-repeat url(../images/info.gif);
+    padding: 1em 1.75em;
+    margin: 0em;
+}
+
+    #popup_content.alert {
+        background-image: url(images/info.png);
+    }
+
+    #popup_content.confirm {
+        background-image: url(images/important.png);
+    }
+
+    #popup_content.prompt {
+        background-image: url(images/help.png);
+    }
+
+#popup_message {
+    padding-left: 48px;
+}
+
+#popup_panel {
+    text-align: center;
+    margin: 1em 0em 0em 1em;
+}
+
+#popup_prompt {
+    margin: .5em 0em;
+}

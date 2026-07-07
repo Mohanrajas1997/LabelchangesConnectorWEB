@@ -1,0 +1,947 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<style>
+    .h-full {
+        height: 100% !important;
+    }
+
+    .w-full {
+        width: 100% !important;
+    }
+
+    .flex-column {
+        flex-direction: column !important;
+    }
+
+    .flex {
+        display: flex !important;
+    }
+
+    .k-grid-md td, .k-grid-md .k-table-td {
+        padding-block: 5px !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .pt-3 {
+        padding-top: 1rem !important;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+
+    .text-2xl {
+        font-size: 1.5rem !important;
+    }
+
+    .font-bold {
+        font-weight: 700 !important;
+    }
+
+    .pr-3 {
+        padding-right: 1rem !important;
+    }
+
+    .w-6 {
+        width: 50% !important;
+    }
+
+    .flex-spacer {
+        display: flex;
+        /*flex: 1 1 auto;*/
+    }
+
+    .pi {
+        font-size: 1rem;
+    }
+
+    .pi {
+        font-family: primeicons;
+        speak: none;
+        font-style: normal;
+        font-weight: 400;
+        font-feature-settings: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        display: inline-block;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .text-white {
+        color: #fff !important;
+    }
+
+    .split-button[_ngcontent-vhm-c150] {
+        border-radius: 4px;
+        height: 33px;
+    }
+
+    .cursor-pointer {
+        cursor: pointer !important;
+    }
+
+    .outline-none {
+        outline: none !important;
+    }
+
+    .border-none {
+        border-width: 0 !important;
+        border-style: none;
+    }
+
+    .p-0 {
+        padding: 0 !important;
+    }
+
+    .split-button .button-icon {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .split-button .button-label[_ngcontent-vhm-c150] {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+        display: inline-block;
+        width: max-content;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .bg-blue-400 {
+        background-color: #0fc9b7 !important;
+    }
+
+    .p-card, .p-button, .p-dropdown, .p-inputtext, .p-inputtextarea, .p-multiselect {
+        border-radius: 5px;
+    }
+
+        .p-card .p-card-content {
+            padding: .5rem 0;
+        }
+
+    .p-card {
+        background: #fff;
+    }
+    /*
+                                                                                                                                                                                                                                .k-grid-content {
+                                                                                                                                                                                                                                    height: 300px !important;
+                                                                                                                                                                                                                                } */
+
+    .p-card {
+        background: transparent;
+        color: #495057;
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, .2), 0px 1px 1px 0px rgba(0, 0, 0, .14), 0px 1px 3px 0px rgba(0, 0, 0, .12);
+        border-radius: 5px;
+    }
+
+    .h-full {
+        height: 100% !important;
+    }
+
+    .w-full {
+        width: 100% !important;
+    }
+
+    .p-component, .p-component * {
+        box-sizing: border-box;
+    }
+
+        .p-component * {
+            box-sizing: border-box;
+        }
+
+    .w-3 {
+        width: 25% !important;
+    }
+
+    .pl-3 {
+        padding-left: 1rem !important;
+    }
+
+    .h-1rem {
+        height: 1rem !important;
+    }
+
+    .w-1rem {
+        width: 1rem !important;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+
+    .ml-1 {
+        margin-left: 0.25rem !important;
+    }
+
+    .text-green-900 {
+        color: #1e4620 !important;
+    }
+
+    .align-self-end {
+        align-self: flex-end !important;
+    }
+
+    .vz-dot-xs.green-600 {
+        background-color: #419544;
+    }
+
+    .vz-dot-xs {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .tab-color {
+        background-color: grey !important;
+        padding: 12px;
+        color: #fff;
+    }
+
+    #progressbar .active {
+        color: #0c0c0c;
+    }
+
+    #progressbar {
+        margin-bottom: 0px;
+        overflow: hidden;
+        color: #0c0c0c;
+    }
+
+        #progressbar .active {
+            color: #fff;
+            background-color: #872e7b !important;
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 12px;
+            width: 20%;
+            float: left;
+            position: relative;
+            border-left: 1px solid #fff;
+        }
+
+            /*ProgressBar before any progress*/
+            #progressbar li:before {
+                width: 50px;
+                height: 50px;
+                line-height: 45px;
+                display: block;
+                font-size: 18px;
+                color: #ffffff;
+                background: lightgray;
+                border-radius: 50%;
+                margin: 0 auto 10px auto;
+                padding: 2px;
+            }
+
+            /*ProgressBar connectors*/
+            #progressbar li:after {
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: lightgray;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                z-index: -1;
+            }
+
+            /*Color number of the step and the connector before it*/
+            #progressbar li.active:before, #progressbar li.active:after {
+                background: skyblue;
+            }
+
+    #pplclone_conf_wnd_title {
+        text-align: center;
+    }
+
+    .cancel {
+        width: 100px;
+        border: 1px solid red !important;
+        background: transparent;
+        font-weight: bold;
+        color: red;
+        border: 0 none;
+        border-radius: 5px !important;
+        cursor: pointer;
+        padding: 9px 5px;
+        margin: 10px 5px 0px 5px;
+    }
+
+    .save {
+        width: 100px;
+        background: #0fc9b7;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #ffff;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px 5px;
+        /* margin: 10px 5px;*/
+    }
+
+    th.k-header {
+        color: white;
+    }
+
+    .icon-pdf {
+        display: inline-block;
+        width: 17px;
+        height: 17px;
+        background-image: url('/Content/images/export-pdf.png');
+        background-size: contain;
+        background-repeat: no-repeat;
+        cursor: pointer;
+        position: relative;
+        top: 3px;
+    }
+</style>
+
+<body>
+    <div>
+        <div class="row" style="height:auto;">
+            <div class="col-md-12">
+                @*<div class="content-wrapper" style="padding:10px;">*@
+                <div style="padding:10px; margin-top: 30px;">
+                    <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-md-4 font-bold text-2xl">
+                            ETL List
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4" style="text-align:right;">
+                            <button onclick="hrefFunction()" class="text-white cursor-pointer border-none outline-none p-shadow-3 bg-blue-600">
+                                <span class="button-icon py-2 px-3" style="background-color:#0fc9c09e !important;">
+                                    <i class="glyphicon glyphicon-plus "></i>
+                                </span><span class="button-label py-2 px-3 bg-blue-400" style="font-weight:bold">Add ETL</span>
+                            </button>
+                        </div>
+                    </div>
+                    @* <form id="msform">
+                        <ul id="progressbar" style="padding: 8px 0px;">
+                            <li class="active tab-color" id="allpipeline" style="cursor:pointer"><strong>All Pipeline</strong></li>
+                            <li class="tab-color" id="draftpipeline" style="cursor:pointer"><strong>Draft Pipelines </strong></li>
+                            <li class="tab-color" id="ondemandpipeline" style="cursor:pointer"><strong>On Demand Pipelines </strong></li>
+                            <li class="tab-color" id="schedulepipeline" style="cursor:pointer"><strong>Scheduled Pipelines  </strong></li>
+                        </ul>
+                    </form> *@
+                    @* <fieldset>
+                    <div class="form-card" style="height: 70vh;">
+                    <div class="row" style="padding: 0px 16px;">
+                    <div id="pipelineGrid"></div>
+                    </div>
+                    </div>
+
+                    <div style="display:none;" id="pplclone_conf">
+                    <div class="row" style="padding-left: 20px;">
+                    <div style="margin-left: 1%;">
+                    <div class="row">
+                    <div class="col-sm-4">
+                    <input class="form-control" id="txt_clonepplcode" type="text" name="txt_clonepplcode" style="height: 25%;display:none;" />
+                    <label>Pipeline Name</label>
+                    <span class="mandatory">*</span>
+                    <input class="form-control" id="txt_clonepplname" type="text" name="txt_clonepplname" style="height: 25%;" />
+                    </div>
+
+                    <div class="col-sm-4">
+                    <label>Target Dataset</label>
+                    <span class="mandatory">*</span> &nbsp;&nbsp;
+                    <select class="form-control" id="trgdataset" name="trgdataset" style="height:20px">
+                    <option value="">-- Select --</option>
+                    </select>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="row" style="padding-left: 100px;">
+                    <div class="row" style="margin-top: 2%;">
+                    <input style="margin-left: 2%;padding:5px;" type="button" id='btn_pplclonesave' onclick="PPLcloneSave($('#txt_clonepplcode').val())" class="save" value="Clone" />
+                    <input style="margin-left: 2%; padding:4px 5px;" type="button" id='btn_clonecancel' onclick="closepplclonePopup()" class="cancel" value="Close" />
+                    </div>
+                    </div>
+
+                    </fieldset> *@
+
+                    <fieldset>
+                        <div class="form-card" style="height: 70vh;">
+                            <div class="row" style="padding: 0px 16px;">
+                                <div id="pipelineGrid"></div>
+                            </div>
+                        </div>
+
+                        <div style="display:none;" id="pplclone_conf">
+                            <div class="row">
+                                <div class="col-md-3" style="margin-left: 5%;">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input class="form-control" id="txt_clonepplcode" type="text" name="txt_clonepplcode" style="height: 25%;display:none;" />
+                                            <label>New Pipeline Name</label>
+                                            <span class="mandatory">*</span>
+                                            <input class="form-control" id="txt_newpplname" type="text" name="txt_newpplname" style="height: 25%;" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>New Dataset</label>
+                                            <span class="mandatory">*</span> &nbsp;&nbsp;
+                                            <select class="form-control" id="trgdataset" name="trgdataset" style="height:20px">
+                                                <option value="">-- Select --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3" style="margin-left: 13%; border-left: 1px solid #dbb8b8;">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label>Selected Pipeline Name</label>
+                                            <input class="form-control" id="txt_clonepplname" type="text" name="txt_clonepplname" style="height: 25%;" disabled />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label>Selected Dataset</label>
+                                            <input class="form-control" id="txt_clonepplds" type="text" name="txt_clonepplds" style="height: 25%;" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="padding-left: 122px;">
+                                <div class="row" style="margin-top: 2%;">
+                                    <input style="margin-left: -2%;padding:5px;" type="button" id='btn_pplclonesave' onclick="PPLcloneSave($('#txt_clonepplcode').val())" class="save" value="Clone" />
+                                    <input style="margin-left: 9%; padding:4px 5px;" type="button" id='btn_clonecancel' onclick="closepplclonePopup()" class="cancel" value="Close" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        let userCode = "";
+        if (urlParams != "") {
+            userCode = urlParams.get('user_code');
+        }
+        else {
+            userCode = 'Blank';
+        }
+        sessionStorage.setItem("userCode", userCode);
+        Getpipelines('', '');
+    });
+</script>
+<script>
+    function Getpipelines(runtype, pipeline_sts) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GellAllPipelines", "Pipeline")?run_type=' + runtype + "&pipeline_status=" + pipeline_sts,
+            //url: "../Pipeline/GellAllPipelines?run_type=" + runtype + "&pipeline_status=" + pipeline_sts,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                listgrid(response);
+            },
+            error: function (er) {
+                alert(er)
+                console.log(er)
+            }
+        });
+    }
+
+</script>
+<script>
+
+
+    function listgrid(data) {
+        try {
+            $("#pipelineGrid").kendoGrid({
+                dataSource: {
+                    data: data,
+                    schema: {
+                        model: {
+                            fields: {
+                                pipeline_gid: { type: "string" },
+                                pipeline_code: { type: "string" },
+                                pipeline_name: { type: "string" },
+                                source_db_type: { type: "string" },
+                                connector_name: { type: "string" },
+                                connection_code: { type: "string" },
+                                table_view_name: { type: "string" },
+                                pplFieldNames: { type: "string" },
+                                default_value: { type: "string" },
+                                dataset_name: { type: "string" },
+                                pipeline_status: { type: "string" },
+                                created_by: { type: "string" },
+                                updated_date: { type: "date" },
+                                delete_flag: { type: "string" },
+                                run_type: { type: "string" },
+                                source_file_name: { type: "string" },
+                                upload_mode: { type: "string" },
+                                key_field: { type: "string" },
+                                updated_time_stamp: { type: "string" },
+                                pull_days: { type: "string" },
+                                Action: { type: "String" },
+                                dataset_count: {type: "string"}
+                            }
+                        }
+                    },
+                    pageSize: 15
+                },
+                height: 400,
+                width: 1058,
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                toolbar: ["excel"],
+                excel: {
+                    fileName: "PipelineList.xlsx",
+                    filterable: true,
+                    allPages: true
+                },
+                columns: [
+                    {
+                        field: "Action",
+                        title: "Action",
+                        template: function (dataItem) {
+                            let downloadIcon = "";
+
+                            // Check if source_db_type is 'CSV' or 'EXCEL' dataItem.source_db_type === 'CSV' ||
+                            if (dataItem.pipeline_status == 'Active' && dataItem.source_db_type === 'Excel') {
+                                downloadIcon = "<i class='glyphicon glyphicon-download-alt' style='color:black;cursor: pointer;' onclick='DownloadTemplate($(this))' title='Download'></i>";
+                            } else {
+                                downloadIcon = "<i class='glyphicon glyphicon-download-alt' style='color:grey;pointer-events:none;opacity: 0.7;' title='Download (Unavailable)'></i>";
+                            }
+
+                            if (dataItem.pipeline_status == 'Active') {
+                                return `<div style='text-align:center;'>
+                                <i class='glyphicon glyphicon-pencil' style='color:green;cursor: pointer;' onclick='editpipeline($(this))' title='Edit'></i> &nbsp
+                                <i class='glyphicon glyphicon-trash' style='color:red;cursor: pointer;' onclick='deletepipeline($(this))' title='Delete'></i> &nbsp
+                                <i class='glyphicon glyphicon-export' style='color:blue;cursor: pointer;display:none;' onclick='pplclonePopup($(this))' title='Clone'></i> &nbsp
+                                <i class="icon-pdf" onclick="pdfDownload($(this))" title="PDF Download" style='display:none;'></i> &nbsp;
+                                ${downloadIcon}
+                            </div>`;
+                            } else {
+                                return `<div style='text-align:center;'>
+                                <i class='glyphicon glyphicon-pencil' style='color:green;cursor: pointer;' onclick='editpipeline($(this))' title='Edit'></i> &nbsp
+                                <i class='glyphicon glyphicon-trash' style='color:red;cursor: pointer;' onclick='deletepipeline($(this))' title='Delete'></i> &nbsp
+                                <i class='glyphicon glyphicon-export' style='color:grey;pointer-events:none;opacity: 0.7;display:none;' onclick='pplclonePopup($(this))' title='Clone'></i> &nbsp
+                                <i class="icon-pdf" style='color:grey;pointer-events:none;opacity: 0.7;display:none;' title="PDF Download"></i> &nbsp;
+                                ${downloadIcon}
+                            </div>`;
+                            }
+                        },
+                        filterable: false,
+                        sortable: false,
+                        width: 100,
+                    },
+                    {
+                        field: "pipeline_gid",
+                        title: "Pipeline gid",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "connection_code",
+                        title: "Plugin Code",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "table_view_name",
+                        title: "table_view_name",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "pplFieldNames",
+                        title: "pplFieldNames",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "default_value",
+                        title: "default_value",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "upload_mode",
+                        title: "upload_mode",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "key_field",
+                        title: "key_field",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "updated_time_stamp",
+                        title: "updated_time_stamp",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "pull_days",
+                        title: "pull_days",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "connector_name",
+                        title: "Plugin Name",
+                        width: 120
+                    },
+                    {
+                        field: "pipeline_code",
+                        title: "ETL Code",
+                        width: 100
+                        // hidden: true
+                    },
+                    {
+                        field: "pipeline_name",
+                        title: "ETL Name",
+                        width: 200
+                    },
+                    {
+                        field: "source_db_type",
+                        title: "Source Db Type",
+                        width: 200,
+                        hidden: true
+                    },
+                    {
+                        field: "dataset_count",
+                        title: "Dataset Count",
+                        width: 70
+                    },
+                    {
+                        field: "created_by",
+                        title: "Owned By",
+                        width: 150,
+                        hidden: true
+
+                    },
+                    {
+                        field: "updated_date",
+                        title: "Last Modified Date",
+                        template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+                        width: 150
+
+                    },
+                    {
+                        field: "run_type",
+                        title: "Run Type",
+                        width: 150,
+                        hidden: true
+                    },
+                    {
+                        field: "source_file_name",
+                        title: "Source File Name",
+                        width: 150,
+                        hidden: true
+                    },
+                    {
+                        field: "upload_mode",
+                        title: "Upload Mode",
+                        width: 150,
+                        hidden: true
+                    },
+                    {
+                        field: "pipeline_status",
+                        title: "Status",
+                        width: 80
+
+                    }],
+                resizable: true
+
+            });
+            // Ingnore Inactive Pipelines
+            var grid = $("#pipelineGrid").data("kendoGrid");
+            function IgnoreInActiveData() {
+                var dataSource = grid.dataSource;
+                dataSource.filter({
+                    logic: "and",
+                    filters: [
+                        { field: "pipeline_status", operator: "neq", value: "InActive" }
+                    ]
+                });
+            }
+            IgnoreInActiveData();
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+    function editpipeline(e) {
+        var entityGrid = $("#pipelineGrid").data("kendoGrid");
+        var ppl_gid = entityGrid.dataItem(e.select().closest("tr")).pipeline_gid;
+        if (ppl_gid > 0) {
+            window.location.href = '@Url.Action("PipelineNew", "Pipeline")?id=' + ppl_gid;
+            sessionStorage.setItem("ppl_mode", "Edit");
+        }
+    }
+
+    function hrefFunction() {
+        window.location.href = '@Url.Action("PipelineNew", "Pipeline")?id=0';
+        sessionStorage.setItem("ppl_mode", "Create");
+    }
+
+    function deletepipeline(e) {
+        let text = "Are you sure to delete?";
+        jConfirm(text, "Plugin", function (f) {
+            if (f == true) {
+                var entityGrid = $("#pipelineGrid").data("kendoGrid");
+                var v_pipeline_code = entityGrid.dataItem(e.select().closest("tr")).pipeline_code;
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Deleteexistingpipeline", "Pipeline")?pipeline_code=' + v_pipeline_code,
+                    dataType: "json",
+                    success: function (response) {
+                        jAlert(response, "Plugin", function (g) {
+                            if (g == true) {
+                                location.reload();
+                            }
+                        });
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            } else {
+                text = "You canceled!";
+            }
+        });
+    }
+
+    function pplclonePopup(e) {
+        pplclone_conf.classList.add("show");
+        $("#pplclone_conf").kendoWindow({
+            title: "Pipeline Clone", // Add your desired title here
+            content: "<div style='color: white;text-align: center;'></div>"
+        });
+        var entityGrid = $("#pipelineGrid").data("kendoGrid");
+        var v_pipeline_code = entityGrid.dataItem(e.select().closest("tr")).pipeline_code;
+        var v_pipeline_name = entityGrid.dataItem(e.select().closest("tr")).pipeline_name;
+        var v_pipeline_dsname = entityGrid.dataItem(e.select().closest("tr")).dataset_name;
+        $("#txt_clonepplcode").val(v_pipeline_code);
+        $("#txt_clonepplname").val(v_pipeline_name);
+        $("#txt_clonepplds").val(v_pipeline_dsname);
+        var dialog = $("#pplclone_conf").data("kendoWindow");
+        dialog.open().element.closest(".k-window").css({
+            top: 130,
+            left: 465,
+            height: 210,
+            width: 450,
+
+        });
+        loadtrgtbl('', '');
+
+    }
+
+    function closepplclonePopup() {
+        $("#txt_clonepplname").val("");
+        $("#txt_newpplname").val("");
+        $("#txt_clonepplcode").val("");
+        $("#txt_clonepplds").val("");
+        $("#trgdataset").val("");
+        $("#pplclone_conf").data("kendoWindow").close();
+    }
+
+    function PPLcloneSave(v_pipeline_code) {
+        var txt_newpplname = $("#txt_newpplname").val();
+        if (txt_newpplname.trim() == "" || txt_newpplname.trim() == undefined) {
+            jAlert("Please enter ETL name.", "Plugin");
+            return;
+        }
+        var trgdataset = document.getElementById("trgdataset");
+        var v_trgdataset = trgdataset.value;
+        var v_trgdataset = v_trgdataset.toString().split('-')[0];;
+
+        if (v_trgdataset == "") {
+            jAlert("Please Select the targetdatset..!", "Plugin");
+            return;
+        }
+
+        let text = "Are you sure to clone?";
+        jConfirm(text, "Plugin", function (f) {
+            if (f == true) {
+                var data = {};
+                data.in_pipeline_name = txt_newpplname;
+                data.in_pipeline_code = v_pipeline_code;
+                data.in_dataset_code = v_trgdataset;
+                data.out_srcfile_name = "";
+                data.out_dstfile_name = "";
+                data.out_msg = "";
+                data.out_result = 0;
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("pipeline_clone", "Pipeline")',
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response == "Cloning Completed") {
+                            jAlert(response, "Plugin", function (g) {
+                                if (g == true) {
+                                    location.reload();
+                                }
+                            });
+                        }
+                        else {
+                            jAlert(response, "Plugin");
+                            return;
+                        }
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            } else {
+                text = "You canceled!";
+            }
+        });
+    }
+
+    function ProcessData(e) {
+        var entityGrid = $("#pipelineGrid").data("kendoGrid");
+        var v_conn_code = entityGrid.dataItem(e.select().closest("tr")).connection_code;
+        var v_db_name = entityGrid.dataItem(e.select().closest("tr")).db_name;
+        var v_srcfieldname = entityGrid.dataItem(e.select().closest("tr")).pplFieldNames;
+        var v_trg_table = entityGrid.dataItem(e.select().closest("tr")).table_name;
+        var v_src_table = entityGrid.dataItem(e.select().closest("tr")).table_view_name;
+        var v_default_value = entityGrid.dataItem(e.select().closest("tr")).default_value;
+        var v_upload_mode = entityGrid.dataItem(e.select().closest("tr")).upload_mode;
+        var v_key_field = entityGrid.dataItem(e.select().closest("tr")).key_field;
+        var v_updated_time_stamp = entityGrid.dataItem(e.select().closest("tr")).updated_time_stamp;
+        var v_pull_days = entityGrid.dataItem(e.select().closest("tr")).pull_days;
+
+        var data = {};
+        data.connection_code = v_conn_code;
+        data.databasename = v_db_name;
+        data.sourcetable = v_src_table;
+        data.source_field_columns = v_srcfieldname;
+        data.targettable = v_trg_table;
+        data.defaultvalue = v_default_value;
+        data.upload_mode = v_upload_mode;
+        data.primary_key = v_key_field;
+        data.updated_time_stamp = v_updated_time_stamp;
+        data.pull_days = v_pull_days;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SourceToTargetDataPush", "Pipeline")',
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                jAlert(data, "Plugin");
+                //alert(data);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function loadtrgtbl(id, name) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetTargetTablelist", "Pipeline")',
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                var select = $("#trgdataset");
+
+                // Clear existing options
+                select.empty();
+
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.dataset_code).text(item.dataset_name));
+                });
+                $('#trgdataset').val(id + "-" + name);
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function DownloadTemplate(e) {
+        var entityGrid = $("#pipelineGrid").data("kendoGrid");
+        var pipelineCode = entityGrid.dataItem(e.select().closest("tr")).pipeline_code; // Get pipeline code from an input field
+        if (!pipelineCode) {
+            jAlert("Pipeline code is required.", "Error");
+            return;
+        }
+
+        var fileext_val = entityGrid.dataItem(e.select().closest("tr")).source_file_name;
+        if (fileext_val == "") {
+            fileext_val = input.toString();
+        }
+        var extension = fileext_val;
+        var lastIndex = extension.lastIndexOf(".");
+        if (lastIndex !== -1) {
+            var fileexts = extension.substring(lastIndex);
+        }
+        var filenameWithoutExtension = (lastIndex !== -1) ? fileext_val.substring(0, lastIndex) : fileext_val; // If no dot found, use full name
+
+        // Construct the download URL
+        var downloadUrl = `@Url.Action("TemplateDownload", "Pipeline")?pipelinecode=${encodeURIComponent(pipelineCode)}&fileExtension=${encodeURIComponent(fileexts)}&sourceFileName=${encodeURIComponent(filenameWithoutExtension)}`;
+
+        // Trigger the file download
+        window.location.href = downloadUrl;
+    }
+
+     function pdfDownload(e) {
+        var entityGrid = $("#pipelineGrid").data("kendoGrid");
+        var v_pipeline_code = entityGrid.dataItem(e.closest("tr")).pipeline_code;
+        if (v_pipeline_code) {
+            var url = '@Url.Action("GeneratePdf", "Pipeline")' +
+                '?in_pipeline_code=' + encodeURIComponent(v_pipeline_code);
+            window.location.href = url;
+        }
+    }
+
+
+</script>

@@ -1,0 +1,72 @@
+﻿@model Connection
+@{
+}
+<div class="modal" tabindex="-1" role="dialog" id="field_mappingPopup" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="margin-top: -26px;">
+                <div class="row">
+                    <div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Set Value</h4>
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="row" style="padding:0 18px;">
+                    <div id="grid_setvalue"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4"> </div>
+                    <div class="col-sm-4" style="margin-top: 2%;text-align: right; display:flex;">
+                        <input style="float: right;margin-top: 0%;" type="button" id="cancel" onclick="CloseSetValue()" class="cancel action-button-previous" value="Cancel" />
+                        <input style="float: right;margin-right: 0%;" type="button" id='saveValue' onclick="_SaveSetValue()" class="save" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function _SaveSetValue() {
+        var pipelinecode = $('#txt_ppl_code').val();
+        var grid_val = $("#grid_setvalue").data("kendoGrid");
+        var getdata = $("#grid_setvalue").data().kendoGrid.dataSource.view();
+        var dataArr = [];
+        for (var i=0; i < getdata.length; i++) {
+            var dataItem = getdata[i];
+            dataArr.push(dataItem);
+        }
+        var data = {};
+        data.jsondata = JSON.stringify(dataArr);
+        data.pipeline_code = pipelinecode;
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("SaveIncrementalRecord", "Pipeline")',
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                jAlert("Record Saved Successfully..!", "Connector");
+                $("#field_mappingPopup").hide();
+            },
+            error: function (er) {
+                alert(er)
+                console.log(er)
+            }
+        });
+    }
+
+    function CloseSetValue() {
+        $("#field_mappingPopup").hide();
+    }
+
+
+
+</script>

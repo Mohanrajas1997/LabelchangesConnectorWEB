@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Connector Publish\Web</_PublishTargetUrl>
+    <History>True|2024-04-29T05:36:26.3443160Z;True|2024-04-23T17:56:43.3172778+05:30;True|2024-01-12T10:51:48.8468673+05:30;True|2024-01-05T17:17:35.1823369+05:30;True|2023-12-21T12:30:45.4655701+05:30;True|2023-12-20T17:53:05.8019740+05:30;True|2023-12-18T14:19:45.8078487+05:30;True|2023-12-14T17:24:29.0758673+05:30;True|2023-12-14T16:33:42.4558990+05:30;True|2023-12-01T17:13:56.7073817+05:30;True|2023-12-01T16:16:38.2268764+05:30;True|2023-12-01T16:00:43.1549580+05:30;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

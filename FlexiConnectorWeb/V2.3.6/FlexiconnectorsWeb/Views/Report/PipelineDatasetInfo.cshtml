@@ -1,0 +1,245 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<style>
+    .refresh {
+        width: 100px;
+        background: #0fc9b7;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #ffff;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 8px 5px;
+        /* margin: 10px 5px;*/
+    }
+
+    .text-2xl {
+        font-size: 1.5rem !important;
+    }
+
+    .font-bold {
+        font-weight: 700 !important;
+    }
+</style>
+
+<body>
+    <div>
+        <div class="row" style="height:auto;">
+            <div class="col-md-12">
+                @*<div class="content-wrapper" style="padding:10px;">*@
+                <div style="padding:10px; margin-top: 30px;">
+                    <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-md-4 font-bold text-2xl">
+                            PIPELINE DATASET INFO
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Pipeline Name</label>
+                            <span id="txt_pipeline" class="mandatory" style="display:none;">*</span>
+                            <select class="form-control" id="drp_pipeline" name="drp_pipeline">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Dataset Name</label>
+                            <span id="txt_mappedds" class="mandatory" style="display:none;">*</span>
+                            <select class="form-control" id="drp_mappedds" name="drp_mappedds">
+                                <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input style="float: left;margin-top: 6%;" type="button" id='next' onclick="RefreshData()" class="refresh" value="Refresh" />
+                        </div>
+
+                    </div>
+                    <fieldset>
+                        <div class="form-card" style="height: 70vh;margin-top:1%;">
+                            <div class="row" style="padding: 0px 16px;">
+                                <div id="pipelineDSGrid"></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        let userCode = "";
+        if (urlParams != "") {
+            userCode = urlParams.get('user_code');
+        }
+        else {
+            userCode = 'Blank';
+        }
+        sessionStorage.setItem("userCode", userCode);
+        listgrid([]);
+        Getpipelines('', 'Active');
+    });
+</script>
+<script>
+
+    function RefreshData(){
+        var ppl_code = $('#drp_pipeline').val();
+        var ds_code = $('#drp_mappedds').val();
+         GetpipelinedsList(ppl_code, ds_code);
+    }
+
+    function GetpipelinedsList(pipelinecode, datasetcode) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GellPipelinedatasetInfo", "Report")?pipeline_code=' + pipelinecode + "&dataset_code=" + datasetcode,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                var res = JSON.parse(response)
+                var $grid = $("#pipelineDSGrid");
+
+                // destroy previous grid if exists
+                if ($grid.data("kendoGrid")) {
+                    $grid.data("kendoGrid").destroy();
+                    $grid.empty(); // remove leftover DOM
+                }
+                listgrid(res);
+            },
+            error: function (er) {
+                alert(er)
+                console.log(er)
+            }
+        });
+    }
+
+    function loadmappedds(pipeline_code) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetDataSet", "Pipeline")?pipeline_code='+pipeline_code+"&source_fields="+''+"&datasetType="+'',
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                console.log("data", data);
+                var select = $("#drp_mappedds");
+
+                // Clear existing options
+                select.empty();
+
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.dataset_code).text(item.dataset_name));
+                });
+                // $('#drp_mappedds').val(id + "-" + name);
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+</script>
+<script>
+
+    function listgrid(data) {
+        try {
+            $("#pipelineDSGrid").kendoGrid({
+
+                dataSource: {
+                    data: data,
+                    schema: {
+                        model: {
+                            fields: {
+                                connector_type: { type: "string" },
+                                pipeline_code_name: { type: "string" },
+                                dataset_code_name: { type: "string" },
+                                upload_mode: { type: "string" },
+                                key_field: { type: "string" },
+                                key_field_desc: { type: "string" },
+                                run_type: { type: "string" },
+                                cron_expression: { type: "string" },
+                                pipelinedet_status: { type: "string" },
+                                updated_by: { type: "string" },
+                                updated_date: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 15
+                },
+                height: 400,
+                width: 1058,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                toolbar: ["excel"],
+                excel: {
+                    fileName: "PipelineDatasetInfo.xlsx",
+                    filterable: true,
+                    allPages: true
+                },
+                columns: [
+                    { field: "connector_type", title: "Conn Type", width: 100 },
+                    { field: "pipeline_code_name", title: "Pipeline Code & Name", width: 200 },
+                    { field: "dataset_code_name", title: "Dataset Code & Name", width: 200 },
+                    { field: "upload_mode", title: "Upload Mode", width: 150 },
+                    { field: "key_field", title: "key_field", width: 100, hidden: true },
+                    { field: "key_field_desc", title: "key Field", width: 150 },
+                    { field: "run_type", title: "Run Type", width: 100 },
+                    { field: "cron_expression", title: "Cron Expression", width: 150 },
+                    { field: "pipelinedet_status", title: "Status", width: 80 },
+                    { field: "updated_by", title: "update by", width: 100 },
+                    { field: "updated_date", title: "update date", width: 150,
+                      template: "#= kendo.toString(kendo.parseDate(updated_date), 'yyyy-MM-dd HH:mm:ss') #"}
+                ],
+                resizable: true
+            });
+        } catch (err) {
+            alert(err);
+        }
+    }
+
+
+     function Getpipelines(runtype, pipeline_sts) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GellAllPipelines", "Pipeline")?run_type=' + runtype + "&pipeline_status=" + pipeline_sts,
+            //url: "../Pipeline/GellAllPipelines?run_type=" + runtype + "&pipeline_status=" + pipeline_sts,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                 var select = $("#drp_pipeline");
+
+                // Clear existing options
+                select.empty();
+
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(response, function (index, item) {
+                    select.append($("<option>").attr("value", item.pipeline_code).text(item.pipeline_name));
+                });
+                // $('#drp_pipeline').val(id);
+            },
+            error: function (er) {
+                alert(er)
+                console.log(er)
+            }
+        });
+    }
+
+     $('#drp_pipeline').on('change', function () {
+            var selectedValue = $(this).val();
+            loadmappedds(selectedValue);
+        });
+
+</script>

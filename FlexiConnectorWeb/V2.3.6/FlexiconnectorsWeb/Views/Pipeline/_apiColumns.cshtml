@@ -1,0 +1,983 @@
+﻿@model Connection
+@{
+
+}
+<style>
+	#ApiKeyGrid .k-icon.k-i-expand,
+	#ApiKeyGrid .k-icon.k-i-collapse {
+		background-image: url('/Content/kendo1/2015.1.318/Default/sprite.png') !important;
+		background-repeat: no-repeat;
+	}
+
+</style>
+<div class="modal" tabindex="-1" role="dialog" id="apiColumn_Popup" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="dialog">
+		<div class="modal-content" style="width: 75%;left: 0%;box-shadow:0 0 8px 8px rgba(153, 153, 153, 0.8) !important">
+			<div class="modal-body" style="margin-top: -15%;margin-left: 3%;margin-right: 3%;">
+				<div class="row">
+					<h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">API Column</h4>
+				</div>
+				<div class="row">
+					<label class="form-label">Serial No</label>
+					<input class="form-control" type="text" id="txt_pplapifield_gid" name="txt_pplapifield_gid" style="display:none" />
+					<input class="form-control" type="number" id="txt_apiserialno" name="txt_serialno" min="1" oninput="validateNumberInput(this,'serialno')" />
+				</div>
+				<div class="row">
+					<label class="form-label">Column Name </label>
+					<input class="form-control" type="text" id="txt_apicolumnname" name="txt_columnname" />
+				</div>
+				<div class="row">
+					<label class="form-label">Data Type</label>
+					@* <input class="form-control" type="text" id="txt_csvcol_datatype" name="txt_csvcol_datatype" /> *@
+					<select class="form-control" id="drp_apicol_datatype" name="drp_apicol_datatype" style="width:100%;height:25%">
+						<option value="-- Select --">-- Select --</option>
+						<option value="TEXT">TEXT</option>
+						<option value="INTEGER">INTEGER</option>
+						<option value="DATE">DATE</option>
+						<option value="DATETIME">DATETIME</option>
+						<option value="NUMERIC">NUMERIC</option>
+					</select>
+				</div>
+				<div class="row">
+					<div class="col-sm-3">
+					</div>
+					<div class="col-sm-3"> </div>
+					<div class="col-sm-6" style="margin-top: 2%;text-align: right; display:flex;">
+						<input style="float: right;margin-top: 0%;" type="button" id="api_cancel" onclick="CloseApiColumns()" class="cancel action-button-previous" value="Cancel" />
+						<input style="float: right;margin-right: 0%;" type="button" id='btn_saveApiColumns' onclick="saveApiColumns()" class="save" value="Save" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="apiDatastruture_Popup" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="dialog">
+		<div class="modal-content" style="width: 75%;left: 0%;box-shadow:0 0 8px 8px rgba(153, 153, 153, 0.8) !important">
+			<div class="modal-body" style="margin-top: -15%;margin-left: 3%;margin-right: 3%;">
+				<div class="row">
+					<h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">API Data Structure</h4>
+				</div>
+
+				<div class="row">
+					<div id="srcapiDataStructure_old" style="margin-top: -3%;"></div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3">
+					</div>
+					<div class="col-sm-3"> </div>
+					<div class="col-sm-6" style="margin-top: 2%;text-align: right; display:flex;">
+						<input style="float: right;margin-top: 0%;" type="button" id="api_validate" onclick="validateApiDataStructure('Yes')" class="save query_clr" value="Validate" />
+						<input style="float: right;margin-top: 0%;" type="button" id="api_cancel" onclick="CloseApiColumns()" class="cancel action-button-previous" value="Cancel" />
+						<input style="float: right;margin-right: 0%;" type="button" id='btn_saveApiDatastrucre' onclick="saveApiDatastrucre()" class="save" value="Save" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="datafieldselection" style="padding-left: 15px; display:none;">
+	@*  <div class="row">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-3"> </div>
+        <div class="col-sm-6" style="margin-top: 2%;text-align: right; display:flex;">
+            <input style="float: right;margin-top: 0%;" type="button" id="api_validate" onclick="validateApiDataStructure()" class="save query_clr" value="Validate & Save" />
+            <input style="float: right;margin-top: 0%;" type="button" id="api_cancel" onclick="CloseApiColumns()" class="cancel action-button-previous" value="Cancel" />
+            <input style="float: right;margin-right: 0%;" type="button" id='btn_saveApiDatastrucre' onclick="saveApiDatastrucre()" class="save" value="Save" />
+        </div>
+    </div> *@
+
+	<div class="row" style="margin-top: -57px;margin-bottom: 33px;">
+		<div class="col-sm-4">
+		</div>
+		<div class="col-sm-4">
+		</div>
+		<div class="col-sm-4" id="btn_save" style="margin-left: 77%; display: flex;top: 6px;">
+			<input style="padding: 1rem !important;cursor:pointer;width: 29%;background: #3c8dbc !important; border: #3c8dbc;" type="button" onclick="validateApiDataStructure('Yes')" id='api_validate' class="save" value="Validate & Save" />
+			<input style="padding: 1rem !important;cursor:pointer;margin-left: 12px; color: red;background-color: white;border: 1px solid red;" type="button" onclick="revertChanges()" id='btn_fieldSelectionRevert' class="save" value="Revert" />
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div id="srcapiDataStructure" style="margin-top: -3%;"></div>
+	</div>
+	<textarea id="txtExtractJson" rows="10" cols="80" hidden></textarea>
+	<textarea id="txtSelectedKeys" rows="10" cols="80" hidden></textarea>
+	<div id="dgvSelectedKeys" hidden></div>
+	<div id="dgvExtractedJson"></div>
+</div>
+
+<script>
+	function CloseApiColumns() {
+		$("#apiColumn_Popup").hide();
+		$("#apiDatastruture_Popup").hide();
+	}
+
+	 function loadapiDatastrutureGrid() {
+		var jsonInput = datasetfiledname;
+		let jsonObj = typeof jsonInput === "string" ? JSON.parse(jsonInput) : jsonInput;
+		let treeData = [];
+		let nodeId = 1;
+
+		function buildTreeRows(token, parentId, parentKey) {
+			if (Array.isArray(token)) {
+				if (token.length > 0) {
+					buildTreeRows(token[0], parentId, parentKey);
+				}
+			} else if (typeof token === "object" && token !== null) {
+				Object.keys(token).forEach(function (key) {
+					let value = token[key];
+					let currentId = nodeId++;
+					let isArray = Array.isArray(value);
+
+					treeData.push({
+						id: currentId,
+						parentId: parentId,
+						name: key,
+						keyNode: key,
+						parentKey: parentKey,
+						valueType: isArray ? "Multiple" : "Single",
+						level: parentId == null ? 0 : getLevelFromParent(treeData, parentId) + 1,
+						selected: false
+					});
+					buildTreeRows(value, currentId, key);
+				});
+			}
+		}
+
+		function getLevelFromParent(data, parentId) {
+			const parent = data.find(x => x.id === parentId);
+			return parent ? parent.level : 0;
+		}
+
+		// Start recursive conversion
+		buildTreeRows(jsonObj, null, "");
+
+		const sourceFieldNames_n = sourceFieldNames.map(x => x.sourcefield_name);
+		treeData.forEach(item => {
+			item.selected = sourceFieldNames_n.includes(item.keyNode);
+		});
+
+		treeData.forEach(item => {
+			if (item.selected) {
+				selectParents(treeData, item);
+			}
+		});
+
+		// Destroy existing grid (if any)
+		if ($("#ApiKeyGrid").data("kendoTreeList")) {
+			$("#ApiKeyGrid").data("kendoTreeList").destroy();
+			$("#ApiKeyGrid").remove();
+		}
+		// Add container
+		$("#srcapiDataStructure").append(
+			'<div id="ApiKeyGrid" style="width:96%; height:290px; margin-top:21px;"></div>'
+		);
+
+		// Initialize Kendo TreeList
+		$("#ApiKeyGrid").kendoTreeList({
+			dataSource: {
+				data: treeData,
+				schema: {
+					model: {
+						id: "id",
+						parentId: "parentId",
+						fields: {
+							id: { type: "number" },
+							parentId: { type: "number", nullable: true },
+							name: { type: "string" },
+							keyNode: { type: "string" },
+							parentKey: { type: "string" },
+							valueType: { type: "string" },
+							level: { type: "number" },
+							selected: { type: "boolean" }
+						},
+						expanded: true
+					}
+				}
+			},
+			height: 295,
+			selectable: true,
+			editable: true,
+			columns: [
+				{
+					field: "name",
+					title: "JSON Data Structure",
+					expandable: true,
+					width: 350,
+					template: function (item) {
+						return `<span>${item.name}</span>`;
+					}
+				},
+				{
+					field: "selected",
+					title: "Select",
+					width: 80,
+					attributes: { style: "text-align: center;" },
+					template:
+						'<input type="checkbox" class="nodeSelect" #= selected ? "checked" : "" # />',
+				},
+				{
+					field: "valueType",
+					title: "Value Type",
+					width: 150,
+					editor: valueTypeEditor,
+				},
+				{ field: "level", title: "Level", hidden: true },
+				{ field: "parentKey", title: "Parent Node", hidden: true },
+				{ field: "keyNode", title: "Key Node", hidden: true }
+			],
+			dataBound: onTreeListDataBound
+		});
+
+
+		function onTreeListDataBound(e) {
+			// var treeList = this;
+			// treeList.tbody.find(".nodeSelect").off("change").on("change", function () {
+			// 	var tr = $(this).closest("tr");
+			// 	var dataItem = treeList.dataItem(tr);
+			// 	var checked = $(this).is(":checked");
+			// 	dataItem.set("selected", checked);
+			// });
+
+			var treeList = this;
+
+	// Attach the change handler each time data is bound/refreshed
+	treeList.tbody.find(".nodeSelect").off("change").on("change", function () {
+		var tr = $(this).closest("tr");
+		var dataItem = treeList.dataItem(tr);
+		if (!dataItem) return; // safety check
+
+		var isChecked = $(this).is(":checked");
+		dataItem.set("selected", isChecked);
+
+		if (isChecked) {
+			// Automatically check all parents
+			checkParentNodes(treeList, dataItem);
+		} else {
+			// Optionally uncheck all children (can remove if not desired)
+			uncheckChildNodes(treeList, dataItem);
+		}
+	});
+
+		}
+
+		function valueTypeEditor(container, options) {
+			$('<input required name="' + options.field + '"/>')
+				.appendTo(container)
+				.kendoDropDownList({
+					dataSource: ["Select", "Single", "Multiple"]
+				});
+		}
+	}
+
+	let persistedSelectedKeys = [];
+
+	function validateApiDataStructure(type) {
+		const treeList = $("#ApiKeyGrid").data("kendoTreeList");
+		if (!treeList) {
+			jAlert("No data found", "Connector");
+			return;
+		}
+
+		const allData = treeList.dataSource.data().slice(); // flat list
+		if (!allData || allData.length === 0) {
+			jAlert("No data available in the tree.", "Connector");
+			return;
+		}
+		buildKeyPaths(allData);
+		const dt = allData
+			.filter(item => item.selected)
+			.map(item => ({
+				node: item.keyNode,
+				level: item.level,
+				parent_node: item.parentKey
+			}));
+		if (dt.length === 0) {
+			jAlert("Please select at least one key field to validate.", "Connector");
+			return;
+		}
+
+		if (!validateSelectionRules(allData)) {
+			return;
+		}
+
+		const selectedKeys = allData
+			.filter(item => isNodeSelectedOrChildSelected(item, allData))
+			.map(item => item.keyPath || item.keyNode);
+
+		if (selectedKeys.length === 0) {
+			jAlert("Please select at least one key field to validate.", "Connector");
+			return;
+		}
+
+		const dtNode = buildDtNodeFromDt(dt);
+
+		$("#txtSelectedKeys").val(selectedKeys.join("\n"));
+		const nodeList = BuildNodesFromSelectedKeys(selectedKeys);
+		BindNodeGrid(nodeList);
+		BindselectedkeynodeGrid(dtNode);
+		let skeleton;
+		if($('#txt_apiResponse').val()){
+			const sample_response = JSON.parse($('#txt_apiResponse').val());
+			skeleton = getJsonStructure(sample_response);
+		} else {
+			skeleton = getJsonStructure(datasetfiledname);
+		}
+		
+		const stringskeleton = JSON.stringify(skeleton);
+		Jsonreader(stringskeleton, dtNode);
+		try {
+			// const extractJson = $("#txtExtractJson").val();
+			// const table = JsonToDataTableFullyDynamic("[" + extractJson + "]");
+			("#dgvExtractedJson").data("kendoGrid")?.dataSource.data(dtNode);
+
+		
+		} catch (ex) {
+		   // console.warn("Could not build extracted table:", ex);
+		}
+		saveapiNode();
+		// apiResponseStructure = getApiKeyStructure();
+		apiResponseStructure = JSON.parse($("#txtExtractJson").val());
+
+
+		if (type == 'Yes'){
+			if(sourceFieldNames.length > 1){
+				let text = "On changing API Field Selection (Source Fields, Expression, Inclusion,\n" +
+								  "Rejection, Validation, Conversion Rules) will be deleted.\n " +
+								  " Are You sure to change the Resultset ? ";
+				   jConfirm(text, "Connector", function (f) {
+						if (f == true) {
+							saveapisrcfields("Yes");
+							persistedSelectedKeys = selectedKeys.slice();
+							  $("#tab4").removeClass("show-tab-important");
+							  $("#tab3").addClass("show-tab-important");
+							  const apiFieldTab = document.getElementById("apiDSSelectionTab");
+							  const validationTab = document.getElementById("validationTab");
+							  const fieldmappingTab = document.getElementById("fieldmappingTab");
+							  const filtersTab = document.getElementById("filtersTab");
+							  const expressionConf = document.getElementById("expression_conf");
+							  const fieldmappingConf = document.getElementById("fieldmapping_conf");
+							  const apiDSSelection_conf = document.getElementById("apiDSSelection_conf");
+							  const datafieldselection = document.getElementById("datafieldselection");
+								fieldmappingConf.style.display = "block";
+								filtersConf.style.display = "none";
+								apiFieldTab.classList.remove("active")
+								fieldmappingTab.classList.add("active");
+								filtersTab.classList.remove("active");
+								apiDSSelection_conf.style.display = "none";
+								datafieldselection.style.display = "none";
+						} else {
+							revertChanges();
+							persistedSelectedKeys = selectedKeys.slice();
+							  $("#tab4").removeClass("show-tab-important");
+							  $("#tab3").addClass("show-tab-important");
+							  const apiFieldTab = document.getElementById("apiDSSelectionTab");
+							  const validationTab = document.getElementById("validationTab");
+							  const fieldmappingTab = document.getElementById("fieldmappingTab");
+							  const filtersTab = document.getElementById("filtersTab");
+							  const expressionConf = document.getElementById("expression_conf");
+							  const fieldmappingConf = document.getElementById("fieldmapping_conf");
+							  const apiDSSelection_conf = document.getElementById("apiDSSelection_conf");
+							  const datafieldselection = document.getElementById("datafieldselection");
+								fieldmappingConf.style.display = "none";
+								filtersConf.style.display = "none";
+								apiFieldTab.classList.add("active")
+								fieldmappingTab.classList.remove("active");
+								filtersTab.classList.remove("active");
+								apiDSSelection_conf.style.display = "block";
+								datafieldselection.style.display = "block";
+						}
+				   });
+			} else {
+				saveapisrcfields("Yes");
+				persistedSelectedKeys = selectedKeys.slice();
+				$("#tab4").removeClass("show-tab-important");
+				$("#tab3").addClass("show-tab-important");
+				const apiFieldTab = document.getElementById("apiDSSelectionTab");
+				const validationTab = document.getElementById("validationTab");
+				const fieldmappingTab = document.getElementById("fieldmappingTab");
+				const filtersTab = document.getElementById("filtersTab");
+				const expressionConf = document.getElementById("expression_conf");
+				const fieldmappingConf = document.getElementById("fieldmapping_conf");
+				const apiDSSelection_conf = document.getElementById("apiDSSelection_conf");
+				const datafieldselection = document.getElementById("datafieldselection");
+				fieldmappingConf.style.display = "block";
+				filtersConf.style.display = "none";
+				apiFieldTab.classList.remove("active")
+				fieldmappingTab.classList.add("active");
+				filtersTab.classList.remove("active");
+				apiDSSelection_conf.style.display = "none";
+				datafieldselection.style.display = "none";
+			}			
+		} else {			
+			  getdatasetfield();
+			  expressionConf.style.display = "none";
+			  fieldmappingConf.style.display = "block";
+			  filtersConf.style.display = "none";
+			  apiDSSelectionConf.style.display = "none";
+			  datafieldselection.style.display = "none";
+
+			  fieldmappingTab.classList.add("active");
+			  filtersTab.classList.remove("active");
+			  apiDSSelectionTab.classList.remove("active");
+		}
+
+
+	}
+
+	function buildKeyPaths(allData) {
+		const map = new Map();
+		allData.forEach(d => map.set(d.keyNode, d));
+
+		for (const node of allData) {
+			if (node.keyPath) continue;
+			let parts = [];
+			let current = node;
+			const visited = new Set();
+			while (current && !visited.has(current.keyNode)) {
+				visited.add(current.keyNode);
+				parts.unshift(current.keyNode);
+				if (!current.parentKey) break;
+				current = map.get(current.parentKey);
+			}
+			node.keyPath = parts.join(".");
+		}
+	}
+
+	function buildDtNodeFromDt(dt) {
+		if (!dt || dt.length === 0) return [];
+
+		const maxLevel = Math.max(...dt.map(d => d.level));
+		let keyLevel = maxLevel;
+		let parentKey = "";
+		let parentKey1 = "";
+		let childKey = "";
+		const result = [];
+
+		do {
+			let siblingKey = "";
+			const filtered = dt.filter(d => {
+				if (keyLevel === maxLevel) return d.level === keyLevel;
+				return d.level === keyLevel && d.node === parentKey;
+			});
+
+			let i = 0;
+			parentKey1 = parentKey;
+			let data_row1 = null;
+
+			filtered.forEach(row => {
+				if (i === 0) {
+					data_row1 = {
+						node: row.node,
+						parent_node: row.parent_node,
+						level: keyLevel,
+						child_node: childKey,
+						sibling: ""
+					};
+					childKey = row.node;
+				}
+				parentKey = row.parent_node;
+				if (i !== 0) siblingKey += row.node + ",";
+				i++;
+			});
+
+			const others = dt.filter(d => {
+				if (keyLevel === maxLevel) return d.level === keyLevel && d.parent_node !== parentKey;
+				return d.level === keyLevel && d.node !== parentKey1;
+			});
+			others.forEach(r => siblingKey += r.node + ",");
+
+			if (data_row1) {
+				data_row1.sibling = siblingKey.replace(/,$/, "");
+				result.push(data_row1);
+			}
+
+			keyLevel--;
+		} while (keyLevel >= 0);
+		result.sort((a, b) => a.level - b.level);
+		return result;
+	}
+
+	function validateSelectionRules(allData) {
+		const parentChildSelection = {};
+		// Step 1: build parentChildSelection
+		for (const item of allData) {
+			const isChecked = isNodeSelectedOrChildSelected(item, allData);
+			const tagPath = item.keyPath;
+			if (isChecked && tagPath) {
+				const hasChildren = rowHasChildren(item, allData);
+				const parentPath = getParentPath(tagPath);
+				const childSelected = hasAnyChildSelected(item, allData);
+
+				if (hasChildren && childSelected) {
+					if (!parentChildSelection[parentPath]) parentChildSelection[parentPath] = [];
+					parentChildSelection[parentPath].push(tagPath);
+				}
+			}
+		}
+
+		for (const parentPath in parentChildSelection) {
+			const arr = parentChildSelection[parentPath];
+			if (arr.length > 1) {
+				let message = `You have selected multiple nodes with children under '${parentPath}':\n\n`;
+				arr.forEach(tagPath => {
+					const childKeys = getChildKeys(tagPath, allData);
+					message += `• ${tagPath}`;
+					if (childKeys.length > 0) message += `   ↳ Child Keys: ${childKeys.join(", ")}`;
+					message += "\n";
+				});
+				$("#txtExtractJson").val("");
+				const grid = $("#dgvExtractedJson").data("kendoGrid");
+				if (grid) grid.dataSource.data([]);
+				jAlert(message, "Validation Error");
+				highlightInvalidNodes(arr);
+				$("#txtSelectedKeys").val("");
+				return false;
+			}
+		}
+		persistedSelectedKeys = [];
+		for (const item of allData) {
+			if (isNodeSelectedOrChildSelected(item, allData)) {
+				if (item.keyPath) persistedSelectedKeys.push(item.keyPath);
+			}
+		}
+		return true;
+	}
+
+	function isNodeSelectedOrChildSelected(item, allData) {
+		if (!item) return false;
+		const stack = [item];
+		const visited = new Set();
+		while (stack.length) {
+			const current = stack.pop();
+			if (!current) continue;
+			if (visited.has(current.keyNode)) continue;
+			visited.add(current.keyNode);
+			if (current.selected) return true;
+			for (const child of allData) {
+				if (child.parentKey === current.keyNode) stack.push(child);
+			}
+		}
+		return false;
+	}
+
+	function rowHasChildren(item, allData) {
+		if (!item) return false;
+		return allData.some(d => d.parentKey === item.keyNode);
+	}
+
+	function hasAnyChildSelected(item, allData) {
+		if (!item) return false;
+		const stack = [];
+		for (const d of allData) if (d.parentKey === item.keyNode) stack.push(d);
+		const visited = new Set();
+		while (stack.length) {
+			const cur = stack.pop();
+			if (!cur || visited.has(cur.keyNode)) continue;
+			visited.add(cur.keyNode);
+			if (cur.selected) return true;
+			for (const child of allData) if (child.parentKey === cur.keyNode) stack.push(child);
+		}
+		return false;
+	}
+
+	function getParentPath(tagPath) {
+		if (!tagPath) return "";
+		// find last '.' or '['
+		const lastDot = tagPath.lastIndexOf(".");
+		const lastBracket = tagPath.lastIndexOf("[");
+		const idx = Math.max(lastDot, lastBracket);
+		if (idx >= 0) return tagPath.substring(0, idx);
+		return "";
+	}
+
+	function getChildKeys(parentTagPath, allData) {
+		if (!parentTagPath) return [];
+		const result = new Set();
+		for (const row of allData) {
+			if (!row.keyPath) continue;
+			if (row.keyPath.startsWith(parentTagPath + ".")) {
+				if (isNodeSelectedOrChildSelected(row, allData)) {
+					const parts = row.keyPath.split(".");
+					const last = parts[parts.length - 1];
+					result.add(last);
+				}
+			}
+		}
+		return Array.from(result);
+	}
+
+	function highlightInvalidNodes(invalidPaths) {
+		const treeList = $("#ApiKeyGrid").data("kendoTreeList");
+		if (!treeList) return;
+		const ds = treeList.dataSource.data();
+		treeList.content.find("tr").css("background-color", "");
+		for (const p of invalidPaths) {
+			const item = ds.find(d => d.keyPath === p);
+			if (item) {
+				const row = treeList.content.find(`tr[data-uid='${item.uid}']`);
+				row.css("background-color", "LightCoral");
+			}
+		}
+	}
+
+	function BuildNodesFromSelectedKeys(selectedKeys, allData) {
+		const nodeMap = new Map();
+		selectedKeys.forEach(keyPath => {
+			const parts = keyPath.split("."); // Split hierarchical path
+			let pathSoFar = "";
+			let parentObj = null;
+
+			parts.forEach((part, idx) => {
+				pathSoFar = pathSoFar ? pathSoFar + "." + part : part;
+				if (!nodeMap.has(pathSoFar)) {
+					const node = {
+						keyNode: part,
+						keyPath: pathSoFar,
+						children: []
+					};
+					nodeMap.set(pathSoFar, node);
+					if (parentObj) {
+						parentObj.children.push(node);
+					}
+				}
+				parentObj = nodeMap.get(pathSoFar);
+			});
+		});
+		const topLevelNodes = [];
+		nodeMap.forEach(node => {
+			if (!node.keyPath.includes(".")) {
+				topLevelNodes.push(node);
+			}
+		});
+		return topLevelNodes;
+	}
+
+	function BindNodeGrid(nodeList, gridSelector = "#dgvSelectedKeys") {
+		$(gridSelector).hide();
+		const flattened = [];
+		function flatten(node, level = 0, parentKey = "") {
+			flattened.push({
+				node: node.keyNode,
+				keyPath: node.keyPath,
+				parent_node: parentKey,
+				level: level,
+				childrenCount: node.children.length,
+				sibling: "" // optional, fill later if needed
+			});
+			node.children.forEach(child => flatten(child, level + 1, node.keyNode));
+		}
+		nodeList.forEach(n => flatten(n));
+		const grid = $(gridSelector).data("kendoGrid");
+		if (grid) {
+			grid.dataSource.data(flattened);
+		} else {
+			$(gridSelector).kendoGrid({
+				dataSource: {
+					data: flattened,
+					pageSize: 50
+				},
+				sortable: true,
+				pageable: true,
+				columns: [
+					{ field: "node", title: "Node" },
+					{ field: "level", title: "Level" },
+					{ field: "parent_node", title: "Parent Node" },
+					{ field: "childrenCount", title: "Children Count" },
+					{ field: "keyPath", title: "Key Path" }
+				]
+			});
+		}
+	}
+
+	function BindselectedkeynodeGrid(dtNode, gridSelector = "#dgvExtractedJson"){	
+		$(gridSelector).hide();
+		const grid = $(gridSelector).data("kendoGrid");
+		if (grid) {
+			grid.dataSource.data(dtNode);
+		} else {
+			$(gridSelector).kendoGrid({
+				dataSource: {
+					data: dtNode,
+					pageSize: 50
+				},
+				sortable: true,
+				pageable: true,
+				columns: [
+					{ field: "node", title: "Node" },
+					{ field: "level", title: "Level" },
+					{ field: "parent_node", title: "Parent Node" },
+					{ field: "child_node", title: "Children Node" },
+					{ field: "sibling", title: "sibling" }
+				]
+			});
+		}
+	}
+
+	function Jsonreader(jsonText, dtNode) {
+		// parse JSON
+		let jsonObj;
+		try {
+			jsonObj = JSON.parse(jsonText);
+		} catch (e) {
+			alert("Invalid JSON: " + e.message);
+			return;
+		}
+
+		// build node list from array (simulating your DataTable)
+		let nodeList = [];
+		dtNode.forEach(row => {
+			let currNode = row.node || "";
+			let level = parseInt(row.level) || 0;
+			let parentNode = row.parent_node || "";
+			let childNode = row.child_node || "";
+			let siblingNode = row.sibling || "";
+
+			nodeList.push({
+				node: currNode,
+				sibling: siblingNode,
+				parent: parentNode,
+				child: childNode,
+				level: level
+			});
+		});
+
+		// now call recursive reader
+		jsonRead(jsonText, "", nodeList, 0);
+
+
+
+	}
+
+	function convertList(input) {
+		// null/undefined -> empty array string
+		if (input === null || input === undefined) return "[]";
+
+		// If it's already an object/array, convert to array-string
+		if (typeof input !== "string") {
+			// If it's already an array, stringify it; else wrap object in array then stringify
+			return JSON.stringify(Array.isArray(input) ? input : [input]);
+		}
+
+		// Now input is a string
+		let s = input.trim();
+		if (s === "") return "[]";
+
+		// If it already looks like an array, return as-is
+		if (s.startsWith("[")) return s;
+
+		// Otherwise wrap single object or primitive string into array
+		// return "[" + s + "]";
+		return s ;
+	}
+
+
+	function jsonRead(_json, _parent_json, _node_list, _node_index) {
+		// Helper: ensure valid JSON list format
+		function convertlist(jsonStr) {
+			jsonStr = jsonStr.trim();
+			if (!jsonStr.startsWith("[") && !jsonStr.startsWith("{")) {
+				jsonStr = "[" + jsonStr + "]";
+			}
+			return jsonStr;
+		}
+
+		let outputText = "";
+		_json = convertlist(_json);
+
+		let deserializedList = "";
+		try {
+			deserializedList = JSON.parse(_json);
+		} catch (e) {
+			console.error("Invalid JSON:", e, _json);
+			return "";
+		}
+
+		// Ensure we always have an array to iterate
+	if (!Array.isArray(deserializedList)) deserializedList = [deserializedList];
+
+		for (const obj of deserializedList) {
+			let parent_node1 = {};
+			if (_parent_json && _parent_json.trim() !== "") {
+				parent_node1 = JSON.parse(_parent_json);
+			}
+
+			const dict = obj;
+			const node = _node_list[_node_index];
+
+			// Handle sibling nodes
+			if (node.sibling && node.sibling !== "") {
+				const siblings = node.sibling.split(",");
+				for (const key of Object.keys(dict)) {
+					if (siblings.includes(key)) {
+						parent_node1[key] = dict[key];
+					}
+				}
+			} else if (_parent_json && (!node.sibling || node.sibling === "")) {
+				parent_node1 = JSON.parse(_parent_json);
+			}
+
+			// Process current node
+			for (const key of Object.keys(dict)) {
+				if (key === node.node) {
+					if (!node.child || node.child === "") {
+						// Terminal node
+						if (node.sibling !== "" || Object.keys(parent_node1).length > 0) {
+							let currList = convertlist(JSON.stringify(dict[key]));
+							let deserializedCurrList;
+							try {
+								deserializedCurrList = JSON.parse(currList);
+							} catch {
+								deserializedCurrList = [dict[key]];
+							}
+
+							for (const currobj of deserializedCurrList) {
+								let currjsonobj = { ...parent_node1 };
+								let jsonobj = {};
+
+								if (typeof currobj === "object" && currobj !== null) {
+									jsonobj = currobj;
+								} else {
+									jsonobj[key] = currobj;
+								}
+
+								Object.assign(currjsonobj, jsonobj);
+								outputText += JSON.stringify(currjsonobj) ;
+
+							}
+						} else {
+							// Simple key:value pair output
+							outputText += `${key}:${dict[key]}`;
+						}
+					} else {
+						// Recursive call
+						let json1 = JSON.stringify(dict[key]);
+						outputText += jsonRead(json1, JSON.stringify(parent_node1), _node_list, _node_index + 1);
+
+					}
+				}
+			}
+		}
+		$("#txtExtractJson").val(outputText);
+		return outputText;
+	}
+
+		
+	function getApiKeyStructure() {
+		try {
+			const treeList = $("#ApiKeyGrid").data("kendoTreeList");
+			if (!treeList) {
+				jAlert("No data found", "Connector");
+				return null;
+			}
+
+			const allData = treeList.dataSource.data().slice(); // flat list of all nodes
+			if (!allData || allData.length === 0) {
+				jAlert("No data available in the tree.", "Connector");
+				return null;
+			}
+
+			// optional: custom helper you mentioned
+			buildKeyPaths(allData);
+
+			// filter selected items only
+			const selectedItems = allData.filter(item => item.selected);
+
+			if (selectedItems.length === 0) {
+				jAlert("No keys selected.", "Connector");
+				return null;
+			}
+
+			// extract keys (you can adjust based on your schema)
+			const selectedKeys = selectedItems.map(item => item.keyNode || item.key || item.fieldName);
+
+			// build JSON structure
+			const structure = {};
+			selectedKeys.forEach(k => {
+				if (k) structure[k] = "";
+			});
+
+			return structure; // ✅ returns JSON object of selected keys
+
+		} catch (e) {
+			console.error("Error reading TreeList:", e);
+			jAlert("Error reading TreeList: " + e.message, "Error");
+			return null;
+		}
+	}
+
+	// Function to recursively check parent nodes
+	function checkParentNodes(treeList, dataItem) {
+		var parent = treeList.dataSource.get(dataItem.parentId);
+		if (parent) {
+			parent.set("selected", true);
+			// Update the checkbox in UI too
+			var parentRow = treeList.content.find("tr[data-uid='" + parent.uid + "']");
+			parentRow.find(".nodeSelect").prop("checked", true);
+			// Recursively check up the hierarchy
+			checkParentNodes(treeList, parent);
+		}
+	}
+
+	function selectParents(treeData, item) {
+		if (!item.parentId) return; // no parent
+
+		const parent = treeData.find(x => x.id === item.parentId);
+		if (parent && !parent.selected) {
+			parent.selected = true;
+			selectParents(treeData, parent);  // recursive
+		}
+	}
+
+	// Optional: Function to uncheck all child nodes if parent is unchecked
+	function uncheckChildNodes(treeList, dataItem) {
+		var children = treeList.dataSource.childNodes(dataItem);
+		if (children && children.length > 0) {
+			children.forEach(function (child) {
+				child.set("selected", false);
+				var childRow = treeList.content.find("tr[data-uid='" + child.uid + "']");
+				childRow.find(".nodeSelect").prop("checked", false);
+				uncheckChildNodes(treeList, child); // recursive
+			});
+		}
+	}
+
+	function revertChanges() {
+		loadapiDatastrutureGrid();
+	}
+
+	function saveapiNode(){
+		var pipelineCode = $("#txt_ppl_code").val();
+		var datasetCode = $("#txtds_code").val();
+		var userCode = _user_code;
+		var grid = $("#dgvExtractedJson").data("kendoGrid");
+		grid.dataSource.sync();
+		var items = grid.dataSource._data;
+		var baseUrl = '@Url.Action("pplapinode", "Pipeline")';
+		var fullUrl = baseUrl
+						+ '?pipeline_code=' + pipelineCode
+						+ '&dataset_code=' + datasetCode
+						+ '&user_code=' + userCode;
+		$.ajax({
+			type: "Post",
+			url: fullUrl,
+			// url: '@Url.Action("pplapinode", "Pipeline")',
+			data: JSON.stringify(items),
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			success: function (response) {
+			// alert ("response", response);
+			},
+			error: function (er) {				
+				jAlert(er, "Error");
+			}
+		});
+	}
+
+</script>

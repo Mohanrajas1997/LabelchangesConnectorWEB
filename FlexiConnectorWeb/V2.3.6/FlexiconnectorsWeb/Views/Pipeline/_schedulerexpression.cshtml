@@ -1,0 +1,434 @@
+﻿@model Connection
+@{
+
+}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 363px;
+    }
+
+    table, th, td {
+        border: 1px solid #d2d6de;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: rgb(135, 46, 123);
+        text-align: center;
+        color: white;
+    }
+
+    .header {
+        background-color: rgb(135, 46, 123);
+    }
+
+    #scheduler_exp_Popup tbody {
+        display: block;
+        height: 310px;
+        /* overflow-y: auto; */
+    }
+
+        #scheduler_exp_Popup thead,
+        #scheduler_exp_Popup tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+</style>
+<div class="modal" tabindex="-1" role="dialog" id="scheduler_exp_Popup" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="dialog">
+        <div class="modal-content" style="width: 120%;left: 0%;">
+            <div class="modal-body" style="margin-top: -10%;margin-left: 3%">
+                @*<div class="row">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4">
+                <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Scheduler Expression</h4>
+                </div>
+                <div class="col-sm-4">
+                </div>
+                </div>*@
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="row">
+                            <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Scheduler Expression</h4>
+                        </div>
+                        <div class="row">
+                            <label class="form-label">Second </label>
+                            <input class="form-control" id="txt_second" placeholder="Example: 0 " oninput="concatExpression()" onclick="SampleTips('second')" type="text" name="txt_second" />
+                        </div>
+                        <div class="row">
+                            <label class="form-label">Minute </label>
+                            <input class="form-control" id="txt_minute" placeholder="Example: 0 " oninput="concatExpression()" onclick="SampleTips('minute')" type="text" name="txt_minute" />
+                        </div>
+                        <div class="row">
+                            <label class="form-label">Hour </label>
+                            <input class="form-control" id="txt_hour" placeholder="Example: 0 " oninput="concatExpression()" onclick="SampleTips('hour')" type="text" name="txt_hour" />
+                        </div>
+                        <div class="row">
+                            <label class="form-label">Day(Month) </label>
+                            <input class="form-control" id="txt_dayhour" placeholder="Example: * " oninput="concatExpression()" onclick="SampleTips('daymonth')" type="text" name="txt_dayhour" />
+                        </div>
+                        <div class="row">
+                            <label class="form-label">Month </label>
+                            <input class="form-control" id="txt_month" placeholder="Example: * " oninput="concatExpression()" onclick="SampleTips('month')" type="text" name="txt_month" />
+                        </div>
+                        @*  <div class="row">
+                        <label class="form-label">Day(Week) </label>
+                        <input class="form-control" id="txt_dayweek" placeholder="Example: * " oninput="concatExpression()" onclick="SampleTips('dayweek')" type="text" name="txt_dayweek" />
+                        </div> *@
+                        <div class="row">
+                            <label class="form-label">Cron Expression </label>
+                            <input class="form-control" id="txt_cronexpression" type="text" disabled />
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        @* Second Table Design *@
+                        <div class="table-container" id="div_second">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="header">Sample Tips For Seconds</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Expressions</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold; text-align:center;">*</td>
+                                        <td>At Every Second</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Second1,Second2</td>
+                                        <td>Value list separator<br>Ex: 10,30<br>At 10th and 30th second</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Second1-Second2</td>
+                                        <td>Range of values<br>Ex: 1-10<br>At Every 1st to 10th Second</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Second1/Second2</td>
+                                        <td>Step values<br>Ex: */2<br>At Every 2nd Second</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">0-59</td>
+                                        <td>Allowed values</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @* Minute Table Design *@
+                        <div class="table-container" id="div_minute" style="display:none">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="header">Sample Tips For Minute</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Expressions</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold; text-align:center;">*</td>
+                                        <td>At Every Minute</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Minute1,Minute2</td>
+                                        <td>Value list separator<br>Ex: 20,40<br>At 20th & 40th Minute</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Minute1-Minute2</td>
+                                        <td>Range of values<br>Ex: 1-10<br>At Every 1st to 10th Minute</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Minute1/Minute2</td>
+                                        <td>Step values<br>Ex: */2<br>At Every 2nd Minute</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">0-59</td>
+                                        <td>Allowed values</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        @* Hours Table Design *@
+                        <div class="table-container" id="div_hour" style="display:none">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="header">Sample Tips For Hour</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Expressions</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold; text-align:center;">*</td>
+                                        <td>At Every Hour</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Hour1,Hour2</td>
+                                        <td>Value list separator<br>Ex: 13,14<br>At 13th & 14th Hour</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Hour1-Hour2</td>
+                                        <td>Range of values<br>Ex: 1-10<br>At Every 1st to 10th Hour</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Hour1/Hour2</td>
+                                        <td>Step values<br>Ex: */2<br>At Every 2nd Hour</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">0-23</td>
+                                        <td>Allowed values</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        @* Day(Month) Table Design *@
+                        <div class="table-container" id="div_day_month" style="display:none">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="header">Sample Tips For Day(Month)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Expressions</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold; text-align:center;">*</td>
+                                        <td>At Every Day(Month)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">DayofMonth1,DayofMonth2</td>
+                                        <td>Value list separator<br>Ex: 20,40<br>At 20th & 40th Day(Month)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">DayofMonth1-DayofMonth2</td>
+                                        <td>Range of values<br>Ex: 1-10<br>At Every 1st to 10th Day(Month)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">DayofMonth1/DayofMonth2</td>
+                                        <td>Step values<br>Ex: */2<br>At Every 2nd Day(Month)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">1-31</td>
+                                        <td>Allowed values</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        @* Month Table Design *@
+                        <div class="table-container" id="div_month" style="display:none">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="header">Sample Tips For Month</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Expressions</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold; text-align:center;">*</td>
+                                        <td>At Every Month</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Month1,Month2</td>
+                                        <td>Value list separator <br>Ex: 1,2<br>At 1st & 2nd Month</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Month1-Month2</td>
+                                        <td>Range of values (Ex: 1-10)<br>At Every 1st to 10th Month</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">Month1/Month2</td>
+                                        <td>Step values (Ex: */2)<br>At Every 2nd Month</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">1-12</td>
+                                        <td>Allowed values</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">JAN-DEC</td>
+                                        <td>Alternative single values</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        @* Day(Week) Table Design *@
+                        <div class="table-container" id="div_day_week" style="display:none">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="header">Sample Tips For Day(Week)</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Expressions</th>
+                                        <th>Definition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold; text-align:center;">*</td>
+                                        <td>At Every Day(Week)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">DayofWeek1,DayofWeek2</td>
+                                        <td>Value list separator<br>Ex: 1,2<br>At 1st & 2nd Day(Week)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">DayofWeek1-DayofWeek2</td>
+                                        <td>Range of values<br>Ex: 1-6<br>At Every 1st to 6th Day(Week)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">DayofWeek1/DayofWeek2</td>
+                                        <td>Step values<br>Ex: */2<br>At Every 2nd Day(Week)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">0-6</td>
+                                        <td>Allowed values</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">SUN-SAT</td>
+                                        <td>Alternative single values</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color:red;font-weight:bold;text-align:center;">7</td>
+                                        <td>Sunday (non-standard)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-8" style="padding-left: 0px;">
+                        <label class="form-label">File Path</label>
+                        <span class="mandatory" style="display:none;">*</span>                        
+                        <input class="form-control" id="txt_filePath" style="width: 98%;" type="text" name="txt_filePath" />
+                    </div>                   
+                    <div class="col-sm-4" style="margin-top: 2.5%;text-align: right; display:flex;margin-bottom: 5px;">
+                        <input style="float: right;margin-top: 0%;" type="button" id="cancel" onclick="CloseCronExpression()" class="cancel action-button-previous" value="Cancel" />
+                        <input style="float: right;margin-right: 0%;" type="button" id='btn_saveCronexp' onclick="saveCronexpression()" class="save" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function CloseCronExpression() {
+        $("#scheduler_exp_Popup").hide();
+    }
+
+    function SampleTips(type) {
+        $("#div_second").hide();
+        $("#div_minute").hide();
+        $("#div_hour").hide();
+        $("#div_day_month").hide();
+        $("#div_month").hide();
+        // $("#div_day_week").hide();
+
+        if (type == "second") {
+            $("#div_second").show();
+        }
+        else if (type == "minute") {
+            $("#div_minute").show();
+        }
+        else if (type == "hour") {
+            $("#div_hour").show();
+        }
+        else if (type == "daymonth") {
+            $("#div_day_month").show();
+        }
+        else if (type == "month") {
+            $("#div_month").show();
+        }
+        // else if (type == "dayweek") {
+        //     $("#div_day_week").show();
+        // }
+    }
+
+    function concatExpression() {
+        var _second = $("#txt_second").val().trim();
+        var _minute = $("#txt_minute").val().trim();
+        var _hour = $("#txt_hour").val().trim();
+        var _dayhour = $("#txt_dayhour").val().trim();
+        var _month = $("#txt_month").val().trim();
+        // var _dayweek = $("#txt_dayweek").val().trim();
+        var _space = " ";
+        var _cronexpression = "";
+        _cronexpression = _second + _space + _minute + _space + _hour + _space + _dayhour
+            + _space + _month;
+        // + _space + _dayweek;
+        $("#txt_cronexpression").val(_cronexpression);
+    }
+
+    function saveCronexpression() {
+        var _second = $("#txt_second").val().trim();
+        var _minute = $("#txt_minute").val().trim();
+        var _hour = $("#txt_hour").val().trim();
+        var _dayhour = $("#txt_dayhour").val().trim();
+        var _month = $("#txt_month").val().trim();
+        var _file_path = $("#txt_filePath").val().trim();
+        // var _dayweek = $("#txt_dayweek").val().trim();
+        if (_second == "") {
+            jAlert("Please enter a second ", "Connector");
+            return;
+        }
+        else if (_minute == "") {
+            jAlert("Please enter a minute ", "Connector");
+            return;
+        }
+        else if (_hour == "") {
+            jAlert("Please enter a hour ", "Connector");
+            return;
+        }
+        else if (_dayhour == "") {
+            jAlert("Please enter a dayhour ", "Connector");
+            return;
+        }
+        else if (_month == "") {
+            jAlert("Please enter a month ", "Connector");
+            return;
+        }
+        // else if (_dayweek == "") {
+        //     jAlert("Please enter a dayweek ", "Connector");
+        //     return;
+        // }
+        else if(_file_path == "") {
+            jAlert("Please enter file path ", "Connector");
+            return;
+        }
+        var cron_express = $("#txt_cronexpression").val();
+        if (cron_express != "") {
+            $("#txt_cronexpr").val(cron_express);
+            CloseCronExpression();
+        }
+
+    }
+</script>

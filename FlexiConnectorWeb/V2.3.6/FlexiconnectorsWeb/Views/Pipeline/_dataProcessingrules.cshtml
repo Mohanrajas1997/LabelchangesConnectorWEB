@@ -1,0 +1,290 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Connection
+@{
+}
+<div class="modal" tabindex="-1" role="dialog" id="rulesModel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="margin-top: -26px;">
+                <div class="row">
+                    <div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4">
+                        <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Conversion Rule</h4>
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <hr style="margin-top:-1px; width:100%;">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label"> Selected Field </label>
+                        <input class="form-control" id="choosenfieldtype" type="text" name="choosenfieldtype" disabled />
+                        <input class="form-control" id="choosenfieldid" type="text" name="choosenfieldid" style="display:none" />
+                        <input class="form-control" id="Mode" type="text" name="Mode" style="display:none" />
+                        @Html.TextBoxFor(model => model.dataProcessing.dataprocessing_gid, new { @class = "form-control", @id = "txtDPgid", @type = "hidden" })
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label"> Rule </label>
+                        @Html.DropDownListFor(model => model.SelectedMasterId, Model.masterDatas, "--Select--", new { @class = "form-control", id = "masterData" })
+                    </div>
+
+                    <div class="col-md-6">
+                        <div>
+                            <label class="form-label">
+                                Rule Type
+                            </label>
+                            <select id="subMasterdata" class="form-control" onchange="Actionchange($('#subMasterdata').val())"></select>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="dynamicParams" style="display:none;">
+                    <div class="row">
+                        <div id="divseqno" class="col-md-3">
+                            <label class="form-label">
+                                Sequence No
+                            </label>
+                            @Html.TextBoxFor(model => model.dataProcessing.dataprocessing_orderby, new { @class = "form-control", @id = "orderby", oninput = "this.value = this.value.replace(/[^0-9]/g, '')" })
+                        </div>
+                        <div id="divlabsubrules" class="col-md-3">
+                            <label id="labsubrules" class="form-label">
+                                Sub Rules
+                            </label>
+                            @*<select class="form-control" id="expressions" name="expressions" onchange="changeTruncateText($('#expressions').val())" disabled>*@
+                            <select class="form-control" id="expressions" name="expressions" disabled>
+                            </select>
+                        </div>
+                        <div id="divParam0" style="display:none" class="col-md-6">
+                            <label id="Param0" class="form-label">
+                                Param 0
+                            </label>
+                            @Html.TextBoxFor(model => model.dataProcessing.dataprocessing_param1, new { @class = "form-control", @id = "param1" })
+                        </div>
+
+                    </div>
+                    <div id="subAction" class="row">
+                        <div id="divParam1" style="display:none" class="col-md-6">
+                            <label id="Param1" class="form-label">
+                                Param 1
+                            </label>
+                            @Html.TextBoxFor(model => model.dataProcessing.dataprocessing_param2, new { @class = "form-control", @id = "param2" })
+                        </div>
+                        <div id="divParam2" style="display:none" class="col-md-6">
+                            <label id="Param2" class="form-label">
+                                Param 2
+                            </label>
+                            @Html.TextBoxFor(model => model.dataProcessing.dataprocessing_param3, new { @class = "form-control", @id = "param3" })
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row" style="padding-bottom:5px;margin-top:5px;padding-left:10px;padding-right:10px">
+                    <div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-4"> </div>
+                    <div class="col-sm-4" style="margin-top: 2%;text-align: right;">
+                        <input style="float: right;margin-right: 0%;" type="button" id='saveData' onclick="setDataprocessingrules('Insert')" class="save" value="Save" />
+                        <input style="float: right;margin-right: 0%;" type="button" id='updateData' onclick="setDataprocessingrules('Edit')" class="save" value="Update" />
+                        <input style="float: right;margin-top: 0%;" type="button" id="btn_prvs" onclick="closeModels()" class="cancel action-button-previous" value="Cancel" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        Actionchange("FRText");
+        $("#dynamicParams").show();
+        $('#updateData').hide();
+        if ($('#Mode').val() == "Edit") {
+            processingruleaction(action);
+        }
+
+    });
+
+    function closeModels() {
+        $("#rulesModel").innerHTML = "";
+        $("#rulesModel").hide();
+    }
+
+    $('#masterData').change(function () {
+        var selectedValue = '';
+        /*if ($(this).val() == '' || $(this).val() == undefined || $(this).val() == null){
+            selectedValue = $("#masterData").val();
+        }else{
+            selectedValue = $(this).val();
+        }*/
+
+        selectedValue = $(this).val();
+
+        $.ajax({
+            url: '@Url.Action("getMasterData", "Pipeline")?parentCode=' + selectedValue, // Replace with your controller action URL
+            method: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                // Populate the dropdown with data
+                var dropdown = $('#subMasterdata');
+                dropdown.empty();
+                dropdown.append($('<option></option>').val('').text('--Select--')); // Add a default option
+
+                $.each(data, function (key, entry) {
+                    dropdown.append($('<option></option>').val(entry.value).text(entry.text));
+                });
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+
+
+
+    });
+
+    function GetfieldConfig() {
+        $.ajax({
+            url: '@Url.Action("GetfieldConfig", "Pipeline")', // Replace with your controller action URL
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var _data = $.parseJSON(data);
+                $('#divParam0').css("display", "none");
+                $('#divParam1').css("display", "none");
+                $('#divParam2').css("display", "none");
+                $("#expressions").prop("disabled", true);
+                // $("#labsubrules").text("");
+                for (var i = 0; i < _data.length; i++) {
+                    if (_data[i]['fieldconfig_master_code'] == $("#subMasterdata").val()) {
+
+                        var _datadynamic = $.parseJSON(_data[i]['fieldconfig_dynamicfields']);
+                        for (var j = 0; j < _datadynamic.length; j++) {
+                            $('#divParam' + j).css("display", "block");
+                            $('#Param' + j).text(_datadynamic[j]['label']);
+                        }
+                        if (_data[i]['fieldconfig_expressions'] == "Y") {
+                            /*$("#divseqno").addClass("col-md-3");
+                            $("#divlabsubrules").addClass("col-md-3");
+                            $("#divlabsubrules").css("display", "block");*/
+                            $("#expressions").prop("disabled", false);
+                            $('#labsubrules').val(_data[i]['fieldconfig_expression_label']);
+                            $("#labsubrules").text(_data[i]['fieldconfig_expression_label']);
+                        } else {
+                            /*$("#divseqno").addClass("col-md-6");
+                            $("#divlabsubrules").addClass("col-md-0");
+                            $("#divlabsubrules").css("display", "none");*/
+                            $("#expressions").prop("disabled", true);
+                            $('#labsubrules').text("Not Applicable");
+                            // $("#labsubrules").text("");
+                        }
+                        return
+
+                    } else {
+                        $("#expressions").prop("disabled", true);
+                        $('#labsubrules').text("Not Applicable");
+                        // $("#labsubrules").text("");
+                    }
+                }
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+
+    function Actionchange(selectedValue) {
+        //if (selectedValue == "" || selectedValue == undefined || selectedValue == null){
+        //	selectedValue = $("#subMasterdata").val();
+        //}
+        $.ajax({
+            url: '@Url.Action("getMasterDatawithCode", "Pipeline")?parentCode=' + selectedValue, // Replace with your controller action URL
+            method: 'POST',
+            dataType: 'json',
+            success: function (data) {
+                // Populate the dropdown with data
+                var dropdown = $('#expressions');
+                dropdown.empty();
+                dropdown.append($('<option></option>').val('').text('--Select--')); // Add a default option
+
+                $.each(data.masterDatas, function (key, entry) {
+                    dropdown.append($('<option></option>').val(entry.value).text(entry.text));
+                });
+                GetfieldConfig();
+            },
+        });
+    }
+
+    function setDataprocessingrules(action) {
+        var ppl_gid = $("#txt_ppl_gid").val();
+        var ds_code = $("#txtds_code").val();
+        var orderBy = $("#orderby").val();
+        var fieldGid = $("#choosenfieldid").val();
+        var master_code = $("#masterData").val();
+        var pmaster_code = $("#subMasterdata").val();
+        var cmaster_code = ($("#expressions").val() == null) ? "" : $("#expressions").val();
+        var param1 = $("#param1").val();
+        var param2 = $("#param2").val();
+        var param3 = $("#param3").val();
+        var dpheaderGid = $("#txtDPheadergid").val();
+
+        if (action != 'Delete') {
+            if (orderBy <= 0 || orderBy == "undefined" || orderBy == "") {
+                jAlert("Sequence number must be greater then Zero.", "Connector");
+                return;
+            } else if (master_code == "undefined" || master_code == "") {
+                jAlert("Rule should not be empty.", "Connector");
+                return;
+            }
+            else if (pmaster_code == "undefined" || pmaster_code == "") {
+                jAlert("Rule Type should not be empty.", "Connector");
+                return;
+            }
+            else {
+                var grid = $("#processingDetailgrid").data("kendoGrid");
+                // Get the currently selected data item
+                for (var i = 0; i < grid._data.length; i++) {
+                    if (orderBy == grid._data[i]['dataprocessing_orderby'] && $('#txtDPgid').val() != grid._data[i]['dataprocessing_gid']) {
+                        jAlert("Duplicate Sequence No.", "Connector");
+                        return;
+                    }
+                }
+                //var selectedItem = grid.dataItem(grid.select());
+            }
+        }
+
+
+        var dataprocessing = {
+            "dataprocessing_gid": (action == "Insert") ? 0 : $('#txtDPgid').val(),
+            "dataprocessing_pipeline_gid": ppl_gid, "dataprocessing_orderby": orderBy, "dataprocessing_pplfieldmapping_gid": fieldGid,
+            "dataprocessing_master_code": master_code, "dataprocessing_parent_master_code": pmaster_code,
+            "delete_flag": (action == "Insert" || action == "Edit") ? 'N' : (action == "Delete") ? 'Y' : 'N',
+            "dataprocessing_child_master_code": cmaster_code, "dataprocessing_param1": param1, "dataprocessing_param2": param2,
+            "dataprocessing_param3": param3, "dataprocessing_header_gid": dpheaderGid,
+            "dataprocessingheader_dataset_code": ds_code,
+        };
+
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("setDataprocessing", "Pipeline")',
+            dataType: 'json',
+            data: { "dataprocessing": dataprocessing },
+            success: function (response) {
+                closeModels();
+                processingaction("Refresh");
+                jAlert(response, "Message");
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+</script>
+

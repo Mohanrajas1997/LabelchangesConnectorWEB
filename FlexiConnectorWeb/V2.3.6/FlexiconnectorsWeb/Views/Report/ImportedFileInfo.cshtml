@@ -1,0 +1,245 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<style>
+    .refresh {
+        width: 100px;
+        background: #0fc9b7;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #ffff;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 8px 5px;
+        /* margin: 10px 5px;*/
+    }
+
+    .text-2xl {
+        font-size: 1.5rem !important;
+    }
+
+    .font-bold {
+        font-weight: 700 !important;
+    }
+</style>
+
+<body>
+    <div>
+        <div class="row" style="height:auto;">
+            <div class="col-md-12">
+                @*<div class="content-wrapper" style="padding:10px;">*@
+                <div style="padding:10px; margin-top: 30px;">
+                    <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-md-4 font-bold text-2xl">
+                            FILE IMPORT INFO
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label">Period From</label>
+                            <span id="txt_importfrom" class="mandatory" style="display:none;">*</span>
+                            <br>
+                            <input type="text" class="form-control" id="import_from" name="import_from" placeholder="Select start date">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Period To</label>
+                            <span id="txt_importto" class="mandatory" style="display:none;">*</span>
+                            <br>
+                            <input type="text" class="form-control" id="import_to" name="import_to" placeholder="Select end date">
+                        </div>
+                        <div class="col-md-3">
+                            <input style="float: left;margin-top: 8%;" type="button" id='btn_refresh' onclick="RefreshData()" class="refresh" value="Refresh" />
+                        </div>
+                    </div>
+                    <fieldset>
+                        <div class="form-card" style="height: 70vh;margin-top:1%;">
+                            <div class="row" style="padding: 0px 16px;">
+                                <div id="FileImportGrid"></div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        let userCode = "";
+        if (urlParams != "") {
+            userCode = urlParams.get('user_code');
+        }
+        else {
+            userCode = 'Blank';
+        }
+        sessionStorage.setItem("userCode", userCode);
+
+
+    // Initialize From DateTimePicker
+    var fromPicker = $("#import_from").kendoDateTimePicker({
+        format: "dd-MM-yyyy HH:mm:ss",
+        parseFormats: ["yyyy-MM-dd HH:mm:ss", "yyyy-MM-ddTHH:mm:ss", "MM/dd/yyyy hh:mm tt"],
+        value: null,
+        change: function () {
+            var fromVal = this.value();
+            var toVal = toPicker.value();
+
+            // Enforce to >= from
+            if (toVal && fromVal && toVal < fromVal) {
+                  jAlert("Period From Cannot be greater than Period To", "Flexi Connector");
+                  $('#btn_refresh').prop('disabled', true);
+                  return
+            }
+            $('#btn_refresh').prop('disabled', false);
+            $("#import_from").data("kendoDateTimePicker").value(fromVal);
+        }
+    }).data("kendoDateTimePicker");
+
+    // Initialize To DateTimePicker
+    var toPicker = $("#import_to").kendoDateTimePicker({
+        format: "dd-MM-yyyy HH:mm:ss",
+        parseFormats: ["yyyy-MM-dd HH:mm:ss", "yyyy-MM-ddTHH:mm:ss", "MM/dd/yyyy hh:mm tt"],
+        value: null,
+        change: function () {
+            var toVal = this.value();
+            var fromVal = fromPicker.value();
+
+            if (fromVal && toVal && toVal < fromVal) {
+                jAlert("Period To Cannot be less than Period From", "Flexi Connector");
+                $('#btn_refresh').prop('disabled', true);
+                  return
+            }
+            $('#btn_refresh').prop('disabled', false);
+            $("#import_to").data("kendoDateTimePicker").value(toVal);
+        }
+    }).data("kendoDateTimePicker");
+
+        listgrid([]);
+    });
+
+
+</script>
+<script>
+
+    // Helper function to convert JS Date to MySQL format
+    function toMySQLDateTime(jsDate) {
+        if (!jsDate) return "";
+        const pad = (n) => n < 10 ? '0' + n : n;
+        return jsDate.getFullYear() + '-' +
+            pad(jsDate.getMonth() + 1) + '-' +
+            pad(jsDate.getDate()) + ' ' +
+            pad(jsDate.getHours()) + ':' +
+            pad(jsDate.getMinutes()) + ':' +
+            pad(jsDate.getSeconds());
+    }
+
+      function RefreshData() {
+        var fromDateObj = $("#import_from").data("kendoDateTimePicker").value();
+        var toDateObj = $("#import_to").data("kendoDateTimePicker").value();
+
+        var from_date = toMySQLDateTime(fromDateObj);
+        var to_date = toMySQLDateTime(toDateObj);
+
+        // Now from_date and to_date are MySQL-formatted strings
+        GetimportedfileList(from_date, to_date);
+    }
+
+    function GetimportedfileList(fromdate, todate) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GellImportedFileInfo", "Report")?from_date=' + fromdate + "&to_date=" + todate,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                var res = JSON.parse(response)
+                 var $grid = $("#FileImportGrid");
+
+                // destroy previous grid if exists
+                if ($grid.data("kendoGrid")) {
+                    $grid.data("kendoGrid").destroy();
+                    $grid.empty(); // remove leftover DOM
+                }
+                listgrid(res);
+            },
+            error: function (er) {
+                alert(er)
+                console.log(er)
+            }
+        });
+    }
+
+</script>
+<script>
+
+    function listgrid(data) {
+        try {
+            $("#FileImportGrid").kendoGrid({
+                 toolbar: ["excel"],
+                excel: {
+                    fileName: "FileimportedDetails.xlsx",
+                    filterable: true,
+                    allPages: true
+                },
+                dataSource: {
+                    data: data,
+                    schema: {
+                        model: {
+                            fields: {
+                                pipeline_code_name: { type: "string" },
+                                dataset_code_name: { type: "string" },
+                                file_name: { type: "string" },
+                                scheduler_start_date: { type: "string" },
+                                scheduler_end_date: { type: "string" },
+                                import_rec_count: { type: "integer" },
+                                valid_rec_count: { type: "integer" },
+                                Error_rec_count: { type: "integer" },
+                                dataset_moved_count: { type: "integer" },
+                                scheduler_status: { type: "string" },
+                                errorlog_exception: { type: "string" },
+                                import_by: { type: "string" },
+                                scheduler_gid: { type: "integer" }
+                            }
+                        }
+                    },
+                    pageSize: 15
+                },
+                height: 400,
+                width: 1058,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    { field: "pipeline_code_name", title: "Pipeline Code & Name", width: 200 },
+                    { field: "dataset_code_name", title: "Dataset Code & Name", width: 200 },
+                    { field: "file_name", title: "File Name", width: 200 },
+                    { field: "scheduler_start_date", title: "Scheduler start Date", width: 100,
+                    template: "#= kendo.toString(kendo.parseDate(scheduler_start_date), 'yyyy-MM-dd HH:mm:ss') #"},
+                    { field: "scheduler_end_date", title: "Scheduler end Date", width: 100 ,
+                    template: "#= kendo.toString(kendo.parseDate(scheduler_end_date), 'yyyy-MM-dd HH:mm:ss') #"},
+                    { field: "import_rec_count", title: "Imported Rec Count", width: 100 },
+                    { field: "valid_rec_count", title: "Valid Rec Count", width: 100 },
+                    { field: "Error_rec_count", title: "Error Rec Count", width: 100 },
+                    { field: "dataset_moved_count", title: "Dataset Moved Count", width: 100 ,hidden: true},
+                    { field: "scheduler_status", title: "Scheduler status", width: 100},
+                    { field: "errorlog_exception", title: "Error Exception", width: 100},
+                    { field: "import_by", title: "Import By", width: 100},
+                    { field: "scheduler_gid", title: "Scheduler gid", width: 100}
+                ],
+
+                resizable: true
+            });
+        } catch (err) {
+            alert(err);
+        }
+    }
+
+</script>

@@ -1,0 +1,84 @@
+﻿@model Connection
+@{
+
+}
+<div class="modal" tabindex="-1" role="dialog" id="datasetClone_Popup" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="dialog">
+        <div class="modal-content" style="width: 75%;left: 0%;box-shadow:0 0 8px 8px rgba(153, 153, 153, 0.8) !important">
+            <div class="modal-body" style="margin-top: -15%;margin-left: 3%;margin-right: 3%;">
+                <div class="row">
+                    <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Dataset Clone</h4>
+                </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                        <label id="lbl_clone_txt" style="color:red; display:none;"></label>
+                              @*   <label>New Dataset Name</label>
+                                <span class="mandatory">*</span>
+                                <input class="form-control" id="txt_newdsname" type="text" name="txt_newdsname" style="height: 25%;" /> *@
+                                <label id="lbl_matched" style="display:none;">Matched Dataset<span class="mandatory">*</span> &nbsp;&nbsp;</label>
+                                <label id="lbl_unmatched" style="display:none;">Unmatched Dataset<span class="mandatory">*</span> &nbsp;&nbsp;</label>
+                                
+                                <select class="form-control" id="new_dataset" name="new_dataset">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label>Clone Dataset</label>
+                                <span class="mandatory">*</span> &nbsp;&nbsp;
+                                <select class="form-control" id="clone_dataset" name="clone_dataset">
+                                    <option value="">-- Select --</option>
+                                </select>
+                            </div>
+                        </div>
+                <div class="row" style="padding-left: 122px;">
+                    <div class="row" style="margin-top: 2%;">
+                        <input style="margin-left: -2%;padding:5px;" type="button" id='btn_dsclonesave' onclick="DScloneSave()" class="save" value="Clone" />
+                        <input style="margin-left: 9%; padding:4px 5px;" type="button" id='btn_clonecancel' onclick="closepplclonePopup()" class="cancel" value="Cancel" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function closepplclonePopup() {
+         $("#datasetClone_Popup").hide();
+    }
+
+    function DScloneSave() {
+        let text = "Are you sure to Clone?";
+      jConfirm(text, "Flexi Connector", function (f) {
+      if (f == true) {
+            var data = {};
+            data.in_clone_dataset_code = $('#clone_dataset').val();
+            data.in_pipeline_code =  $('#txt_ppl_code').val();
+            data.in_dataset_type = $('input[name="rdo_dsmode"]:checked').val();
+            data.in_new_dataset_code = $('#new_dataset').val();
+            data.in_user_code = _user_code;
+             $.ajax({
+                type: "Post",
+                url: '@Url.Action("CloneDataset", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    if(res.length > 0) {
+                         $("#datasetClone_Popup").hide();
+                         loadexistingdataset("");
+                         jAlert(res[0].out_msg, "Connector");
+                    }
+                },
+                error: function (er) {
+                    console.log(er);
+                }
+            });
+         } else {
+            text = "You canceled!";
+         }
+      });    
+       
+    }
+
+</script>

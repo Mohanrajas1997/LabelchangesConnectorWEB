@@ -1,0 +1,4364 @@
+﻿@*@model List<ConnectionDto>*@
+@model Connection
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    .k-grid td {
+        line-height: 2.3em;
+    }
+
+    .modal-content {
+        top: 17px;
+        left: 100px;
+    }
+
+    .cancel {
+        width: 100px;
+        border: 1px solid red !important;
+        background: transparent;
+        font-weight: bold;
+        color: red;
+        border: 0 none;
+        border-radius: 5px !important;
+        cursor: pointer;
+        padding: 9px 5px;
+        margin: 10px 5px 0px 5px;
+    }
+
+    .save {
+        width: 100px;
+        background: #0fc9b7;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #ffff;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px 5px;
+        /* margin: 10px 5px;*/
+    }
+
+    .demo-wrapper {
+        grid-template-columns: 180px 1fr;
+    }
+
+    .k-h4 {
+        line-height: 26px;
+        margin-bottom: 0;
+    }
+
+    .k-window-titlebar {
+        display: none !important;
+        background-color: transparent !important;
+    }
+
+    .kd-nodata-wrapper {
+        display: block !important;
+        padding-top: 20px !important;
+    }
+
+
+    /* Breakpoints for full screen demo: max:599px, min:759px and max: 959 */
+
+    .demo-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .avatar {
+        display: block !important;
+    }
+
+    .side-container {
+        display: none !important;
+    }
+
+    .main-container {
+        padding-bottom: 0;
+    }
+
+    .content-expanded {
+        border-end-end-radius: 0;
+        border-end-start-radius: 0;
+    }
+
+
+    /* Breakpoint for full screen demo: max:359px */
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    html.k-webkit.k-webkit114 {
+        overflow: hidden;
+    }
+
+    div.k-window-content {
+        overflow: hidden;
+        box-shadow: 0 0 8px 8px rgba(153, 153, 153, 0.8) !important;
+    }
+
+    }
+
+    .k-window-title {
+        position: absolute;
+        left: 9.44em;
+        right: 0.44em;
+        overflow: hidden;
+        cursor: default;
+        text-overflow: ellipsis;
+        font-weight: bold;
+        color: green;
+        display: none;
+    }
+
+    div.k-window {
+        box-shadow: 0 0 8px 8px rgba(153, 153, 153, 0.8) !important;
+        padding-top: 0px !important;
+    }
+
+
+    .modal-dialog {
+        margin: 11% auto;
+    }
+
+</style>
+<style>
+
+    .show {
+        display: block;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        height: 100%;
+    }
+
+    /*form styles*/
+    #msform {
+        position: relative;
+        padding: 0px 10px;
+    }
+
+    .k-grid-md td, .k-grid-md .k-table-td {
+        padding-block: 5px !important;
+    }
+
+    .k-grid {
+        border-width: 1px;
+        border-style: solid;
+        box-sizing: border-box;
+        outline: 0;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.4285714286;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .navbar {
+        margin-bottom: 0px !important;
+    }
+
+    #msform fieldset .form-card {
+        margin: 0px !important;
+        border: 0 none;
+        background: #fff;
+        border-radius: 0px;
+        box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+        padding: 20px 29px 30px 43px;
+        box-sizing: border-box;
+        margin: 0 3% 20px 3%;
+        width: 100%;
+        /*stacking fieldsets above each other*/
+        position: relative;
+        height: 67vh;
+    }
+
+    #msform fieldset {
+        background: white;
+        border: 0 none;
+        border-radius: 0.5rem;
+        box-sizing: border-box;
+        margin: 0;
+        padding-bottom: 20px;
+        /*stacking fieldsets above each other*/
+        position: relative;
+        background-color: transparent;
+    }
+
+        /*Hide all except first fieldset*/
+        #msform fieldset:not(:first-of-type) {
+            display: none;
+        }
+
+        #msform fieldset .form-card {
+            text-align: left;
+            height: 60vh;
+        }
+
+    /*Blue Buttons*/
+    #msform .action-button {
+        width: 100px;
+        background: #0fc9b7;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #ffff;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px 5px;
+        margin: 10px 5px;
+    }
+    /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    #msform .action-button:hover, #msform .action-button:focus {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }*/
+
+    /*Previous Buttons*/
+    #msform .action-button-previous {
+        width: 100px;
+        border: 1px solid red !important;
+        background: transparent;
+        font-weight: bold;
+        color: red;
+        border: 0 none;
+        border-radius: 5px !important;
+        cursor: pointer;
+        padding: 10px 5px;
+        margin: 10px 5px;
+    }
+
+    /*   #msform .action-button-previous:hover, #msform .action-button-previous:focus {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        box-shadow: 0 0 0 2px white, 0 0 0 3px #616161;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }*/
+
+    /*Dropdown List Exp Date*/
+    select.list-dt {
+        border: none;
+        outline: 0;
+        border-bottom: 1px solid #ccc;
+        padding: 2px 5px 3px 5px;
+        margin: 2px;
+    }
+
+        select.list-dt:focus {
+            border-bottom: 2px solid skyblue;
+        }
+
+    /*The background card*/
+    .card1 {
+        z-index: 0;
+        border: none;
+        border-radius: 0.5rem;
+        position: relative;
+    }
+
+    /*FieldSet headings*/
+    .fs-title {
+        font-size: 25px;
+        color: #2C3E50;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    /*progressbar*/
+    #progressbar {
+        margin-bottom: 0px;
+        overflow: hidden;
+        color: #0c0c0c;
+    }
+
+        #progressbar .active {
+            color: #fff;
+            background-color: #872e7b !important;
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 12px;
+            width: 20%;
+            float: left;
+            position: relative;
+        }
+
+            /*ProgressBar before any progress*/
+            #progressbar li:before {
+                width: 50px;
+                height: 50px;
+                line-height: 45px;
+                display: block;
+                font-size: 18px;
+                color: #ffffff;
+                background: lightgray;
+                border-radius: 50%;
+                margin: 0 auto 10px auto;
+                padding: 2px;
+            }
+
+            /*ProgressBar connectors*/
+            #progressbar li:after {
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: lightgray;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                z-index: -1;
+            }
+
+            /*Color number of the step and the connector before it*/
+            #progressbar li.active:before, #progressbar li.active:after {
+                background: skyblue;
+            }
+
+    /*Imaged Radio Buttons*/
+    .radio-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .radio {
+        display: inline-block;
+        width: 204;
+        height: 104;
+        border-radius: 0;
+        background: lightblue;
+        box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        cursor: pointer;
+        margin: 8px 2px;
+    }
+
+        .radio:hover {
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .radio.selected {
+            box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+    .choose-source .connector-details .container .connector .connector-info {
+        padding: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        height: inherit;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        grid-gap: 0.5rem;
+        gap: 0.5rem;
+    }
+
+    *:not(.p-inputtext):not(.p-button):focus {
+        box-shadow: none !important;
+    }
+
+    *:not(.p-inputtext):not(.p-button):focus {
+        box-shadow: none !important;
+    }
+
+    /*Fit image in bootstrap div*/
+    .fit-image {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .choose-source .connector-details .container .connector .highlight {
+        width: 140px;
+        height: 130px;
+        box-shadow: 0 2px 5px #0000004d;
+        border: 4px solid #53adde;
+        transition: .3s;
+        border-radius: 5px;
+    }
+
+    .mandatory {
+        color: red;
+    }
+
+    .col-md-12 {
+        width: 100%;
+    }
+
+    .item {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .item-card {
+        transition: 0.5s;
+        cursor: pointer;
+    }
+
+    .item-card-title {
+        font-size: 15px;
+        transition: 1s;
+        cursor: pointer;
+    }
+
+        .item-card-title i {
+            font-size: 15px;
+            transition: 1s;
+            cursor: pointer;
+            color: #ffa710
+        }
+
+    .card-title i:hover {
+        transform: scale(1.25) rotate(100deg);
+        color: #18d4ca;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+    }
+
+    .card-text {
+        height: 80px;
+    }
+
+    .card::before, .card::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: scale3d(0, 0, 1);
+        transition: transform .3s ease-out 0s;
+        background: rgba(255, 255, 255, 0.1);
+        content: '';
+        pointer-events: none;
+    }
+
+    .card::before {
+        transform-origin: left top;
+    }
+
+    .card::after {
+        transform-origin: right bottom;
+    }
+
+    .card:hover::before, .card:hover::after, .card:focus::before, .card:focus::after {
+        transform: scale3d(1, 1, 1);
+    }
+
+    #page-content-wrapper {
+        padding: 15px;
+        width: 80% !important;
+    }
+
+    .k-multiselect .k-multiselect-wrap {
+        white-space: nowrap;
+    }
+
+    .tab-color {
+        background-color: grey !important;
+        padding: 12px;
+        color: #fff;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .split-button .button-label[_ngcontent-vhm-c150] {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+        display: inline-block;
+        width: max-content;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .bg-blue-400 {
+        background-color: #0fc9b7 !important;
+    }
+
+    .text-white {
+        color: #fff !important;
+    }
+
+    .cursor-pointer {
+        cursor: pointer !important;
+    }
+
+    .border-none {
+        border-width: 0 !important;
+        border-style: none;
+    }
+
+    .h6, h6 {
+        font-size: 15px;
+        color: black;
+        text-align: right;
+    }
+
+    .hide-selected > div.k-input-values {
+        display: none;
+    }
+
+    button[disabled], html input[disabled] {
+        background: #0fc9b759 !important;
+        cursor: default !important;
+    }
+
+    .btntestconn {
+        background: #0fc9b7;
+        font-weight: bold;
+        color: white;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px 10px;
+        float: right
+    }
+
+    .query_clr {
+        background-color: #2196f3 !important;
+    }
+
+    .no-file-chosen {
+        color: transparent;
+    }
+
+    .checked-row-background {
+        background-color: yellow;
+    }
+
+    th.k-header {
+        color: white;
+    }
+
+    .set_val {
+        cursor: pointer;
+        border: 1px solid green;
+        background: green;
+        padding: 1px 17px;
+        border-radius: 3px;
+        margin-left: 41px;
+    }
+
+        .set_val > a {
+            color: #fff;
+            text-align: center;
+        }
+
+    .disabled {
+        color: gray;
+        border: 1px solid gray;
+        background: gray;
+        opacity: 0.8;
+        border-radius: 3px;
+        margin-left: 41px;
+        padding: 1px 17px;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+        .disabled > a {
+            color: #000;
+            text-align: center;
+        }
+
+</style>
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <div style="height:auto;">
+            @*<div class="content-wrapper" style="padding:10px;">*@
+            <div style="padding:10px;">
+                <div class="card1">
+                    <div class="row">
+                        <div class="col-md-12 mx-0">
+                            <form id="msform">
+                                <ul id="progressbar" style="padding: 8px 0px;">
+                                    <li class="active tab-color" id="pipelne"><strong>Pipeline</strong></li>
+                                    <li class="tab-color"><strong>Data Source</strong></li>
+                                    <li class="tab-color"><strong>Pre Processing</strong></li>
+                                    <li class="tab-color"><strong>Processing</strong></li>
+                                    <li class="tab-color"><strong>Post Processing</strong></li>
+                                </ul>
+                                <fieldset>
+                                    <div class="form-card" style="height: 68vh;">
+                                        <div class="row">
+                                            <div class="col-sm-4" style="width: 33.33333333%;padding-left: 0%;">
+                                                <input class="form-control" type="text" id="txt_ppl_gid" name="txt_ppl_gid" style="display:none" />
+                                                <input class="form-control" type="text" id="txt_ppl_code" name="txt_ppl_code" style="display:none" />
+                                                <input class="form-control" type="text" id="txt_ppl_status" name="txt_ppl_status" style="display:none" />
+                                                <input class="form-control" type="text" id="txt_fileextension" name="txt_fileextension" style="display:none" />
+                                                <input class="form-control" type="text" id="txt_source_db_type" name="txt_source_db_type" style="display:none" />
+                                                <input class="form-control" type="text" id="txt_table_view_query_type" name="txt_table_view_query_type" style="display:none" />
+                                                <input class="form-control" type="text" id="txt_table_view_query_desc" name="txt_table_view_query_desc" style="display:none" />
+                                                <label class="form-label">PipeLine Name </label>
+                                                <span class="mandatory">*</span>
+                                                <input class="form-control" id="txtppl_name" type="text" name="pipeline" />
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row">
+                                            <div class="col-sm-4" style="width: 33.33333333%;padding-left: 0%;">
+                                                <label class="form-label">Description </label>
+                                                @*<span class="mandatory">*</span>*@
+                                                <textarea class="form-control" id="txtppl_desc" type="text" name="txtppl_desc" style="width: 370px;height: 220px;resize: none;"></textarea>
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="navbar fixed-bottom" style="min-height:0px;"></div>
+                                    <input style="float: right;margin-right: 0%;" type="button" id='btn_nextppl' onclick="pplsave()" name="next" class="next action-button" value="Next" />
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-card" style="height: 68vh;">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div>
+                                                    <label>Connectors</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" id="connectors" onchange="getdblist($('#connectors').val())" name="ConnectorsId" style="width:100%;">
+                                                        <option value="">-- Select --</option>
+                                                        @foreach (var connector in ViewBag.Connectors)
+                                                        {
+                                                            <option value="@connector.Id">@connector.Name</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <br />
+                                                <div id="div_srcdbname" style="display:none;">
+                                                    <label>Source DataBase Name</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" onchange="gettablelist($('#connectors').val(),$('#databasename').val())" id="databasename" name="databasename">
+                                                    </select>
+                                                    <br />
+
+                                                </div>
+                                                <div id="div_tvq" style="display:none;">
+                                                    <label>Source Table/View/Query</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" id="src_tblviewquery" name="src_tblviewquery">
+                                                        <option value="">-- Select --</option>
+                                                        <option value="T">Table</option>
+                                                        <option value="V">View</option>
+                                                        <option value="Q">Custom Query</option>
+                                                    </select>
+                                                    <br />
+
+                                                </div>
+                                                <div class="form-group" id="div_fileinput" style="display:none;">
+                                                    <label class="form-label">Select File</label>
+                                                    <span class="mandatory">*</span>
+                                                    <input type="file" id="fileInput" name="fileInput" value="test" accept=".xls,.xlsx" onchange="file_change(this)">
+                                                </div>
+
+                                                <div id="div_selectfile" style="margin-top:-4%">
+                                                    <label class="form-label" style="color:green" id="selectedfilename"></label>
+                                                </div>
+
+                                                <div class="col-sm-6" id="img_div">
+                                                    <br />
+                                                    <img id="imgmysql" src="~/Content/images/mysql.png" alt="My Image" hidden>
+                                                    <img id="imgpostgres" src="~/Content/images/postgres.png" alt="My Image" hidden>
+                                                    <img id="imgcsv" src="~/Content/images/csv.png" alt="My Image" hidden>
+                                                    <img id="imgexcel" src="~/Content/images/excel.png" alt="My Image" hidden>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8" id="grid_tvc">
+                                                <input class="form-control" id="txt_tableview_desc" type="text" name="txt_tableview_desc" style="display:none" />
+                                                <input class="form-control" id="txt_sheetname" type="text" name="txt_sheetname" style="display:none" />
+
+                                                <div id="div_table" hidden>
+                                                    <label>Source Table List</label>
+                                                    <div id="srctblsearch" style="margin-top: -2.5%;">
+                                                    </div>
+                                                </div>
+                                                <div id="div_view" hidden>
+                                                    <label>Source View List</label>
+                                                    <div id="srcviewsearch" style="margin-top: -2.5%;">
+                                                    </div>
+                                                </div>
+                                                <div id="div_excel" hidden>
+                                                    <label>Excel Sheet List</label>
+                                                    <div id="srcexcelsearch" style="margin-top: -2.5%;">
+                                                    </div>
+                                                </div>
+
+                                                <div id="div_query" hidden>
+                                                    <label>Query</label>
+                                                    <div id="cust_query">
+                                                        <div>
+                                                            <textarea id="txt_cusquery" style=" height: 50vh;width: 100%;border: 1px solid #d9c3c3;border-radius: 5px;resize: none;"></textarea>
+                                                        </div>
+                                                        <div>
+                                                            <button class="save query_clr" style="float:right;" onclick="checkquery('CustomQuery')" type="button" name="checkquery">  Check Query </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="navbar fixed-bottom" style="min-height:0px; margin:0px;"></div>
+                                    <input style="float: right;margin-right: 0%;" type="button" id='btn_nextppl1' onclick="pplsave()" name="btn_nextppl1" class="next action-button" value="Next" disabled />
+                                    <input style=" float: right;" type="button" id="btn_prvs" onclick="pplsave()" name="previous" class="previous action-button-previous" value="Previous" />
+                                </fieldset>
+                                <fieldset>
+                                    <div class="form-card" style="height:68vh;padding-left: 29px;">
+                                        <div>
+                                            <label id="lbl_info" style="color:brown">
+                                            </label>
+                                        </div>
+                                        <ul id="cc_progressbar" style="padding: 8px;padding-left: 0px;text-align: center;">
+                                            <li class="active cc_tab-color" id="fieldmappingTab"><a data-toggle="tab" style="color: #fff;">Field Mapping</a></li>
+                                            <li class="cc_tab-color" id="filtersTab"><a data-toggle="tab" style="color: #fff;">Filters</a></li>
+                                        </ul>
+                                        <div style="display:none;" id="expression_conf">
+                                            <div class="row">
+                                                <h6 style="text-align: center;font-size: 17px;color: green;font-weight: 700;">
+                                                    Expressions
+                                                </h6>
+                                            </div>
+
+                                            <div class="row" style="padding-left: 6px;">
+                                                <div class="col-md-4" style="margin-left: 1%;">
+                                                    <div class="row">
+                                                        <label>Expression Name</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input style="display:none;" class="form-control" id="txt_pplsourcefield_gid" type="text" name="txt_pplsourcefield_gid" />
+                                                        <input class="form-control" id="txt_expression_name" type="text" name="txt_expression_name" style="height: 25%;" />
+                                                    </div>
+                                                    <div class="row">
+                                                        <label>Expression Datatype</label>
+                                                        <span class="mandatory">*</span>
+                                                        <select class="form-control" id="drp_datatype" name="drp_datatype" style="width:100%;height:25%">
+                                                            <option value="-- Select --">-- Select --</option>
+                                                            <option value="TEXT">TEXT</option>
+                                                            <option value="INTEGER">INTEGER</option>
+                                                            <option value="DATE">DATE</option>
+                                                            <option value="DATETIME">DATETIME</option>
+                                                            <option value="NUMERIC">NUMERIC</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label>Expression</label>
+                                                        <span class="mandatory">*</span>
+                                                        <textarea class="form-control" type="text" id="txt_expression_field" onclick="document.getElementById('btn_expressionsave').disabled = true;" name="txt_expression_field" style="color: black; height: 88px;line-height: 20px;resize: none;"></textarea>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 1%;">
+                                                        <input style="padding:5px;" type="button" id='btn_expcheckquery' onclick="IsCheckQuery('Expression')" class="save query_clr" value="Check Query" />
+                                                        <input style="margin-left: 2%;padding:5px;" type="button" id='btn_expressionsave' onclick="PPLexpressionSave()" class="save" value="Save" disabled />
+                                                        <input style="margin-left: 2%; padding:4px 5px;" onclick="closeexpressionpopup()" type="button" id='btn_expressioncancel' class="cancel" value="Close" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <div class="row">
+                                                        <label style="margin-left:7%;">Expression List</label>
+                                                    </div>
+
+                                                    <div class="row" id="expressionsearch" style="margin-top: -1%;margin-left: 1%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="fieldmapping_conf">
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label style="margin-top: 6px;">Target Dataset</label>
+                                                    <span style="margin-top: 6px;" class="mandatory">*</span> &nbsp;&nbsp;
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <input class="form-control" id="txt_trgdataset" type="text" name="txt_trgdataset" style="display:none;" />
+                                                    <select class="form-control" id="trgdataset" name="trgdataset" onchange="PPLfieldMapInsert()" style="margin-left: -25%;">
+                                                        <option value="">-- Select --</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-sm-2">
+                                                    <input style="padding: 4%; margin-left: 245%;" type="button" onclick="fieldmapsave()" id='btn_fieldmapsave' class="save" value="Update" />
+                                                </div>
+
+                                                <div class="col-sm-2" style="float: right; text-align: right; margin-right: 23px;margin-top: 5px;">
+                                                    <button type="button" id="btn_addnew" class="text-white cursor-pointer border-none outline-none p-shadow-3 bg-blue-600">
+                                                        <span class="button-icon py-2 px-3" style="background-color:#175650 !important;">
+                                                            <i class="glyphicon glyphicon-plus "></i>
+                                                        </span><span class="button-label py-2 px-3 bg-blue-400">Expression</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row" id="search">
+                                            </div>
+
+                                        </div>
+
+                                        <div id="filters_conf">
+                                            <div class="row" style="padding-left: 1.5%;">
+                                                <div class="col-md-6">
+                                                    <div>
+                                                        <h2 style="margin-top: 10px;margin-bottom:0px; text-align: center;font-size: 17px;color: green;font-weight: 700;">
+                                                            Inclusion
+                                                        </h2>
+                                                    </div>
+                                                    <div class="row">
+                                                        <input style="display:none;" class="form-control" id="txt_filter_gid" type="text" name="txt_filter_gid" />
+                                                        <label>Filter Condition</label>
+                                                        <span class="mandatory">*</span>
+                                                        <textarea class="form-control" type="text" id="txt_filtercond" name="txt_filtercond" oninput="togglebutton('Filter')" onclick="document.getElementById('btn_filtersave').disabled = true;" style="width:95%;height:175px;color: black;resize: none;"></textarea>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 2%;">
+                                                        <input type="button" id='btn_flcheckquery' class="save query_clr" onclick="ExcelIsCheckQuery('Filter',$('#txt_source_db_type').val())" value="Check Query" />
+                                                        <input style="margin-left: 2%;" type="button" id='btn_filtersave' onclick="pplfiltercondsave()" class="save" value="Save" disabled />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div>
+                                                        <h2 style="margin-top: 10px;margin-bottom:0px;text-align: center;font-size: 17px;color: red;font-weight: 700;"> Exclusion</h2>
+                                                    </div>
+                                                    <div class="row">
+                                                        <input style="display:none;" class="form-control" id="txt_rejection_gid" type="text" name="txt_rejection_gid" />
+                                                        <label>Rejection Condition</label>
+                                                        <span class="mandatory">*</span>
+                                                        <textarea class="form-control" type="text" id="txt_rejectioncond" name="txt_rejectioncond" oninput="togglebutton('Rejection')" onclick="document.getElementById('btn_rejectionsave').disabled = true;" style="width:95%;height:175px;color: black;resize: none;"></textarea>
+                                                    </div>
+                                                    <div class="row" style="margin-top: 2%;">
+                                                        <input type="button" id='btn_rjcheckquery' class="save query_clr" onclick="ExcelIsCheckQuery('Rejection',$('#txt_source_db_type').val())" value="Check Query" />
+                                                        <input style="margin-left: 2%;" type="button" id='btn_rejectionsave' onclick="pplrejectioncondsave()" class="save" value="Save" disabled />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="navbar fixed-bottom" style="min-height:0px;"></div>
+                                    <input style="float: right;margin-right: 0%;" type="button" onclick="pplsave()" id='btn_nextppl2' name="next" class="next action-button"
+                                           value="Next" />
+                                    <input style=" float: right;" type="button" name="previous" id="btn_prvs" class="previous action-button-previous" value="Previous" />
+                                </fieldset>
+                                <fieldset>
+                                    <ul id="cc_progressbar" style="padding: 8px;padding-left: 0px;text-align: center;">
+                                        <li class="active cc_tab-color" id="validationTab"><a data-toggle="tab" style="color: #fff;">Validation Rule</a></li>
+                                        <li class="cc_tab-color" id="dataprocessingTab"><a data-toggle="tab" style="color: #fff;">Conversion Rule</a></li>
+                                    </ul>
+                                    @* <div> @Html.Partial("_dataProcessinglist", new Connection())</div>*@
+                                    @await Html.PartialAsync("_dataProcessinglist", Model)
+                                    <input style="float: right;margin-right: -0%;" type="button" id='btn_nextppl3' name="next" class="next action-button" value="Next" />
+                                    <input style="float: right;margin-right: 1%;" type="button" name="previous" id="btn_prvs" class="previous action-button-previous" value="Previous" />
+                                </fieldset>
+
+                                <fieldset>
+                                    <div class="form-card" style="height: 68vh;overflow-y: auto;">
+                                        @* <label style="color:brown;font-size: 16px;">Finalization</label> *@
+                                        <div id="div_finalization">
+
+                                            <div class="row" style="margin-top:1%">
+                                                <div class="col-md-4">
+                                                    <input class="form-control" type="text" id="txt_pplfinalization_gid" name="txt_pplfinalization_gid" style="display:none" />
+                                                    <label>Run Type</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" onchange="schedulecron_cond()" id="run_type" name="run_type">
+                                                        <option>--select--</option>
+                                                        <option value="On Demand" selected>On Demand</option>
+                                                        <option value="Scheduled Run">Scheduled Run</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4" id="Scheduled_expression">
+                                                    @* <label class="form-label">Scheduled Cron Expression</label> *@
+                                                    <label class="form-label">Recurring Daily</label>
+                                                    <span class="mandatory">*</span>
+                                                    @*  <label class="form-label" style="color:green; margin-left: 20%;">
+                                                    Every Day
+                                                    </label> *@
+                                                    <input class="form-control" id="txt_cronexpr" type="text" placeholder="Ex: 24-hour format (HH:mm)" name="txt_cronexpr" disabled />
+                                                    @* <input class="form-control" id="txt_cronexpr" type="time" placeholder="Ex:-24 hours format" name="txt_cronexpr" /> *@
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label class="form-label">Last Sync DateTime</label>
+                                                    <input class="form-control" id="txt_lastsyncDT" type="text" name="txt_lastsyncDT" />
+                                                </div>
+
+                                            </div>
+                                            <div class="row" style="margin-top:1%">
+                                                <div class="col-md-4">
+                                                    <label>Extract Mode</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" id="extract_mode" onchange="extracttext_cond()" name="extract_mode">
+                                                        <option selected>--select--</option>
+                                                        <option value="Incremental records">Incremental records</option>
+                                                        <option value="Pull last X days">Pull last X days</option>
+                                                        <option value="Pull all records">Pull all records</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>Upload Mode</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" id="upload_mode" onchange="rejectduplicate_cond()" name="upload_mode">
+                                                        <option>--select--</option>
+                                                        <option selected>Insert or Update based on key</option>
+                                                        <option>Append</option>
+                                                        <option>Clean and Insert</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <label>Key Field</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control multi-select" id="keyfield_drp" name="keyfield_drp">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top: 1%;">
+                                                <div class="col-md-4">
+                                                    <label id="div_lblExtractcond">Extract Condition</label>
+                                                    <span id="setVal" onclick="SetValuePopUp()"> <a>Set Value </a></span>
+                                                    @* <label id="div_lblField" style="display:none; margin-left:10px;">Field</label> *@
+                                                    <textarea class="form-control" id="txt_extractcond" onblur="submitBtnCondition()" type="text" name="txt_extractcond" style="width: 353px;height: 113px;resize: none;"></textarea>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="row" style="margin: -1px;">
+                                                        <label class="form-label">Pull last X days</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input class="form-control" id="txt_pulllstxdays" value="0" type="text" name="txt_pulllstxdays" maxlength="2" disabled />
+                                                    </div>
+
+                                                    <div class="row" style="margin: -1px;">
+                                                        <button class="save query_clr" style="margin-top: 5%;" id="btn_fin_chkquery" onclick="IsCheckQuery('ExtractCondition')" type="button" name="btn_fin_chkquery">  Check Query </button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="row" style="margin: -1px;">
+                                                        <div class="row" style="margin-top:1%;margin-left: 0%;margin: -1px;margin-top: 7%;">
+                                                            <input type="checkbox" checked id="chkbox_rejduplicate" name="chkbox_rejduplicate" />
+                                                            <label class="form-label">Reject Duplicates</label>
+                                                        </div>
+                                                        <div class="row" style="margin-top:1%;margin-left: 0%;margin: -1px;">
+                                                            <input type="radio" id="rdo_abort" name="rdo_error_mode" />
+                                                            <label>Abort on Errors</label>
+                                                            &nbsp;&nbsp;&nbsp;
+                                                            <input type="radio" checked id="rdo_continue" name="rdo_error_mode" />
+                                                            <label>Continue With Errors</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input style="float: right;margin-right: 0%;" onclick="Getpplstatus()" type="button" id="btn_submit" name="next" class="next action-button" value="Submit" />
+                                    <input style="float: right;margin-right: 1%;" type="button" name="fin_prvus" id="fin_prvus" class="previous action-button-previous" value="Previous" />
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div>@await Html.PartialAsync("_dataProcessingrules", Model)</div>
+    <div class="modal" tabindex="-1" role="dialog" id="viewexcludecolumn" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="margin-top: -26px;">
+                    <div class="row">
+                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-4">
+                            <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Exclude column</h4>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                    <hr style="margin-top:-1px; width:100%;">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div>
+                                <label class="form-label">
+                                    Cleansing Action
+                                </label>
+                                <select class="form-control" id="fieldtype" name="cleaningaction">
+                                    <option value="">-- Select --</option>
+                                    <option value="FR">Find and Replace Text</option>
+                                    <option value="TT" selected>Truncate Text</option>
+                                    <option value="RW">Remove Whitespace</option>
+                                    <option value="FRT">Find and Remove Text</option>
+                                    <option value="ET">Extract Text</option>
+                                    <option value="PS">Add Prefix and Suffix</option>
+                                    <option value="CC">Change Case</option>
+                                    <option value="VM">Value Mapper</option>
+                                    <option value="BN">Boolean Number</option>
+                                    <option value="BS">Boolean to String</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label>Choose Fields</label>
+                                <select class="form-control" id="fieldtype" name="cleaningaction">
+                                    <option value="" selected>-- Select --</option>
+                                    <option value="">Bank Name</option>
+                                    <option value="">Bank Branch Name</option>
+                                    <option value="">IFSC Code</option>
+                                    <option value="">Bank Branch Address</option>
+                                    <option value="">Rural Urban Branch</option>
+                                    <option value="">Pincode</option>
+                                    <option value="">created By</option>
+                                    <option value="">Entry Code</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-bottom:5px;margin-top:5px;padding-left:10px;padding-right:10px">
+                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-4"> </div>
+                        <div class="col-sm-4" style="margin-top: 2%;text-align: right;">
+                            @* <button type="button" class="btn btn-sm btn-success me-2" style="background: #38b55a;border-color: #38b55a;width:40%">Save</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-sm btn-success me-2" style="background: red;border-color: red;width:40%" onclick="closeModel()">Cancel</button>
+                            *@
+                            <input style="float: right;margin-right: 0%;" type="button" id='next' class="save" value="Save" />
+                            <input style=" float: right; margin-top: 0%;" type="button" id="btn_prvs" class="cancel action-button-previous" onclick="closeModel()" value="Cancel" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div> @await Html.PartialAsync("_setValues", Model) </div>
+
+    <div class="modal" id="field_mappingPopup">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content" style="height:500px;">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body" style="margin-top: -26px;">
+                    <div class="row">
+                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-4">
+                            <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Set Value</h4>
+                        </div>
+                        <div class="col-sm-4">
+                            <i class="bx bx-x cursor-pointer" data-bs-dismiss="modal" style="color: #000000;float:right"></i>
+                        </div>
+                    </div>
+                    <hr style="margin-top:-1px; width:100%;">
+                    <div class="container" style="padding:0px !important;">
+                        @await Html.PartialAsync("_setValues", Model)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
+
+<script>
+    var _user_code = "";
+    $(document).ready(function () {
+        _user_code = sessionStorage.getItem("userCode");
+        var sourceFieldNames = [];
+        $("#selectedfilename").val("");
+        loadgrid([]);
+        $("#filters_conf").hide();
+        RejectionGrid([]);
+        $("#rejection_conf").hide();
+        $("#dataprocessing_conf").hide();
+        FilterGrid([]);
+        ValidationGrid([]);
+        $("#updatedtimestamp").show();
+        fetchppl(@ViewBag.id);
+        var inputValue = '';
+        document.getElementById('setVal').classList.remove('disabled');
+        document.getElementById('setVal').classList.add('set_val');
+        document.getElementById('txt_cronexpr').addEventListener('blur', function () {
+            inputValue = this.value;
+            var regex = /^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/; // Regex for 24-hour format (HH:mm)
+
+            if (!regex.test(inputValue)) {
+                jAlert("Please enter a valid time in 24-hour format (HH:mm)", "Connector");
+                //this.value = ''; // Clear the input field if the input is invalid
+                //inputValue = '';
+                return;
+            }
+        });
+        // Add keypress event listener to the input field
+        $('#txt_pulllstxdays').keypress(function (event) {
+            // Get the keycode of the pressed key
+            var keycode = event.keyCode ? event.keyCode : event.which;
+
+            // Allow only numeric input (48-57 are keycodes for digits 0-9)
+            if (!(keycode >= 48 && keycode <= 57)) {
+                event.preventDefault(); // Prevent the default action
+            }
+        });
+        //(function ($) {
+        //    var MultiSelectBox = window.kendo.ui.DropDownList.extend({
+        //        _select: function (li) { },//Prevents highlighting
+        //        _blur: function () { },//Prevents auto close
+        //    });
+
+        //    window.kendo.ui.plugin(MultiSelectBox);
+        //})(jQuery);
+    });
+
+    //function onSelect(e) {
+    //    var cbs = document.getElementsByName("cb");
+    //    var checkboxes = document.getElementsByTagName('input');
+    //    var ddl = $("#id").data("kendoDropDownList");
+    //    var id = ddl.element.attr("id");
+    //    multiselect();
+    //    var item = e.item;
+    //    var index = item.index();
+    //    if (index == 0) {
+    //        for (var i = 1; i < cbs.length; i++) {
+    //            var selectAll = cbs[0].checked;
+    //            if (cbs[0].checked) {
+    //                for (var i = 0; i < checkboxes.length; i++) {
+    //                    if (checkboxes[i].type == 'checkbox') {
+    //                        checkboxes[i].checked = true;
+    //                    }
+    //                }
+    //                multiselect();
+    //            }
+
+    //            else {
+    //                for (var i = 0; i < checkboxes.length; i++) {
+    //                    if (checkboxes[i].type == 'checkbox') {
+    //                        checkboxes[i].checked = false;
+    //                    }
+    //                }
+    //                multiselect();
+    //            }
+    //        }
+    //    }
+
+    //}
+
+    //function multiselect() {
+    //    // var dataItem = this.dataItem(e.item);
+    //    var ddl = $("#id").data("kendoDropDownList");
+    //    var isAllChecked = $('#cb').prop("checked");
+    //    var cbs = document.getElementsByName("cb");
+    //    var display;
+
+    //    var list = [];
+    //    for (var i = 1; i < cbs.length; i++) {
+    //        if (cbs[i].checked) {
+    //            list.push(cbs[i].value);
+    //        }
+
+    //    }
+
+    //    if (list.length == 0) {
+    //        display = "-- SelectAll --";
+    //    }
+    //    else {
+
+    //        display = list.join(", ");
+    //    }
+
+    //    ddl.text(display);
+
+    //}
+
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var opacity;
+
+    // $(".next").click(function () {
+
+    //     current_fs = $(this).parent();
+    //     next_fs = $(this).parent().next();
+
+    //     if ($("#txtppl_name").val() != "") {
+    //         $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+    //         $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+    //         Processing(next_fs);
+    //         var checkbox = document.getElementById("chkbox_rejduplicate");
+    //         var upldmode = document.getElementById("upload_mode");
+    //         var v_upldmode = upldmode.value;
+
+    //         if (current_fs.context.value == "Submit" && checkbox.checked == true && $('keyfield_drp').val() == undefined) {
+    //             console.log(current_fs.context.value);
+    //         }
+    //         else {
+    //             var extractmode = document.getElementById("extract_mode");
+    //             var v_extractdmode = extractmode.value;
+    //             var v_extract_cond = $("#txt_extractcond").val().trim();
+    //             if (v_extractdmode == "Pull all records") {
+    //             current_fs.hide();
+    //             next_fs.show();
+    //             current_fs.animate({ opacity: 0 }, {
+    //                 step: function (now) {
+    //                     opacity = 1 - now;
+
+    //                     current_fs.css({
+    //                         'display': 'none',
+    //                         'position': 'relative'
+    //                     });
+    //                     next_fs.css({ 'opacity': opacity });
+    //                 },
+    //                 // duration: 600
+    //             });
+    //             // }
+
+    //         }
+
+
+    //     }
+    // });
+
+    $(".next").click(function () {
+
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+
+        if ($("#txtppl_name").val() != "") {
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            Processing(next_fs);
+            var checkbox = document.getElementById("chkbox_rejduplicate");
+            var upldmode = document.getElementById("upload_mode");
+            var v_upldmode = upldmode.value;
+            var ext_mode = document.getElementById("extract_mode");
+            var v_ext_mode = ext_mode.value;
+            var runtype = document.getElementById("run_type");
+            var v_runtype = runtype.value;
+            var v_cron_expression = $("#txt_cronexpr").val();
+            var v_lastxdays = $("#txt_pulllastxdays").val();
+
+            if (current_fs.context.value == "Submit" && checkbox.checked == true && $('keyfield_drp').val() == undefined) {
+                // Stay on same screen
+            }
+            else if (current_fs.context.value == "Submit" && v_runtype == "--select--") {
+                jAlert("Please Select the runtype..!", "Connector");
+                return;
+                // Stay on same screen
+            }
+            else if (current_fs.context.value == "Submit" && v_runtype == "Scheduled Run" && v_cron_expression == "") {
+                jAlert("Cron Expression Cannot be blank.", "FlexiConnector");
+                return;
+                // Stay on same screen
+            }
+            else if (current_fs.context.value == "Submit" && $("#txt_source_db_type").val() == "MySql" && v_ext_mode == "--select--") {
+                jAlert("Please Select the Extract Mode..!", "Connector");
+                return;
+                // Stay on same screen
+            }
+            else if (current_fs.context.value == "Submit" && v_upldmode == "--select--") {
+                jAlert("Please Select the Upload Mode..!", "Connector");
+                return;
+                // Stay on same screen
+            }
+            else if (current_fs.context.value == "Submit" && v_upldmode == "Insert or Update based on key" && $("#keyfield_drp").val() == undefined) {
+                jAlert("Please Select the Keyfield on submit!", "Connector");
+                return;
+                // Stay on same screen
+            }
+
+            else if (current_fs.context.value == "Submit" && (v_ext_mode == "Incremental records" || v_ext_mode == "Pull last X days") && $('#txt_extractcond').val().trim() == "") {
+                jAlert("Extract condition Cannot be blank.", "Connector");
+                return;
+                // Stay on same screen
+            }
+            else if (current_fs.context.value == "Submit" && v_ext_mode == "Pull last X days" && parseInt($("#txt_pulllstxdays").val(), 10) <= 0) {
+                jAlert("Pull last X days Cannot be blank.", "Connector");
+                return;
+                // Stay on same screen
+            }
+            else {
+                current_fs.hide();
+                next_fs.show();
+                current_fs.animate({ opacity: 0 }, {
+                    step: function (now) {
+                        opacity = 1 - now;
+
+                        current_fs.css({
+                            'display': 'none',
+                            'position': 'relative'
+                        });
+                        next_fs.css({ 'opacity': opacity });
+                    },
+                    // duration: 600
+                });
+            }
+
+
+        }
+    });
+
+    $(".previous").click(function () {
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+
+        $("#progressbar li").eq($("fieldset").index(previous_fs)).addClass("active");
+        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+        current_fs.hide();
+        previous_fs.show();
+
+        current_fs.animate({ opacity: 0 }, {
+            step: function (now) {
+                opacity = 1 - now;
+
+                current_fs.css({
+                    'display': 'none',
+                    'position': 'relative'
+                });
+                previous_fs.css({ 'opacity': opacity });
+            },
+            //  duration: 600
+        });
+    });
+
+    $('.radio-group .radio').click(function () {
+        $(this).parent().find('.radio').removeClass('selected');
+        $(this).addClass('selected');
+    });
+
+    $(".submit").click(function () {
+        return false;
+    })
+
+    // Multiselect for pulldays keyfield
+    var dspdkeyfield = new kendo.data.DataSource({
+        data: [
+            { Keyfield_name: "insert_date" },
+            { Keyfield_name: "update_date" },
+            { Keyfield_name: "row_timestamp" }
+        ],
+        sort: { field: "Keyfield_name", dir: "asc" }
+    });
+
+    $("#pulldays_kf_drp").kendoMultiSelect({
+        dataSource: dspdkeyfield,
+        autoHeight: true,
+        autoClose: false,
+        filter: "contains",
+        dataTextField: "Keyfield_name", // Define the dataTextField to display the 'Keyfield_name' property in the dropdown
+        noDataTemplate: $("#noDataTemplate").html()
+    });
+
+    // Multiselect for updatetimestamp
+    var dsupdatetimestamp = new kendo.data.DataSource({
+        data: [
+            { Keyfield_name: "insert_date" },
+            { Keyfield_name: "update_date" },
+            { Keyfield_name: "accbal_gid" }
+        ],
+        sort: { field: "Keyfield_name", dir: "asc" }
+    });
+
+    $("#updtimestamp").kendoMultiSelect({
+        dataSource: dsupdatetimestamp,
+        autoHeight: true,
+        autoClose: false,
+        filter: "contains",
+        dataTextField: "Keyfield_name", // Define the dataTextField to display the 'Keyfield_name' property in the dropdown
+        noDataTemplate: $("#noDataTemplate").html()
+    });
+
+    var dskeyfield;
+    $("#keyfield_drp").kendoMultiSelect({
+        dataSource: dskeyfield,
+        autoHeight: true,
+        autoClose: false,
+        filter: "contains",
+        dataTextField: "name", // Define the dataTextField to display the 'Keyfield_name' property in the dropdown
+        dataValueField: "id",
+        noDataTemplate: $("#noDataTemplate").html()
+    });
+
+    // });
+</script>
+<script>
+    function GetSourceDBType(conn_code) {
+        if (conn_code != "") {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetsrcDbType", "Pipeline")?Connection_code=' + conn_code,
+                //url: "../Pipeline/GetsrcDbType?Connection_code=" + conn_code,
+                contentType: false,
+                processData: false,
+                cache: false,
+                success: function (response) {
+                    $("#imgmysql").attr("hidden", true);
+                    $("#imgpostgres").attr("hidden", true);
+                    $("#imgcsv").attr("hidden", true);
+                    $("#imgexcel").attr("hidden", true);
+                    document.getElementById('txt_extractcond').disabled = false;
+                    document.getElementById('extract_mode').disabled = false;
+                    document.getElementById('btn_fin_chkquery').disabled = false;
+                    $("#txt_source_db_type").val(response.source_db_type);
+                    if (response.source_db_type == "MySql") {
+                        $("#div_srcdbname").show();
+                        $("#div_tvq").show();
+                        $("#div_fileinput").hide();
+                        $("#div_excel").hide();
+                        $("#imgmysql").removeAttr("hidden");
+                        $("#txt_sheetname").val("");
+                        $("#txt_fileextension").val("");
+                        document.getElementById("selectedfilename").textContent = "";
+                    }
+                    else if (response.source_db_type == "Postgres") {
+                        $("#div_srcdbname").show();
+                        $("#databasename").val("");
+                        $("#div_tvq").show();
+                        $("#src_tblviewquery").val("");
+                        $("#div_fileinput").hide();
+                        $("#div_excel").hide();
+                        document.getElementById("selectedfilename").textContent = "";
+                        $("#imgpostgres").removeAttr("hidden");
+                    }
+                    else if (response.source_db_type == "CSV") {
+                        $("#div_srcdbname").hide();
+                        $("#databasename").val("");
+                        $("#div_tvq").hide();
+                        $("#src_tblviewquery").val("");
+                        $("#div_fileinput").show();
+                        // $("#div_excel").hide();
+                        $("#imgcsv").removeAttr("hidden");
+                    }
+                    else if (response.source_db_type == "Excel") {
+                        $("#div_srcdbname").hide();
+                        $("#databasename").val("");
+                        $("#div_tvq").hide();
+                        $("#src_tblviewquery").val("");
+                        $("#div_fileinput").show();
+                        $("#imgexcel").removeAttr("hidden");
+                        document.getElementById("btn_nextppl1").disabled = true;
+                        document.getElementById('txt_extractcond').disabled = true;
+                        document.getElementById('btn_fin_chkquery').disabled = true;
+                        document.getElementById('extract_mode').disabled = true;
+                    }
+
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    var path = "";
+    var sheet_name = "";
+    var sheet_name1 = "";
+    var previous_targetds = "";
+
+    function fetchppl(id) {
+        drpkeyfield();
+
+        var id = @ViewBag.pipeline_id;
+
+        if (id == "" || id == "0") {
+            id = $('#txt_ppl_gid').val();
+        }
+        else {
+            document.getElementById("btn_nextppl").disabled = true;
+            document.getElementById("btn_nextppl1").disabled = true;
+        }
+
+        if (id != "") {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Readpipeline", "Pipeline")?id=' + id,
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    $('#txt_ppl_gid').val(response.pipeline_gid);
+                    $('#txt_ppl_code').val(response.pipeline_code);
+                    $('#txt_ppl_status').val(response.pipeline_status);
+                    $('#txtpipelinecode').val(response.pipeline_code);
+                    $('#txt_fileextension').val(response.source_file_name);
+                    $('#txtppl_name').val(response.pipeline_name);
+                    $('#txtppl_desc').val(response.pipeline_desc);
+                    var defaultValue = response.connection_code;
+                    if (defaultValue != "") {
+                        $('#connectors').val(defaultValue);
+                        GetSourceDBType(defaultValue);
+                        getdblist(defaultValue);
+                    }
+                    var db_name = response.db_name;
+                    $("#txt_table_view_query_type").val(response.table_view_query_type);
+                    if (response.table_view_query_type == "Q") {
+                        $('#txt_cusquery').val(response.table_view_query_desc);
+                    }
+                    $("#txt_trgdataset").val(response.target_dataset_code);
+                    previous_targetds = response.target_dataset_code;
+                    loadtrgtbl(response.target_dataset_code, response.target_dataset_code);
+                    $("#txt_table_view_query_desc").val(response.table_view_query_desc);
+
+                    setTimeout(function () {
+                        $('#databasename').val((response.db_name));
+                        $('#src_tblviewquery').val(response.table_view_query_type);
+                        $('#txt_tableview_desc').val(response.table_view_query_desc);
+                        fetchpplcond("Filter");
+                        fetchpplcond("Rejection");
+                        fetchpplcond("Validation");
+                        checkTVQ(response.table_view_query_type);
+                        if ((response.sheet_name) != null && (response.sheet_name) != "") {
+                            var extension = response.source_file_name;
+                            var lastIndex = extension.lastIndexOf(".");
+                            if (lastIndex !== -1) {
+                                var fileexts = extension.substring(lastIndex);
+                            }
+                            //Hardcode
+                            path = response.file_path + response.pipeline_code + fileexts;//"D:\\Mohan\\Gitlab\\Github\\FlexiConnectorsWeb\\wwwroot\\uploads\\" + response.pipeline_code + fileexts;
+                            sheet_name = response.sheet_name;
+                            if (fileexts != null || fileexts != undefined) {
+                                getexcelsheetlist(path, '');
+                            }
+
+                        }
+                        TablefieldGriddata();
+                        fetchpplfinalization();
+                        extractcond_label();
+                        loadgriddataprocessing([]);
+                        document.getElementById("btn_nextppl").disabled = false;
+                        document.getElementById("btn_nextppl1").disabled = false;
+                        $('#txt_sheetname').val(response.sheet_name);
+                        document.getElementById("selectedfilename").textContent = response.source_file_name;
+
+                        if (response.source_file_name == "") {
+                            $("#fileInput").removeClass('no-file-chosen'); // Remove the CSS class
+
+                        } else {
+                            $("#div_selectfile").show();
+                            $("#fileInput").addClass('no-file-chosen'); // Add the CSS class
+
+                        }
+
+                    }, 1800);
+
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    function SrcTableGrid(data1) {
+        try {
+            $("#srcTableGrid").remove();
+            $('#srctblsearch').append('<div id="srcTableGrid" style="width: 96%; height: 350px !important; margin-top: 15px;margin-left: 0px;"></div>');
+            $("#srcTableGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                name: { type: "string" },
+                                Action: { type: "boolean" },
+                            }
+                        }
+                    },
+                    pageSize: 2000,
+                },
+                height: 306,
+                width: 1058,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "Action",
+                        title: "Select", // Change column title
+                        template: '<input type="radio" name="radioGroup" #= Action ? "checked" : "" # onclick="TableselectRow(this)" />', // Add radio button template
+                        sortable: false,
+                        filterable: false,
+                        width: 50
+                    },
+                    {
+                        field: "name",
+                        title: "Table Name",
+                        width: 200
+                    }],
+                editable: "inline",
+                dataBound: function () {
+                    selectRadioButtonByValue_tbl();
+                    // Iterate through each row and set background color based on the checked radio button
+                    $("#srcTableGrid tbody tr").each(function () {
+                        var row = $(this);
+                        var radio = row.find('input[name="radioGroup"]');
+
+                        if (radio.prop("checked")) {
+                            // Set the background color for the checked row
+                            row.addClass("checked-row-background");
+                        } else {
+                            // Remove background color for other rows
+                            row.removeClass("checked-row-background");
+                        }
+                    });
+                }
+
+            });
+        }
+        catch (err) {
+            jAlert(er, "Error");
+        }
+    }
+
+    function selectRadioButtonByValue_tbl() {
+        var grid = $("#srcTableGrid").data("kendoGrid");
+        var dataSource = grid.dataSource;
+
+        for (var i = 0; i < dataSource.total(); i++) {
+            var dataItem = dataSource.at(i);
+            if (dataItem.name === $('#txt_tableview_desc').val()) {
+                var row = grid.table.find("tr")[i];
+                var radio = $(row).find("input[type='radio']");
+                radio.prop("checked", true);
+                break; // Exit the loop once the radio button is found and selected
+            }
+            //else{
+            //    $("#srcTableGrid input[type='radio']:first").prop('checked', true);
+            //}
+        }
+    }
+
+    function SrcViewGrid(data1) {
+        try {
+            $("#SrcViewGrid").remove();
+            $('#srcviewsearch').append('<div id="SrcViewGrid" style="width: 98%; height: 350px !important; margin-top: 15px;margin-left: 0px;"></div>');
+            $("#SrcViewGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                name: { type: "string" },
+                                Action: { type: "boolean" },
+                            }
+                        }
+                    },
+                    pageSize: 2000,
+                },
+                height: 306,
+                width: 1058,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "Action",
+                        title: "Select", // Change column title
+                        template: '<input type="radio" name="radioGroup1" #= Action ? "checked" : "" # onclick="ViewselectRow(this)" />', // Add radio button template
+                        sortable: false,
+                        filterable: false,
+                        width: 50
+                    },
+                    {
+                        field: "name",
+                        title: "View Name",
+                        width: 200
+                    }],
+                editable: "inline",
+                dataBound: function () {
+                    selectRadioButtonByValue_view();
+                    $("#SrcViewGrid tbody tr").each(function () {
+                        var row = $(this);
+                        var radio = row.find('input[name="radioGroup1"]');
+
+                        if (radio.prop("checked")) {
+                            // Set the background color for the checked row
+                            row.addClass("checked-row-background");
+                        } else {
+                            // Remove background color for other rows
+                            row.removeClass("checked-row-background");
+                        }
+                    });
+                }
+                // editable: false,
+            });
+        }
+        catch (err) {
+            jAlert(er, "Error");
+        }
+    }
+
+    function SrcExcelGrid(data1) {
+        try {
+            $("#SrcExcelGrid").remove();
+            $('#srcexcelsearch').append('<div id="SrcExcelGrid" style="width: 98%; height: 350px !important; margin-top: 15px;margin-left: 0px;"></div>');
+            $("#SrcExcelGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                name: { type: "string" },
+                                Action: { type: "boolean" },
+                            }
+                        }
+                    },
+                    pageSize: 2000,
+                },
+                height: 306,
+                width: 1058,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "Action",
+                        title: "Select", // Change column title
+                        template: '<input type="radio" name="radioGroup2" #= Action ? "checked" : "" # onclick="ExcelselectRow(this)" />', // Add radio button template
+                        sortable: false,
+                        filterable: false,
+                        width: 50
+                    },
+                    {
+                        field: "name",
+                        title: "Sheet Name",
+                        width: 200
+                    }],
+                editable: "inline",
+                dataBound: function () {
+                    selectRadioButtonByValue_excel();
+                }
+                // editable: false,
+            });
+        }
+        catch (err) {
+            jAlert(er, "Error");
+        }
+    }
+
+    function selectRadioButtonByValue_view() {
+        var grid = $("#SrcViewGrid").data("kendoGrid");
+        var dataSource = grid.dataSource;
+
+        for (var i = 0; i < dataSource.total(); i++) {
+            var dataItem = dataSource.at(i);
+            if (dataItem.name === $('#txt_tableview_desc').val()) {
+                var row = grid.table.find("tr")[i];
+                var radio = $(row).find("input[type='radio']");
+                radio.prop("checked", true);
+                break; // Exit the loop once the radio button is found and selected
+            }
+            //else{
+            //    $("#srcTableGrid input[type='radio']:first").prop('checked', true);
+            //}
+        }
+    }
+
+    function selectRadioButtonByValue_excel() {
+        var grid = $("#SrcExcelGrid").data("kendoGrid");
+        var dataSource = grid.dataSource;
+
+        for (var i = 0; i < dataSource.total(); i++) {
+            var dataItem = dataSource.at(i);
+            if (dataItem.name === $('#txt_sheetname').val()) {
+                var row = grid.table.find("tr")[i];
+                var radio = $(row).find("input[type='radio']");
+                radio.prop("checked", true);
+                break; // Exit the loop once the radio button is found and selected
+            }
+        }
+    }
+
+    function TableselectRow(radio) {
+        document.getElementById("btn_nextppl1").disabled = false;
+        var grid = $("#srcTableGrid").data("kendoGrid");
+        var dataItem = grid.dataItem($(radio).closest("tr"));
+        dataItem = dataItem.name;
+        return dataItem;
+    }
+
+    function ViewselectRow(radio1) {
+        document.getElementById("btn_nextppl1").disabled = false;
+        var grid1 = $("#SrcViewGrid").data("kendoGrid");
+        var dataItem1 = grid1.dataItem($(radio1).closest("tr"));
+        dataItem1 = dataItem1.name;
+        return dataItem1;
+    }
+
+    function ExcelselectRow(radio2) {
+        var ppl_code = $('#txt_ppl_code').val();
+        var grid2 = $("#SrcExcelGrid").data("kendoGrid");
+        var dataItem2 = grid2.dataItem($(radio2).closest("tr"));
+        dataItem2 = dataItem2.name;
+        /*return dataItem2;*/
+        const input = $('#fileInput').val();
+        var fileext_val = $('#txt_fileextension').val();
+        if (fileext_val == "") {
+            fileext_val = input.toString();
+        }
+        var extension = fileext_val;
+        var lastIndex = extension.lastIndexOf(".");
+        if (lastIndex !== -1) {
+            var fileexts = extension.substring(lastIndex);
+        }
+        var filename = $('#txt_ppl_code').val() + fileexts;
+        var formData = new FormData();
+        formData.append('file_Paths', input);
+        formData.append('sheetName', dataItem2);
+        formData.append('filename', filename);
+        // formData.append('password', '');
+
+        $.ajax({
+            url: '@Url.Action("validatefile", "Pipeline")',
+            type: 'Post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response == true) {
+                    document.getElementById("btn_nextppl1").disabled = false;
+                    $('#txt_sheetname').val(dataItem2);
+                }
+                else {
+                    document.getElementById("btn_nextppl1").disabled = true;
+                    jAlert("sheet has no record..!", "Connector");
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function TablefieldGriddata() {
+        var ppl_code = $('#txt_ppl_code').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Readpplfieldmapping", "Pipeline")?pipeline_code=' + ppl_code,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                DrpdownSrcExpression(ppl_code, "");
+                loadgrid(response);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function FieldMappingGriddata() {
+        var ppl_code = $('#txt_ppl_code').val();
+        var data_set = document.getElementById("trgdataset").value;
+        var lastIndex = data_set.lastIndexOf("-");
+        if (lastIndex !== -1) {
+            data_set = extension.substring(lastIndex);
+        }
+
+        var src = "";
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Readpplfieldmap", "Pipeline")?pipeline_code=' + ppl_code + "&dataset=" + data_set + "&source_name=" + src,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                //loadgrid(response);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    /* DataProcessing Grid Start*/
+    function loadgriddataprocessing(data1) {
+        try {
+
+            var data1 = [
+                {
+                    extaraction_type: "Data Cleansing",
+                    process: "Truncate Text",
+                    field_name: "Balance Amount",
+                    Action: "-"
+                }
+            ];
+            $("#dataprocesingmaingrid").remove();
+            $('#dataprocessingmaindiv').append('<div id="dataprocesingmaingrid" style="margin-top: 15px;margin-left: 13px;"></div>');
+            $("#dataprocesingmaingrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                extaraction_type: { type: "string" },
+                                process: { type: "string" },
+                                field_name: { type: "string" },
+                                Action: { type: "String" },
+                            }
+                        }
+                    },
+                    pageSize: 10,
+                },
+                height: 305,
+                width: 1058,
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                //selectable: "multiple",
+                //toolbar: [{ name: "create", text: " " }],
+                columns: [
+
+                    {
+                        field: "extaraction_type",
+                        title: "Extraction Type",
+                        width: 200,
+                    },
+                    {
+                        field: "process",
+                        title: "Cleansing Action",
+                        width: 200
+                    },
+                    {
+                        field: "field_name",
+                        title: "Choose Field",
+                        width: 200
+                    },
+                    {
+                        field: "Action",
+                        title: "Action",
+                        template: "<i class='glyphicon glyphicon-trash' onclick='deletepplfieldmap($(this))' style='color:red;margin-left: 40% !important'></i>",
+                        width: 80
+                    },
+                ],
+            });
+        }
+        catch (err) {
+            jAlert(er, "Error");
+        }
+    }
+
+    function DataProcessingGriddata() {
+        var ppl_code = $('#txt_ppl_code').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Readpplfieldmap", "Pipeline")?pipeline_code=' + ppl_code,
+            //url: "../Pipeline/Readpplfieldmap?pipeline_code=" + ppl_code,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                loadgriddataprocessing(response);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    /* DataProcessing Grid End*/
+
+    function columntype(val) {
+        alert("value", val);
+        //$(this).parent().find('.radio').removeClass('selected');
+        //$(this).addClass('selected');
+    }
+
+    function deletepplfieldmap(e) {
+        let text = "Are you sure to delete?";
+        jConfirm(text, "Connector", function (f) {
+            if (f == true) {
+                var entityGrid = $("#TablefieldGrid").data("kendoGrid");
+                var pplfieldmap_gid = entityGrid.dataItem(e.select().closest("tr")).pplfieldmapping_gid;
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Deleteexistingpplfieldmap", "Pipeline")?id=' + pplfieldmap_gid,
+                    //url: "../Pipeline/Deleteexistingpplfieldmap?id=" + pplfieldmap_gid,
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        jAlert(response, "Connector", function (g) {
+                            if (g == true) {
+                                fetchppl();
+                                //location.reload();
+                            }
+                        });
+                        //jAlert(response, "Connector");
+                        //alert(response);
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            }
+            else {
+                text = "You canceled!";
+            }
+        });
+
+    }
+
+
+    btn_addnew.addEventListener("click", function () {
+        GetExpressionlines($("#txt_ppl_code").val());
+        //ExpressionGrid([]);
+        expression_conf.classList.add("show");
+        $("#expression_conf").kendoWindow();
+        var dialog = $("#expression_conf").data("kendoWindow");
+        dialog.open().element.closest(".k-window").css({
+            top: 110,
+            left: 130,
+            height: 381,
+            width: 1033,
+
+        });
+    });
+
+
+    var v_srctblviewqry_desc = "";
+    var v_srctblviewqry_type = "";
+    function pplsave() {
+        if ($("#txtppl_name").val() == "" || $("#txtppl_name").val() == null || $("#txtppl_name").val() == undefined) {
+            jAlert("Please enter pipeline name.", "Connector");
+            return;
+        }
+        var current_date = new Date;
+        var conn_code = document.getElementById("connectors");
+        var v_conn_code = conn_code.value;
+
+        var db_name = document.getElementById("databasename");
+        var v_db_name = db_name.value;
+
+        var selectedfile = document.getElementById("selectedfilename").textContent;
+        var sheet_name1 = document.getElementById("txt_sheetname").value;
+        var srctblviewqry_type = document.getElementById("src_tblviewquery");
+        v_srctblviewqry_type = srctblviewqry_type.value;
+
+        var trg_tbl = document.getElementById("trgdataset").value;
+        var ppl_code = $("#txt_ppl_code").val();
+
+
+        var txt_trg_tbl = document.getElementById("trgdataset");
+        var selectedOption1 = txt_trg_tbl.options[txt_trg_tbl.selectedIndex];
+        var selectedText1 = selectedOption1.textContent;
+
+        var v_trg_table = trg_tbl.toString().split('-')[0];
+
+        if (trg_tbl == "") {
+            document.getElementById('btn_fieldmapsave').disabled = true;
+            document.getElementById('btn_addnew').disabled = true;
+        }
+        else {
+            if (v_trg_table != $("#txt_trgdataset").val() && $("#txt_source_db_type").val() == "Excel") {
+                srcexcelfields(ppl_code, path, sheet_name1);
+            }
+
+            document.getElementById('btn_fieldmapsave').disabled = false;
+            document.getElementById('btn_addnew').disabled = false;
+        }
+
+        var label = document.getElementById('lbl_info');
+        var selectedOption = conn_code.options[conn_code.selectedIndex];
+        var selectedText = selectedOption.textContent;
+        label.innerHTML = "Pipeline Name -> " + $("#txtppl_name").val() + ";Connector Name -> " + selectedText + ";Target Dataset -> " + selectedText1;
+
+
+        if (v_srctblviewqry_type == "T") {
+            var radioButton = $("input[name='radioGroup']:checked");
+            if (radioButton.length > 0) {
+                v_srctblviewqry_desc = TableselectRow(radioButton[0]);
+            }
+        }
+        else if (v_srctblviewqry_type == "V") {
+            var radioButton = $("input[name='radioGroup1']:checked");
+            if (radioButton.length > 0) {
+                v_srctblviewqry_desc = ViewselectRow(radioButton[0]);
+            }
+        }
+        else if (v_srctblviewqry_type == "Q") {
+            v_srctblviewqry_desc = document.getElementById("txt_cusquery").value;
+        }
+        else {
+            v_srctblviewqry_desc = trg_tbl.toString().split('-')[1];
+        }
+        var trg_tbl = document.getElementById("trgdataset").value;
+        // var v_trg_table = trg_tbl.toString().split('-')[0];
+
+        if ($("#txt_ppl_gid").val() == "") {
+            var insppl = {};
+            insppl.pipeline_gid = "0";
+            insppl.pipeline_name = $("#txtppl_name").val();
+            insppl.pipeline_desc = $("#txtppl_desc").val();
+            insppl.connection_code = v_conn_code;
+            insppl.db_name = v_db_name;
+            insppl.table_view_query_type = v_srctblviewqry_type;
+            insppl.table_view_query_desc = v_srctblviewqry_desc;
+            insppl.target_dataset_code = v_trg_table;
+            insppl.created_date = current_date;
+            insppl.created_by = _user_code;
+            insppl.pipeline_status = "Draft";
+            var insppl1 = insppl;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Addnewpipeline", "Pipeline")',
+                data: JSON.stringify(insppl1),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    $('#txt_ppl_gid').val(response);
+                    setTimeout(function () {
+                        fetchppl(response);
+                    }, 600);
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+        else {
+            var updppl = {};
+            updppl.pipeline_gid = $("#txt_ppl_gid").val();
+            updppl.pipeline_name = $("#txtppl_name").val();
+            updppl.pipeline_desc = $("#txtppl_desc").val();
+            updppl.connection_code = v_conn_code;
+            updppl.db_name = v_db_name;
+            updppl.source_file_name = selectedfile;
+            updppl.sheet_name = sheet_name1;
+            updppl.table_view_query_type = v_srctblviewqry_type;
+            updppl.table_view_query_desc = v_srctblviewqry_desc;
+            updppl.target_dataset_code = v_trg_table;
+            updppl.updated_date = current_date;
+            updppl.updated_by = _user_code;
+            updppl.pipeline_status = $("#txt_ppl_status").val();
+            var updppl1 = updppl;
+            var stngyfy = JSON.stringify(updppl1)
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Updateexistingpipeline", "Pipeline")',
+                data: JSON.stringify(updppl1),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    //alert(response);
+                    fetchppl(response);
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+
+    }
+
+
+    function srctablefields(connection_code, databasename, sourcetable) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetSourceTableFielddrp", "Pipeline")?conn_code=' + connection_code + "&dbname=" + databasename +
+                "&srctable=" + sourcetable,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                var select = $("#srcfield");
+
+                // Clear existing options
+                select.empty();
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.id).text(item.name));
+                });
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function DrpdownSrcExpression(pipeline_code, source_type) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetSrcExpressionDrpdown", "Pipeline")?pipeline_code=' + pipeline_code + '&source_type=' + source_type,
+            async: false,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                sourceFieldNames = data;
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function srcexcelfields(pipeline_code, path, sheetname) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetSourceExcelFielddrp", "Pipeline")?pipeline_code=' + pipeline_code + "&path=" + path + "&sheetname=" + sheetname + "&user_code=" + _user_code,
+            async: false,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+                var select = $("#id_pplfieldname");
+
+                // Clear existing options
+                select.empty();
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                for (var i = 0; i < data.length; i++) {
+                    var optionName = data[i].name;
+                    var selected = "Tran Date" === optionName ? 'selected' : '';
+                    select.append($("<option >").attr("value", optionName).text(optionName));
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function srcmysqlfields(conn_code, pipeline_code, db_name, table_view_query_desc, table_view_query_type) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetSourcetvqFielddrp", "Pipeline")?conn_code=' + conn_code + "&pipeline_code=" + pipeline_code + "&db_name="
+                + db_name + "&src_table=" + table_view_query_desc + "&table_view_query_type=" + table_view_query_type + "&user_code=" + _user_code,
+            async: false,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+
+                var select = $("#id_pplfieldname");
+
+                // Clear existing options
+                select.empty();
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                for (var i = 0; i < data.length; i++) {
+                    var optionName = data[i].name;
+                    var selected = "Tran Date" === optionName ? 'selected' : '';
+                    select.append($("<option >").attr("value", optionName).text(optionName));
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function trgtablefields(dataset_code) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetTargetTableFielddrp", "Pipeline")?dataset_code=' + dataset_code,
+            //url: "../Pipeline/GetTargetTableFielddrp?dataset_code=" + dataset_code,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                var select = $("#trgfield");
+
+                // Clear existing options
+                select.empty();
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.dataset_field_name).text(item.dataset_field_desc));
+                });
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function drpkeyfield_old() {
+        var conn_code = document.getElementById("connectors");
+        var v_conn_code = conn_code.value;
+
+        var db_name = document.getElementById("databasename");
+        var v_db_name = db_name.value;
+
+        var trg_tbl = document.getElementById("trgdataset");
+        var v_trg_table = trg_tbl.value;
+        v_trg_table = v_trg_table.toString().split('-')[1];
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetKeyFielddrp", "Pipeline")?conn_code=' + v_conn_code + "&dbname=" + v_db_name + "&table_name=" + v_trg_table,
+            //url: "../Pipeline/GetKeyFielddrp?conn_code=" + v_conn_code + "&dbname=" + v_db_name + "&table_name=" + v_trg_table,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                var select = $("#keyfield");
+
+                // Clear existing options
+                select.empty();
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.name).text(item.name));
+                });
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function drpkeyfield() {
+        var trg_tbl = document.getElementById("trgdataset");
+        var v_trg_table = trg_tbl.value;
+        v_trg_table = v_trg_table.toString().split('-')[1];
+
+        if (v_trg_table != undefined && v_trg_table != null && v_trg_table != "") {
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetTrgKeyFielddrp", "Pipeline")?table_name=' + v_trg_table,
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    dskeyfield = new kendo.data.DataSource({
+                        data: data,
+                        sort: { field: "name", dir: "asc" }
+                    });
+                    $("#keyfield_drp").data("kendoMultiSelect").setDataSource(dskeyfield);
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    function tablefieldlist() {
+
+        var conn_code = document.getElementById("connectors");
+        var v_conn_code = conn_code.value;
+
+        var db_name = document.getElementById("databasename");
+        var v_db_name = db_name.value;
+
+        var src_tbl = document.getElementById("srctblview");
+        var v_src_table = src_tbl.value;
+
+        var trg_tbl = document.getElementById("trgdataset");
+        var v_trg_table = trg_tbl.value;
+
+        if (v_src_table == "" || v_src_table == null) {
+            jAlert("Please select source table name.", "Connector");
+            return
+        }
+
+        //if (v_trg_table == "" || v_trg_table == null) {
+        //    jAlert("Please select target data set.", "Connector");
+        //    return
+        //}
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetTableFieldlist", "Pipeline")?conn_code=' + v_conn_code + "&dbname=" + v_db_name + "&srctable=" + v_src_table
+                + "&trgtable=" + v_trg_table,
+            //url: "../Pipeline/GetTableFieldlist?conn_code=" + v_conn_code + "&dbname=" + v_db_name +
+            //    "&srctable=" + v_src_table + "&trgtable=" + v_trg_table,
+            contentType: false,
+            success: function (response) {
+                //loadgrid(response);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+    function Changetargetds() {
+        pplsave();
+        var data = {};
+        var ppl_code = $("#txt_ppl_code").val();
+        var trg_tbl = $('#trgdataset').val();
+        var conn_code = $('#connectors').val();
+        var database_name = $('#databasename').val();
+
+        if ($("#txt_source_db_type").val() == "Excel") {
+            srcexcelfields(ppl_code, path, sheet_name);
+        }
+        else if ($("#txt_source_db_type").val() == "MySql") {
+            srcmysqlfields(conn_code, ppl_code, database_name, v_srctblviewqry_desc, v_srctblviewqry_type);
+        }
+
+        data.pipeline_code = $("#txt_ppl_code").val();
+        trg_tbl = trg_tbl.split('-', 1);
+        data.dataset_code = trg_tbl[0];
+        data.created_by = _user_code;
+
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("Addnewpplfieldmap", "Pipeline")',
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response == "Inserted Successfully") {
+                    TablefieldGriddata();
+                    fetchpplcond("Filter");
+                    fetchpplcond("Rejection");
+                    fetchpplcond("Validation");
+                    DataprocessingLoadgrid([]);
+                }
+                else {
+                    jAlert(response, "Error");
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function PPLfieldMapInsert() {
+        var current_targetds = "";
+        current_targetds = document.getElementById("trgdataset");
+        var selectedOption1 = current_targetds.options[current_targetds.selectedIndex];
+        var selectedText1 = selectedOption1.textContent;
+        if (previous_targetds != "") {
+            let text = "On changing Targetdataset existing (Expression, Inclusion,\n" +
+                "Rejection, Validation, Conversion Rules) will be deleted.\n " +
+                " Are You sure to change the Targetdataset ?  ";
+            jConfirm(text, "Connector", function (f) {
+                if (f == true) {
+                    Changetargetds();
+                }
+            });
+        }
+        else {
+            Changetargetds();
+        }
+        previous_targetds = selectedText1;
+    }
+
+
+    function togglebutton(actionfor) {
+        var condition = "";
+
+        if (actionfor == "Filter") {
+            condition = $("#txt_filtercond").val();
+            if (condition.trim() == '') {
+                document.getElementById('btn_filtersave').disabled = false;
+                document.getElementById('btn_flcheckquery').disabled = true;
+            } else {
+                document.getElementById('btn_filtersave').disabled = true;
+                document.getElementById('btn_flcheckquery').disabled = false;
+            }
+        }
+        else if (actionfor == "Rejection") {
+            condition = $("#txt_rejectioncond").val();
+            if (condition.trim() == '') {
+                document.getElementById('btn_rejectionsave').disabled = false;
+                document.getElementById('btn_rjcheckquery').disabled = true;
+            } else {
+                document.getElementById('btn_rejectionsave').disabled = true;
+                document.getElementById('btn_rjcheckquery').disabled = false;
+            }
+        }
+        else if (actionfor == "Validation") {
+            condition = $("#txt_validationcond").val();
+            if (condition.trim() == '') {
+                document.getElementById('btn_validationsave').disabled = false;
+                document.getElementById('btn_vlcheckquery').disabled = true;
+            } else {
+                document.getElementById('btn_vaidationsave').disabled = true;
+                document.getElementById('btn_vlcheckquery').disabled = false;
+            }
+        }
+
+    }
+
+    function pplfiltercondsave() {
+
+        var current_date = new Date;
+        var data = {};
+
+        data.pipeline_code = $("#txt_ppl_code").val();
+        data.condition_type = "Filter";
+        data.condition_text = $("#txt_filtercond").val().trim();
+
+        if ($("#txt_filter_gid").val() == "") {
+            data.pplcondition_gid = "0";
+            data.created_date = current_date;
+            data.created_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Addnewpplcondition", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert("Filter Condition Saved Successfully..!", "Connector");
+                    fetchpplcond("Filter");
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+        else {
+            data.pplcondition_gid = $("#txt_filter_gid").val();
+            data.updated_date = current_date;
+            data.updated_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Updateexistingpplcondition", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert("Filter Condition Updated Successfully..!", "Connector");
+                    fetchpplcond("Filter");
+                    document.getElementById('btn_filtersave').disabled = true;
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    function fetchpplcond(condition_type) {
+        var ppl_code = $('#txt_ppl_code').val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ReadpipelineCondition", "Pipeline")?pipelinecode=' + ppl_code + '&condition_type=' + condition_type,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.length > 0) {
+                    if (condition_type == "Filter") {
+                        $('#txt_filter_gid').val(response[0].pplcondition_gid);
+                        $('#txt_filtercond').val(response[0].condition_text);
+                    }
+                    else if (condition_type == "Rejection") {
+                        $('#txt_rejection_gid').val(response[0].pplcondition_gid);
+                        $('#txt_rejectioncond').val(response[0].condition_text);
+                    }
+                }
+
+                if (condition_type == "Filter" && response.length == 0) {
+                    $('#txt_filter_gid').val("");
+                    $('#txt_filtercond').val("");
+                }
+                else if (condition_type == "Rejection" && response.length == 0) {
+                    $('#txt_rejection_gid').val("");
+                    $('#txt_rejectioncond').val("");
+                }
+
+                if (condition_type == "Validation") {
+                    ValidationGrid(response);
+                    Validationclear();
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function pplrejectioncondsave() {
+
+        var current_date = new Date;
+        var data = {};
+
+        data.pipeline_code = $("#txt_ppl_code").val();
+        data.condition_type = "Rejection";
+        data.condition_text = $("#txt_rejectioncond").val().trim();
+
+        if ($("#txt_rejection_gid").val() == "") {
+            data.pplcondition_gid = "0";
+            data.created_date = current_date;
+            data.created_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Addnewpplcondition", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert("Rejection Condition Saved Successfully..!", "Connector");
+                    fetchpplcond("Rejection");
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+        else {
+            data.pplcondition_gid = $("#txt_rejection_gid").val();
+            data.updated_date = current_date;
+            data.updated_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Updateexistingpplcondition", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert("Rejection Condition Updated Successfully..!", "Connector");
+                    fetchpplcond("Rejection");
+                    document.getElementById('btn_rejectionsave').disabled = true;
+
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    function pplvalidationrulesave() {
+
+        var current_date = new Date;
+        var data = {};
+
+        data.pipeline_code = $("#txt_ppl_code").val();
+        data.condition_type = "Validation";
+        data.condition_text = $("#txt_validationcond").val();
+        data.condition_name = $("#txt_validation_name").val();
+        data.condition_msg = $("#txt_validation_msg").val();
+
+        if ($("#txt_validation_name").val() == "") {
+            jAlert("Validation name cannot be empty..!", "Connector");
+            return
+        }
+        if ($("#txt_validationcond").val() == "") {
+            jAlert("Validation condition cannot be empty..!", "Connector");
+            return
+        }
+
+        if ($("#txt_validation_gid").val() == "") {
+            data.pplcondition_gid = "0";
+            data.created_date = current_date;
+            data.created_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Addnewpplcondition", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert("Validation Condition Saved Successfully..!", "Connector");
+                    fetchpplcond("Validation");
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+        else {
+            data.pplcondition_gid = $("#txt_validation_gid").val();
+            data.updated_date = current_date;
+            data.updated_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Updateexistingpplcondition", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert("Validation Condition Updated Successfully..!", "Connector");
+                    fetchpplcond("Validation");
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+    function srcupdatetimestampfields(connection_code, databasename, sourcetable) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetSrcUpdatetimestampFielddrp", "Pipeline")?conn_code=' + connection_code + "&dbname=" + databasename +
+                "&srctable=" + sourcetable,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                var select = $("#updtimestamp");
+
+                // Clear existing options
+                select.empty();
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.id).text(item.name));
+                });
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function pplfinsave() {
+        document.getElementById('btn_submit').disabled = false;
+
+        var current_date = new Date;
+        var data = {};
+        var multselectedval = "";
+        var v_chkdup = "N";
+        var v_error_mode = "";
+
+        var runtype = document.getElementById("run_type");
+        var v_runtype = runtype.value;
+
+        var v_cron_expression = $("#txt_cronexpr").val();
+
+        var ext_mode = document.getElementById("extract_mode");
+        var v_ext_mode = ext_mode.value;
+
+        var upldmode = document.getElementById("upload_mode");
+        var v_upldmode = upldmode.value;
+
+        var v_extract_cond = $("#txt_extractcond").val();
+        var v_lastxdays = $("#txt_pulllastxdays").val();
+
+        if (v_runtype == "--select--") {
+            jAlert("Please Select the runtype..!", "Connector");
+            return;
+        }
+
+        else if (v_runtype == "Scheduled Run" && v_cron_expression == "") {
+            jAlert("Cron Expression Cannot be blank.", "FlexiConnector");
+            return;
+            // Stay on same screen
+        }
+
+        if ($("#txt_source_db_type").val() == "MySql" && v_ext_mode == "--select--") {
+            jAlert("Please Select the Extract Mode..!", "Connector");
+            return;
+        }
+
+        if (v_upldmode == "--select--") {
+            jAlert("Please Select the uploadmode..!", "Connector");
+            return;
+        }
+
+        if ((v_ext_mode == "Incremental records" || v_ext_mode == "Pull last X days") && $('#txt_extractcond').val().trim() == "") {
+            jAlert("Extract condition Cannot be blank.", "Connector");
+            return;
+        }
+
+        if (v_ext_mode == "Pull last X days" && parseInt($("#txt_pulllstxdays").val(), 10) <= 0) {
+            jAlert("Pull last X days Cannot be blank.", "Connector");
+            return;
+        }
+
+        var checkbox = document.getElementById("chkbox_rejduplicate");
+        if (checkbox.checked) {
+            v_chkdup = "Y";
+        }
+        else {
+            v_chkdup = "N";
+        }
+
+        var radio1 = document.getElementById("rdo_abort");
+        var radio2 = document.getElementById("rdo_continue");
+        if (radio1.checked) {
+            v_error_mode = "Abort on Errors";
+        } else if (radio2.checked) {
+            v_error_mode = "Continue With Errors";
+        }
+
+        for (var option of document.getElementById('keyfield_drp').options) {
+            if (option.selected) {
+                multselectedval = multselectedval + (option.value) + ",";
+            }
+        }
+
+        if (multselectedval != "") {
+            multselectedval = multselectedval.slice(0, -1);
+        }
+
+        if (checkbox.checked == true && multselectedval == "") {
+            jAlert("Please Select the Keyfield..!", "Connector");
+            return;
+        }
+
+        if (v_upldmode == "Insert or Update based on key" && multselectedval == "") {
+            jAlert("Please Select the Keyfield..!", "Connector");
+            return;
+        }
+
+        if (v_runtype == "Scheduled Run" && v_cron_expression == "") {
+            jAlert("Cron Expression Cannot be blank.", "FlexiConnector");
+            return;
+        }
+
+        // if (v_upldmode!= "Pull all X days" v_extract_cond == "") {
+        //     jAlert("Extraction Condition cannot be empty..!", "Connector");
+        //     return;
+        // }
+
+        data.pipeline_code = $("#txt_ppl_code").val();
+        data.run_type = v_runtype;
+        data.cron_expression = v_cron_expression;//$("#txt_cronexpr").val();
+        data.extract_mode = v_ext_mode;
+        data.upload_mode = v_upldmode;
+        data.key_field = multselectedval;
+        data.extract_condition = v_extract_cond;
+        data.pull_days = parseInt($("#txt_pulllstxdays").val(), 10);
+        data.reject_duplicate_flag = v_chkdup;
+        data.error_mode = v_error_mode;
+        data.pipeline_status = $('#txt_ppl_status').val();
+
+        setTimeout(function () {
+
+            if ($("#txt_pplfinalization_gid").val() == "") {
+                data.finalization_gid = "0";
+                data.created_date = current_date;
+                data.created_by = _user_code;
+
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Addnewpplfinalization", "Pipeline")',
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        jAlert(response, "Connector", function (g) {
+                            if (g == true) {
+                                window.location.href = '@Url.Action("PipelineList", "Pipeline")';
+                            }
+                        });
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            }
+            else {
+                data.finalization_gid = $("#txt_pplfinalization_gid").val();
+                data.updated_date = current_date;
+                data.updated_by = _user_code;
+
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Updateexistingpplfinalization", "Pipeline")',
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        jAlert(response, "Connector", function (g) {
+                            if (g == true) {
+                                window.location.href = '@Url.Action("PipelineList", "Pipeline")';
+                            }
+                        });
+
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            }
+        }, 1200);
+
+    }
+
+    function fetchpplfinalization() {
+        var ppl_code = $('#txt_ppl_code').val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ReadpipelineFinalization", "Pipeline")?pipelinecode=' + ppl_code,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.length > 0) {
+                    $('#txt_pplfinalization_gid').val(response[0].finalization_gid);
+                    $('#run_type').val((response[0].run_type).toString());
+                    schedulecron_cond();
+
+                    $('#txt_cronexpr').val(response[0].cron_expression);
+                    $('#extract_mode').val((response[0].extract_mode).toString());
+                    extracttext_cond();
+
+                    // if ((response[0].upload_mode).toString() == "Insert or Update based on key") {
+                    //     rejectduplicate_cond();
+                    // }
+                    $('#upload_mode').val((response[0].upload_mode).toString());
+                    // if ($('#upload_mode').val() == 'Clean and Insert') {
+                    //     document.getElementById("chkbox_rejduplicate").disabled = true;
+                    // }
+                    pulllastxdays_cond();
+                    rejectduplicate_cond();
+                    $('#txt_extractcond').val(response[0].extract_condition);
+                    $('#txt_pulllstxdays').val(response[0].pull_days);
+
+                    if (response[0].reject_duplicate_flag == "Y") {
+                        document.getElementById("chkbox_rejduplicate").checked = true;
+                    }
+                    else {
+                        document.getElementById("chkbox_rejduplicate").checked = false;
+                    }
+
+                    var radio1 = document.getElementById("rdo_abort");
+                    var radio2 = document.getElementById("rdo_continue");
+                    if (response[0].error_mode == "Abort on Errors") {
+                        radio1.checked = true;
+                        radio2.checked = false;
+                    } else {
+                        radio1.checked = false;
+                        radio2.checked = true;
+                    }
+
+                    selectColumns(response[0].key_field);
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function selectColumns(selectedData) {
+        var multiSelect = $("#keyfield_drp").data("kendoMultiSelect");
+        var newValues = [];
+        if (multiSelect != undefined) {
+            var selectedDatas = selectedData.split(',');
+            // Iterate over the array using jQuery.each
+            $.each(selectedDatas, function (index, value) {
+                newValues.push(value);
+            });
+            multiSelect.value(newValues);
+        }
+    }
+
+    function checkquery(queryfor) {
+        var conn_code = $('#connectors').val();
+        var database_name = $('#databasename').val();
+        var src_table = $('#txt_table_view_query_desc').val();
+        var query = "";
+        var fltcond = "";
+        var rejcond = "";
+
+        if ($('#txt_filtercond').val() != "") {
+            fltcond = "and " + $('#txt_filtercond').val();
+        }
+
+        if ($('#txt_rejectioncond').val() != "") {
+            rejcond = "and " + $('#txt_rejectioncond').val();
+        }
+
+        if (queryfor == "CustomQuery") {
+            query = $('#txt_cusquery').val();
+        }
+        else if (queryfor == "Filter") {
+            query = "select * from " + src_table + " where 1=1 " + fltcond;
+        }
+        else if (queryfor == "Rejection") {
+            query = "select * from " + src_table + " where 1=1 " + rejcond;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("IsCheckQuery", "Pipeline")?conn_code=' + conn_code + "&dbname=" + database_name +
+                "&extractionquery=" + query,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response == true) {
+                    jAlert("Validation Success..!", "Connector");
+                    if (queryfor == "Filter") {
+                        document.getElementById("btn_filtersave").disabled = false;
+                    }
+                    else if (queryfor == "Rejection") {
+                        document.getElementById("btn_rejectionsave").disabled = false;
+                    }
+                }
+                else {
+                    jAlert("Validation Failed..!", "Connector");
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function IsCheckQuery(queryfor) {
+        var pplcode = $('#txt_ppl_code').val();
+
+        var isquery = "";
+        if (queryfor == "Filter") {
+            isquery = $('#txt_filtercond').val();
+        }
+        else if (queryfor == "Rejection") {
+            isquery = $('#txt_rejectioncond').val();
+        }
+        else if (queryfor == "Expression") {
+            isquery = $('#txt_expression_field').val();
+        }
+        else if ($('#txt_validationcond').val() != "" && queryfor == "Validation") {
+            isquery = "and " + $('#txt_validationcond').val();
+        }
+        else if ($('#txt_extractcond').val() != "" && queryfor == "ExtractCondition") {
+            isquery = "and " + $('#txt_extractcond').val();
+            // var searchText = "*datefield";
+            // var searchText1 = "*integerfield";
+
+            // // Check if the textarea value contains the search text
+            // if (isquery.includes(searchText) || isquery.includes(searchText1) || isquery.includes("now()")) {
+
+            // } else {
+            //     jAlert("Use *datefield for Date field (or) Use *integerfield for Integer field", "Connector");
+            //     return;
+            // }
+        }
+
+        if (isquery == "" && queryfor != "ExtractCondition") {
+            jAlert("Condition/Rule Cannot be empty..!", "Connector");
+            return
+        }
+        else if (isquery == "" && queryfor == "ExtractCondition") {
+            jAlert("Extract Condition Cannot be empty..!", "Connector");
+            return
+        }
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("IsCheckQueryValidation", "Pipeline")?pipeline_code=' + pplcode + "&query=" + encodeURIComponent(isquery) + "&queryfor=" + queryfor,
+            success: function (response) {
+                if (response == "Success") {
+                    jAlert("Query Validated Successfully..!", "Connector");
+                    if (queryfor == "Filter") {
+                        document.getElementById("btn_filtersave").disabled = false;
+                    }
+                    else if (queryfor == "Rejection") {
+                        document.getElementById("btn_rejectionsave").disabled = false;
+                    }
+                    else if (queryfor == "Expression") {
+                        document.getElementById("btn_expressionsave").disabled = false;
+                    }
+                    else if (queryfor == "Validation") {
+                        document.getElementById("btn_validationsave").disabled = false;
+                    }
+                    else if (queryfor == "ExtractCondition") {
+                        document.getElementById("btn_submit").disabled = false;
+                    }
+                }
+                else {
+                    jAlert(response, "Error");
+                }
+            },
+            error: function (er) {
+                jAlert(er.responseText, "Error");
+            }
+        });
+    }
+
+    function ExcelIsCheckQuery(queryfor, sourcedbtype) {
+
+        if (sourcedbtype == "MySql") {
+            checkquery(queryfor);
+        }
+        else {
+            var isquery = "";
+            if (queryfor == "Filter") {
+                isquery = $('#txt_filtercond').val();
+            }
+            else if (queryfor == "Rejection") {
+                isquery = $('#txt_rejectioncond').val();
+            }
+            else if (queryfor == "Expression") {
+                isquery = $('#txt_expression_field').val();
+            }
+            else if (queryfor == "Validation") {
+                isquery = $('#txt_validationcond').val();
+            }
+            if (isquery == "") {
+                jAlert("Condition/Rule Cannot be empty..!", "Connector");
+                return
+            }
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ExcelCheckQuery", "Pipeline")?filelocation=' + path + "&query=" + encodeURIComponent(isquery) + "&queryfor=" + queryfor,
+                //dataType: "json",
+                //contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    if (response == "Success") {
+                        jAlert("Query Validated Successfully..!", "Connector");
+                        if (queryfor == "Filter") {
+                            document.getElementById("btn_filtersave").disabled = false;
+                        }
+                        else if (queryfor == "Rejection") {
+                            document.getElementById("btn_rejectionsave").disabled = false;
+                        }
+                        else if (queryfor == "Expression") {
+                            document.getElementById("btn_expressionsave").disabled = false;
+                        }
+                        else if (queryfor == "Validation") {
+                            document.getElementById("btn_validationsave").disabled = false;
+                        }
+                    }
+                    else {
+                        jAlert(response, "Error");
+                    }
+                },
+                error: function (er) {
+                    jAlert(er.responseText, "Error");
+                }
+            });
+        }
+
+    }
+
+
+</script>
+
+<script>
+    function getdblist(connection_code) {
+        // $("#fileInput").removeClass('no-file-chosen'); // Remove the CSS class
+        $("#fileInput").addClass('no-file-chosen');
+        var e = document.getElementById("connectors");
+        var value = e.value;
+        var text = e.options[e.selectedIndex].text;
+
+        if (text == "-- Select --") {
+            // $("#div_fileinput").hide();
+            // $("#grid_tvc").hide();
+            // $("#div_selectfile").hide();
+            // $("#img_div").hide();
+            // $("#div_srcdbname").hide();
+            // $("#div_tvq").hide();
+            document.getElementById("btn_nextppl1").disabled = true;
+        }
+        else {
+            document.getElementById("btn_nextppl1").disabled = false;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Getconndblist", "Pipeline")?connection_code=' + connection_code,
+                //url: "../Pipeline/Getconndblist?connection_code=" + connection_code,
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var select = $("#databasename");
+
+                    // Clear existing options
+                    select.empty();
+                    // Add new options from the JSON data
+                    select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                    $.each(data, function (index, item) {
+                        select.append($("<option>").attr("value", item.name).text(item.name));
+                    });
+
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    function gettablelist(connection_code, database_name) {
+        document.getElementById("btn_nextppl1").disabled = true;
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Gettablelist", "Pipeline")?connection_code=' + connection_code + "&database_name=" + database_name,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                SrcTableGrid(data);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function getviewlist(connection_code, database_name) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Getviewlist", "Pipeline")?connection_code=' + connection_code + "&database_name=" + database_name,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                SrcViewGrid(data);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+
+    function file_change(value) {
+        $("#div_selectfile").hide();
+        var slctfilename = $("#selectedfilename").val();
+        if (slctfilename == "") {
+            $("#fileInput").removeClass('no-file-chosen'); // Remove the CSS class
+        } else {
+            $("#fileInput").addClass('no-file-chosen'); // Add the CSS class
+
+        }
+        $("#selectedfilename").val('');
+
+        document.getElementById("btn_nextppl1").disabled = true;
+        var fileInput = value;
+        var file = fileInput.files[0];
+        var formData = new FormData();
+
+        var pplcode = $('#txt_ppl_code').val();
+        formData.append('pipeline_code', pplcode);
+        formData.append('file', file);
+        document.getElementById("selectedfilename").textContent = file.name;
+        $.ajax({
+            url: '@Url.Action("UploadFile", "Pipeline")',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    getexcelsheetlist(response.path, '');
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    };
+
+
+    function getexcelsheetlist(file_path, password) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetExcelsheetlist", "Pipeline")?path=' + file_path + "&password=" + password,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#div_excel").show();
+                SrcExcelGrid(data);
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+                $("#div_excel").hide();
+
+            }
+        });
+
+    }
+
+    function loadtrgtbl(id, name) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetTargetTablelist", "Pipeline")',
+            //url: "../Pipeline/GetTargetTablelist",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                var select = $("#trgdataset");
+
+                // Clear existing options
+                select.empty();
+
+                // Add new options from the JSON data
+                select.append($("<option>").attr("value", "").text("-- Select --"));
+
+                $.each(data, function (index, item) {
+                    select.append($("<option>").attr("value", item.dataset_code).text(item.dataset_name));
+                });
+                $('#trgdataset').val(id + "-" + name);
+
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+</script>
+<script>
+    function showscheduled() {
+        if ($('#scheduled_run').is(':checked')) {
+            $("#Scheduled_expression").show();
+        }
+        else {
+            $("#Scheduled_expression").hide();
+        }
+    }
+
+    function showincremental() {
+        if ($('#incremental_rec').is(':checked')) {
+            $("#updatedtimestamp").show();
+            $("#div_pulllastxdays").hide();
+        }
+        if ($('#pulllastxdays').is(':checked')) {
+            $("#updatedtimestamp").show();
+            $("#div_pulllastxdays").show();
+        }
+        if ($('#pullallrec').is(':checked')) {
+            $("#updatedtimestamp").hide();
+            $("#div_pulllastxdays").hide();
+
+        }
+    }
+
+    function addNew(widgetId, value) {
+        var widget = $("#" + widgetId).getKendoMultiSelect();
+        var dataSource = widget.dataSource;
+
+        if (confirm("Are you sure?")) {
+            dataSource.add({
+                Id: dataSource.data().length + 1,
+                sportName: value
+            });
+
+            var currentValue = widget.value();
+            currentValue.push(dataSource.data().length)
+            widget.value(currentValue);
+            widget.trigger("change");
+        }
+    };
+
+    var srctblviewqry = document.getElementById("src_tblviewquery");
+
+    srctblviewqry.addEventListener("change", function () {
+        var selectedValue = srctblviewqry.value; // Get the selected value
+
+        checkTVQ(selectedValue);
+    });
+
+    function checkTVQ(selectedValue) {
+        var e = document.getElementById("connectors");
+        var conn_code = e.value;
+
+        var e1 = document.getElementById("databasename");
+        var dbname = e1.value;
+
+        if (selectedValue == "T") {
+            gettablelist(conn_code, dbname)
+            //SrcTableGrid([]);
+            $("#div_table").show();
+            $("#div_view").hide();
+            $("#div_excel").hide();
+            $("#div_query").hide();
+        }
+        else if (selectedValue == "V") {
+            getviewlist(conn_code, dbname)
+            $("#div_view").show();
+            $("#div_excel").hide();
+            $("#div_table").hide();
+            $("#div_query").hide();
+
+        }
+        else if (selectedValue == "Q") {
+            GetSourceDBType($('#connectors').val());
+            $("#div_view").hide();
+            $("#div_table").hide();
+            $("#div_excel").hide();
+            $("#div_query").show();
+        }
+    }
+
+    var cnnect = document.getElementById("connectors");
+
+    cnnect.addEventListener("change", function () {
+        $("#div_view").hide();
+        $("#div_table").hide();
+        $("#div_query").hide();
+        GetSourceDBType(cnnect.value)
+    });
+
+    var databs = document.getElementById("databasename");
+
+    databs.addEventListener("change", function () {
+        $("#div_view").hide();
+        $("#div_table").hide();
+        $("#div_query").hide();
+    });
+
+
+    function loadgrid(data1) {
+        try {
+
+            $("#TablefieldGrid").remove();
+            $('#search').append('<div id="TablefieldGrid" style="width: 96%; height: 230px!important; margin-top: 10px;margin-left: 15px;"></div>');
+            $("#TablefieldGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                selected: { type: "boolean", editable: false },
+                                pplfieldmapping_gid: { type: "string", editable: false },
+                                pipeline_code: { type: "string", editable: false },
+                                ppl_field_name: { type: "string", editable: false },
+                                dataset_field_name: { type: "string", editable: false },
+                                dataset_field_desc: { type: "string", editable: false },
+                                default_value: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 1000,
+                },
+                height: 230,
+                width: 1058,
+                editable: true,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: false,
+
+                columns: [
+                    {
+                        field: "selected",
+                        title: "Mandatory",
+                        template: function (dataItem) {
+                            if (dataItem.field_mandatory == "Y" && dataItem.pplfieldmapping_flag == 1) {
+                                return "<input id='fieldmapcheckbox' type='checkbox' checked='checked' disabled/>";
+                            }
+                            else if (dataItem.field_mandatory == "N" && dataItem.pplfieldmapping_flag == 1) {
+                                return "<input id='fieldmapcheckbox' type='checkbox' checked='checked' disabled/>";
+                            }
+                            else {
+                                return "<input id='fieldmapcheckbox' type='checkbox' disabled/>";
+                            }
+                        },
+                        sortable: false,
+                        filterable: false,
+                        width: 80,
+                        attributes: {
+                            style: "text-align: center;"
+                        }
+
+                    },
+                    {
+                        field: "pplfieldmapping_gid",
+                        title: "pplfieldmapping_gid",
+                        width: 20,
+                        hidden: true
+                    },
+                    {
+                        field: "pipeline_code",
+                        title: "pipeline_code",
+                        width: 200,
+                        hidden: true
+                    },
+                    {
+                        field: "dataset_field_name",
+                        title: "Target Field code",
+                        width: 200,
+                        hidden: true
+                    },
+                    {
+                        field: "dataset_field_desc",
+                        title: "Target Field Name",
+                        width: 200
+
+                    },
+                    {
+                        field: "ppl_field_name",
+                        title: "Source Field Name",
+                        width: 200,
+                        template: "#= createDropdown(pplfieldmapping_gid,ppl_field_name) #"
+
+                    },
+                    {
+                        field: "default_value",
+                        title: "Default Value",
+                        width: 200
+                    }
+                ],
+                // editable: "inline",
+                // editable: false
+
+            });
+
+        }
+        catch (err) {
+            jAlert(err, "Error");
+        }
+    }
+
+    function createDropdown(pplfieldmapping_gid, ppl_field_name) {
+        var dropdownId = 'ppl_field_' + pplfieldmapping_gid; // Construct the id using pplfieldmapping_gid
+        var dropdownHTML = '<select id="' + dropdownId + '" style="width:100%; height: 22px; border-radius: 6px;" class="source-field-dropdown">';
+        for (var i = 0; i < sourceFieldNames.length; i++) {
+            var optionId = sourceFieldNames[i].id;
+            var optionName = sourceFieldNames[i].name;
+            var selected = ppl_field_name === optionId ? 'selected' : '';
+            var textColor = optionName.startsWith('*') ? 'color: red;' : '';
+            //dropdownHTML += '<option style="' + textColor + '" ' + selected + '>' + optionName + '</option>';
+            dropdownHTML += '<option style="' + textColor + '" ' + selected + ' value="' + optionId + '">' + optionName + '</option>';
+        }
+
+        dropdownHTML += '</select>';
+
+        return dropdownHTML;
+    }
+
+    function fieldmapsave() {
+        var grid = $("#TablefieldGrid").data("kendoGrid");
+        var checkedrows = $("#fieldmapcheckbox:checked", grid.tbody).closest("tr");
+        var uncheckedrows = $("#fieldmapcheckbox:not(:checked)", grid.tbody).closest("tr");
+        var objpplmapupdlist = [];
+        var selectedRow = {};
+        var dropdownValuesSet = new Set(); // Set to keep track of unique dropdown values
+
+        //Checked rows data pushed into array
+        for (var i = 0; i < checkedrows.length; i++) {
+            var item = grid.dataItem(checkedrows[i]);
+            var dropdownid = "ppl_field_" + item.pplfieldmapping_gid;
+            //var pplfieldid = "'#" + dropdownid + "'";
+            var dropdownValue = $("#" + dropdownid).val();
+            // if (dropdownValue.startsWith("*")) {
+            //     dropdownValue = dropdownValue.Substring(1)
+            // }
+            var trg_tbl = $('#trgdataset').val();
+            trg_tbl = trg_tbl.split('-', 1);
+
+            if (dropdownValue == "-- Select --") {
+                jAlert("Please select the Source Field Name for " + item.dataset_field_desc, "Connector");
+                return;
+            }
+            //Duplicate check for Source field name
+
+            if (dropdownValuesSet.has(dropdownValue) && dropdownValue != "-- Select --") {
+                jAlert("Duplicate Source Field Name: " + dropdownValue + " for " + item.dataset_field_desc, "Connector");
+                return;
+            } else {
+                dropdownValuesSet.add(dropdownValue);
+            }
+
+            selectedRow = {
+                pplfieldmapping_gid: item.pplfieldmapping_gid,
+                pipeline_code: item.pipeline_code,
+                ppl_field_name: dropdownValue,
+                dataset_field_name: item.dataset_field_name,
+                dataset_field_desc: item.dataset_field_desc,
+                default_value: item.default_value,
+                pplfieldmapping_flag: 1,
+                dataset_code: trg_tbl[0],
+                created_by: _user_code,
+                updated_by: _user_code
+            }
+
+            objpplmapupdlist.push(selectedRow);
+        }
+
+        //Unchecked rows basic validation
+        for (var i = 0; i < uncheckedrows.length; i++) {
+            var item = grid.dataItem(uncheckedrows[i]);
+            var dropdownid = "ppl_field_" + item.pplfieldmapping_gid;
+            var dropdownValue = $("#" + dropdownid).val();
+            // if (dropdownValue.startsWith("*")) {
+            //     dropdownValue = dropdownValue.Substring(1)
+            // }
+            var trg_tbl = $('#trgdataset').val();
+            trg_tbl = trg_tbl.split('-', 1);
+
+            //Duplicate check for Source field name
+            if (dropdownValuesSet.has(dropdownValue) && dropdownValue != "-- Select --") {
+                jAlert("Duplicate Source Field Name: " + dropdownValue + " for " + item.dataset_field_desc, "Connector");
+                return;
+            } else {
+                dropdownValuesSet.add(dropdownValue);
+            }
+
+            selectedRow = {
+                pplfieldmapping_gid: item.pplfieldmapping_gid,
+                pipeline_code: item.pipeline_code,
+                ppl_field_name: dropdownValue,
+                dataset_field_name: item.dataset_field_name,
+                dataset_field_desc: item.dataset_field_desc,
+                default_value: item.default_value,
+                pplfieldmapping_flag: 0,
+                dataset_code: trg_tbl[0],
+                created_by: _user_code,
+                updated_by: _user_code
+            }
+
+            objpplmapupdlist.push(selectedRow);
+
+            // if ((dropdownValue == "-- select --") && (item.default_value != "" && item.default_value != null && item.default_value != undefined)) {
+            //     // if (dropdownValue != "-- select --") {
+            //     jAlert("Please select the Source Field Name for " + item.dataset_field_desc, "Connector");
+            //     return;
+            // }
+            // else if (dropdownValue != "-- select --") {
+            //     // if (dropdownValue != "-- select --") {
+            //     jAlert("Please select the Checkbox for " + item.dataset_field_desc, "Connector");
+            //     return;
+            // }
+        }
+
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("pplfieldmapupdatelist", "Pipeline")',
+            data: JSON.stringify(objpplmapupdlist),
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                jAlert(response, "Connector", function (g) {
+                    if (g == true) {
+                        TablefieldGriddata();
+                    }
+                });
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+        //pplsave();
+    };
+
+</script>
+
+
+
+<script>
+    function GetExpressionlines(pipeline_code) {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetAllexpressions", "Pipeline")?pipelinecode=' + pipeline_code,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                ExpressionGrid(response);
+            },
+            error: function (er) {
+                alert(er)
+            }
+        });
+    }
+
+    function ExpressionGrid(data1) {
+        try {
+            $("#expressionGrid").remove();
+            $('#expressionsearch').append('<div id="expressionGrid" style="width: 96%; height: 232px; margin-top: 6px; margin-left: 20px;"></div>');
+            $("#expressionGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                pplsourcefield_gid: { type: "string" },
+                                sourcefield_name: { type: "string" },
+                                sourcefield_datatype: { type: "string" },
+                                sourcefield_expression: { type: "string" },
+                                Action: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 5
+                },
+                height: 232, // Corrected the height
+                width: "96%", // Use percentage for width
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "pplsourcefield_gid",
+                        title: "pplsourcefield_gid",
+                        hidden: true
+                    },
+                    {
+                        field: "sourcefield_name",
+                        title: "Expression Name",
+                        width: 150
+                    },
+                    {
+                        field: "sourcefield_datatype",
+                        title: "Expression DataType",
+                        width: 150
+                    },
+                    {
+                        field: "sourcefield_expression",
+                        title: "Expression",
+                        width: 200
+                    },
+                    {
+                        field: "Action",
+                        title: "Action",
+                        //template: "<i class='glyphicon glyphicon-trash' style='color:red;margin-left: 40% !important'></i>",
+                        template: "<div class= 'action-cell' style = 'text-align: center;' > <i class='glyphicon glyphicon-pencil' onclick='editexpression($(this))' style = color: green; cursor: pointer; ' title='Edit'></i> </t> </t> <i class='glyphicon glyphicon-trash' onclick='deleteExpression($(this))' style='color:red;margin-left: 20% !important'></i></div>",
+                        width: 80
+                    }
+                ],
+                editable: "inline"
+            });
+        } catch (err) {
+            jAlert(err, "Error");
+        }
+    }
+
+    function editexpression(e) {
+        var entityGrid = $("#expressionGrid").data("kendoGrid");
+        var pplsrcgid = entityGrid.dataItem(e.select().closest("tr")).pplsourcefield_gid;
+        var expression_name = entityGrid.dataItem(e.select().closest("tr")).sourcefield_name;
+        var drp_datatype = entityGrid.dataItem(e.select().closest("tr")).sourcefield_datatype;
+        var expression_field = entityGrid.dataItem(e.select().closest("tr")).sourcefield_expression;
+
+        $('#txt_pplsourcefield_gid').val(pplsrcgid);
+        $('#txt_expression_name').val(expression_name);
+        $('#drp_datatype').val(drp_datatype);
+        $('#txt_expression_field').val(expression_field);
+    }
+
+    function PPLexpressionSave() {
+        var current_date = new Date;
+        var ppl_code = $("#txt_ppl_code").val();
+        var pplsrcgid = $('#txt_pplsourcefield_gid').val();
+        var expression_name = $('#txt_expression_name').val().trim();
+        var expression_datatype = $('#drp_datatype').val();
+        var expression_field = $('#txt_expression_field').val().trim();
+
+        if (expression_name == "") {
+            jAlert("Expression name cannot be blank ", "Connector");
+            return;
+        }
+
+        if (expression_datatype == "-- Select --") {
+            jAlert("Please select the Expression datatype ", "Connector");
+            return;
+        }
+
+        if (expression_field == "") {
+            jAlert("Expression cannot be blank ", "Connector");
+            return;
+        }
+
+
+        if (pplsrcgid == "") {
+            var data = {};
+            data.pplsourcefield_gid = pplsrcgid;
+            data.pipeline_code = ppl_code;
+            data.sourcefield_name = expression_name;
+            data.sourcefield_datatype = expression_datatype;
+            data.sourcefield_expression = expression_field;
+            data.source_type = "Expression";
+            data.created_date = current_date;
+            data.created_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Addnewpplsourcefield", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert(response, "Connector");
+                    if (response == "Record Inserted Successfully") {
+                        GetExpressionlines(ppl_code);
+                        Expressionclear();
+                        document.getElementById("btn_expressionsave").disabled = true;
+                    }
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+        else {
+            var data = {};
+            data.pplsourcefield_gid = pplsrcgid;
+            data.pipeline_code = ppl_code;
+            data.sourcefield_name = expression_name;
+            data.sourcefield_datatype = expression_datatype;
+            data.sourcefield_expression = expression_field;
+            data.source_type = "Expression";
+            data.updated_date = current_date;
+            data.created_by = _user_code;
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Updateexistingpplsourcefield", "Pipeline")',
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                    jAlert(response, "Connector");
+                    if (response == "Record Updated Successfully") {
+                        GetExpressionlines(ppl_code);
+                        Expressionclear();
+                        document.getElementById("btn_expressionsave").disabled = true;
+                    }
+
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+    }
+
+    function deleteExpression(e) {
+        var ppl_code = $("#txt_ppl_code").val();
+        let text = "Are you sure to delete?";
+        jConfirm(text, "Connector", function (f) {
+            if (f == true) {
+                var entityGrid = $("#expressionGrid").data("kendoGrid");
+                var v_pplsourcefield_gid = entityGrid.dataItem(e.select().closest("tr")).pplsourcefield_gid;
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Deleteexistingpplsourcefield", "Pipeline")?id=' + v_pplsourcefield_gid,
+                    dataType: "json",
+                    success: function (response) {
+                        jAlert(response, "Connector", function (g) {
+                            if (g == true) {
+                                GetExpressionlines(ppl_code);
+                                Expressionclear();
+                            }
+                        });
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            } else {
+                text = "You canceled!";
+            }
+        });
+    }
+
+    function closeexpressionpopup() {
+        $("#expression_conf").data("kendoWindow").close();
+        TablefieldGriddata();
+        Expressionclear();
+    }
+
+    function Expressionclear() {
+        $("#txt_pplsourcefield_gid").val("");
+        $("#txt_expression_name").val("");
+        $("#drp_datatype").val("");
+        $("#txt_expression_field").val("");
+    }
+
+    // Get references to the tab links and content divs
+    const fieldmappingTab = document.getElementById("fieldmappingTab");
+    const filtersTab = document.getElementById("filtersTab");
+    const validationTab = document.getElementById("validationTab");
+    const dataprocessingTab = document.getElementById("dataprocessingTab");
+
+    const expressionConf = document.getElementById("expression_conf");
+    const fieldmappingConf = document.getElementById("fieldmapping_conf");
+    const filtersConf = document.getElementById("filters_conf");
+    const validationConf = document.getElementById("validation_conf");
+    const dataprocessingConf = document.getElementById("dataprocessing_conf");
+    const finalizationConf = document.getElementById("finalization_conf");
+
+
+    fieldmappingTab.addEventListener("click", () => {
+        expressionConf.style.display = "none";
+        fieldmappingConf.style.display = "block";
+        filtersConf.style.display = "none";
+
+        fieldmappingTab.classList.add("active");
+        filtersTab.classList.remove("active");
+    });
+
+    filtersTab.addEventListener("click", () => {
+        expressionConf.style.display = "none";
+        fieldmappingConf.style.display = "none";
+        filtersConf.style.display = "block";
+
+        fieldmappingTab.classList.remove("active");
+        filtersTab.classList.add("active");
+    });
+
+
+    validationTab.addEventListener("click", () => {
+        fetchpplcond("Validation");
+        dataprocessingConf.style.display = "none";
+        validationConf.style.display = "block";
+
+        dataprocessingTab.classList.remove("active");
+        validationTab.classList.add("active");
+    });
+
+    dataprocessingTab.addEventListener("click", () => {
+        dataprocessingConf.style.display = "block";
+        validationConf.style.display = "none";
+
+        dataprocessingTab.classList.add("active");
+        validationTab.classList.remove("active");
+    });
+
+
+    function RejectionGrid(data1) {
+        try {
+            var data1 = [
+                { pplcondition_gid: "1", condition_name: "Credit Rule", condition_text: "credit_amt > 0", Action: "Delete" },
+                { pplcondition_gid: "2", condition_name: "Debit Rule", condition_text: "debit_amt > 0", Action: "Delete" },
+                // Add more data as needed
+            ];
+            $("#rejectionGrid").remove();
+            $('#rejectionsearch').append('<div id="rejectionGrid" style="width: 96%; height: 350px; margin-left: 5px;"></div>');
+            $("#rejectionGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                pplcondition_gid: { type: "string" },
+                                condition_name: { type: "string" },
+                                condition_text: { type: "string" },
+                                expression_field: { type: "string" },
+                                Action: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 5
+                },
+                height: 248, // Corrected the height
+                width: "96%", // Use percentage for width
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "pplcondition_gid",
+                        title: "pplcondition_gid",
+                        hidden: true
+                    },
+                    {
+                        field: "condition_name",
+                        title: "Rejection Name",
+                        width: 200
+                    },
+                    {
+                        field: "condition_text",
+                        title: "Rejection rule",
+                        width: 200
+                    },
+                    {
+                        field: "Action",
+                        title: "Action",
+                        template: "<div class= 'action-cell' style = 'text-align: center;' > <i class='glyphicon glyphicon-pencil'style = color: green; cursor: pointer; ' title='Edit'></i> </t> </t> <i class='glyphicon glyphicon-trash' style='color:red;margin-left: 20% !important'></i></div>",
+                        //template: "<i class='glyphicon glyphicon-trash' style='color:red;margin-left: 40% !important'></i>",
+                        width: 80
+                    }
+                ],
+                editable: "inline"
+            });
+        } catch (err) {
+            jAlert(err, "Error");
+        }
+    }
+
+    function FilterGrid(data1) {
+        try {
+            var data1 = [
+                { pplcondition_gid: "1", condition_name: "Credit Rule", condition_text: "credit_amt > 0", Action: "Delete" },
+                { pplcondition_gid: "2", condition_name: "Debit Rule", condition_text: "debit_amt > 0", Action: "Delete" },
+                // Add more data as needed
+            ];
+            $("#filterGrid").remove();
+            $('#filtersearch').append('<div id="filterGrid" style="width: 96%; height: 350px; margin-left: 5px;"></div>');
+            $("#filterGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                pplcondition_gid: { type: "string" },
+                                condition_name: { type: "string" },
+                                condition_text: { type: "string" },
+                                expression_field: { type: "string" },
+                                Action: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 5
+                },
+                height: 248, // Corrected the height
+                width: "96%", // Use percentage for width
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "pplcondition_gid",
+                        title: "pplcondition_gid",
+                        hidden: true
+                    },
+                    {
+                        field: "condition_name",
+                        title: "Filter Name",
+                        width: 200
+                    },
+                    {
+                        field: "condition_text",
+                        title: "Filter rule",
+                        width: 200
+                    },
+                    {
+                        field: "Action",
+                        title: "Action",
+                        template: "<div class= 'action-cell' style = 'text-align: center;' > <i class='glyphicon glyphicon-pencil'style = color: green; cursor: pointer; ' title='Edit'></i> </t> <i class='glyphicon glyphicon-trash' style='color:red;margin-left: 20% !important'></i></div>",
+                        //template: "<i class='glyphicon glyphicon-trash' style='color:red;margin-left: 40% !important'></i>",
+                        width: 80
+                    }
+                ],
+                editable: "inline"
+            });
+        } catch (err) {
+            jAlert(err, "Error");
+        }
+    }
+
+    function ValidationGrid(data1) {
+        try {
+            $("#validationGrid").remove();
+            $('#validationsearch').append('<div id="validationGrid" style="width: 109%; height: 350px; margin-left: 5px;margin-top: -1%;"></div>');
+            $("#validationGrid").kendoGrid({
+                dataSource: {
+                    data: data1,
+                    schema: {
+                        model: {
+                            fields: {
+                                pplcondition_gid: { type: "string" },
+                                condition_name: { type: "string" },
+                                condition_text: { type: "string" },
+                                expression_field: { type: "string" },
+                                Action: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 5
+                },
+                height: 246, // Corrected the height
+                width: "109%", // Use percentage for width
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "pplcondition_gid",
+                        title: "pplcondition_gid",
+                        hidden: true
+                    },
+                    {
+                        field: "condition_name",
+                        title: "Validation Name",
+                        width: 100
+                    },
+                    {
+                        field: "condition_text",
+                        title: "Validation rule",
+                        width: 150
+                    },
+                    {
+                        field: "condition_msg",
+                        title: "Message",
+                        width: 150
+                    },
+                    {
+                        field: "Action",
+                        title: "Action",
+                        template: "<div class= 'action-cell' style = 'text-align: center;' > <i class='glyphicon glyphicon-pencil' onclick='editvalidationrule($(this))' style = color: green; cursor: pointer; ' title='Edit'></i> </t> <i class='glyphicon glyphicon-trash' onclick='deleteValidationrule($(this))' style='color:red;margin-left: 20% !important'></i></div>",
+                        //template: "<i class='glyphicon glyphicon-trash' style='color:red;margin-left: 40% !important'></i>",
+                        sortable: false,
+                        filterable: false,
+                        width: 80
+                    }
+                ],
+                editable: "inline"
+            });
+        } catch (err) {
+            jAlert(err, "Error");
+        }
+    }
+
+    function editvalidationrule(e) {
+        var entityGrid = $("#validationGrid").data("kendoGrid");
+        var pplcondgid = entityGrid.dataItem(e.select().closest("tr")).pplcondition_gid;
+        var cond_name = entityGrid.dataItem(e.select().closest("tr")).condition_name;
+        var cond_text = entityGrid.dataItem(e.select().closest("tr")).condition_text;
+        var cond_msg = entityGrid.dataItem(e.select().closest("tr")).condition_msg;
+
+        $('#txt_validation_gid').val(pplcondgid);
+        $('#txt_validation_name').val(cond_name);
+        $('#txt_validationcond').val(cond_text);
+        $('#txt_validation_msg').val(cond_msg);
+    }
+
+    function deleteValidationrule(e) {
+        let text = "Are you sure to delete?";
+        jConfirm(text, "Connector", function (f) {
+            if (f == true) {
+                var entityGrid = $("#validationGrid").data("kendoGrid");
+                var v_pplcondition_gid = entityGrid.dataItem(e.select().closest("tr")).pplcondition_gid;
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Deleteexistingpplcondition", "Pipeline")?id=' + v_pplcondition_gid,
+                    dataType: "json",
+                    success: function (response) {
+                        jAlert(response, "Connector", function (g) {
+                            if (g == true) {
+                                fetchpplcond("Validation");
+                                Validationclear();
+                            }
+                        });
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            } else {
+                text = "You canceled!";
+            }
+        });
+    }
+
+    function Validationclear() {
+        $('#txt_validation_gid').val("");
+        $('#txt_validation_name').val("");
+        $('#txt_validationcond').val("");
+        $('#txt_validation_msg').val("");
+    }
+
+    function schedulecron_cond() {
+        if ($('#run_type').val() == 'Scheduled Run') {
+            //$('#txt_cronexpr').val("0 0 * * *");
+            // document.getElementById('txt_cronexpr').disabled = true;
+            document.getElementById('txt_cronexpr').disabled = false;
+        }
+        else {
+            $('#txt_cronexpr').val("");
+            document.getElementById('txt_cronexpr').disabled = true;
+        }
+    }
+
+    function pulllastxdays_cond() {
+
+        if ($('#extract_mode').val() == 'Pull last X days' || $('#extract_mode').val() == 'Incremental records') {
+            $('#txt_extractcond').val("");
+            document.getElementById('txt_extractcond').disabled = false;
+        }
+        else {
+            $('#txt_extractcond').val("");
+            document.getElementById('txt_extractcond').disabled = true;
+        }
+    }
+
+    function extractcond_label() {
+        if ($('#extract_mode').val() == 'Pull last X days') {
+            $("#div_lblExtractcond").text("Fields");
+            document.getElementById('txt_pulllstxdays').disabled = false;
+        }
+        else {
+            $("#div_lblExtractcond").text("Extract Condition");
+            $('#txt_pulllstxdays').val("0");
+            document.getElementById('txt_pulllstxdays').disabled = true;
+        }
+    }
+
+    function extracttext_cond() {
+        if ($('#extract_mode').val() == 'Pull all records' || $('#extract_mode').val() == '--select--') {
+            $('#txt_extractcond').val("");
+            document.getElementById('txt_extractcond').disabled = true;
+            document.getElementById('btn_submit').disabled = false;
+        }
+        else {
+            document.getElementById('txt_extractcond').disabled = false;
+            document.getElementById('btn_submit').disabled = true;
+        }
+        if ($('#extract_mode').val() == 'Incremental records') {
+            document.getElementById('setVal').classList.remove('disabled');
+            document.getElementById('setVal').classList.add('set_val');
+        }
+        else {
+            document.getElementById('setVal').classList.add('disabled');
+            document.getElementById('setVal').classList.remove('set_val');
+        }
+        extractcond_label();
+
+    }
+    function rejectduplicate_cond1() {
+        if ($('#upload_mode').val() == 'Clean and Insert') {
+            document.getElementById("chkbox_rejduplicate").checked = false;
+            document.getElementById("chkbox_rejduplicate").disabled = true;
+        }
+        else {
+            document.getElementById("chkbox_rejduplicate").disabled = false;
+        }
+    }
+    function rejectduplicate_cond() {
+    }
+
+    function submitBtnCondition() {
+        if ($('#txt_extractcond').val().trim() == "") {
+            document.getElementById('btn_submit').disabled = false;
+        }
+        else {
+            document.getElementById('btn_submit').disabled = true;
+        }
+    }
+
+    function Getpplstatus() {
+        document.getElementById('btn_submit').disabled = true;
+
+        var dscode = $('#trgdataset').val();
+        dscode = dscode.split('-', 1);
+        var pplcode = $("#txt_ppl_code").val();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SetPPlStatus", "Pipeline")?type=' + "FieldMapping" + "&dataset_code=" + dscode + "&pipeline_code=" + pplcode,
+            success: function (res) {
+                $('#txt_ppl_status').val(res);
+                pplfinsave();
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+    function SetValuePopUp() {
+        $("#field_mappingPopup").show();
+        setgridValue();
+    }
+
+
+    function setgridValue() {
+        var pipelinecode = $('#txt_ppl_code').val();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetIncrementalRecord", "Pipeline")?pipelinecode=' + pipelinecode,
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (response) {
+                fetchgrid(response);
+            },
+            error: function (er) {
+                alert(er)
+                console.log(er)
+            }
+        });
+    }
+
+    function fetchgrid(data) {
+        try {
+            $("#grid_setvalue").kendoGrid({
+                dataSource: {
+                    data: data,
+                    schema: {
+                        model: {
+                            fields: {
+                                serialNumber: { type: "int", editable: false },
+                                incremental_gid: { type: "int", editable: false },
+                                pipeline_code: { type: "string", editable: false },
+                                incremental_field: { type: "string", editable: false },
+                                incremental_value: { type: "string", editable: true },
+                                delete_flag: { type: "string" },
+                            }
+                        }
+                    },
+                    pageSize: 10
+                },
+                height: 300,
+                width: 900,
+                editable: "inline",
+                editable: true,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                columns: [
+                    {
+                        field: "serialNumber",
+                        title: "S.No",
+                        width: 100,
+                    },
+                    {
+                        field: "incremental_gid",
+                        title: "incremental Gid",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "pipeline_code",
+                        title: "pipeline_code",
+                        width: 100,
+                        hidden: true
+                    },
+                    {
+                        field: "incremental_field",
+                        title: "Incremental Field",
+                        width: 100,
+                    },
+                    {
+                        field: "incremental_value",
+                        title: "Incremental Value",
+                        width: 100,
+                    }],
+            });
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+
+
+</script>
+

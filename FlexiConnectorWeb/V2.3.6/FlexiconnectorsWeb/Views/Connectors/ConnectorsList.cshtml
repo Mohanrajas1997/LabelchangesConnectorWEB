@@ -1,0 +1,478 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+
+<style>
+
+    .h-full {
+        height: 100% !important;
+    }
+
+    .w-full {
+        width: 100% !important;
+    }
+
+    .flex-column {
+        flex-direction: column !important;
+    }
+
+    .flex {
+        display: flex !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .pt-3 {
+        padding-top: 1rem !important;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+
+    .text-2xl {
+        font-size: 1.5rem !important;
+    }
+
+    .font-bold {
+        font-weight: 700 !important;
+    }
+
+    .pr-3 {
+        padding-right: 1rem !important;
+    }
+
+    .w-6 {
+        width: 50% !important;
+    }
+
+    .flex-spacer {
+        display: flex;
+        /*flex: 1 1 auto;*/
+    }
+
+    .pi {
+        font-size: 1rem;
+    }
+
+    .pi {
+        font-family: primeicons;
+        speak: none;
+        font-style: normal;
+        font-weight: 400;
+        font-feature-settings: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        display: inline-block;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .text-white {
+        color: #fff !important;
+    }
+
+    .split-button[_ngcontent-vhm-c150] {
+        border-radius: 4px;
+        height: 33px;
+    }
+
+    .cursor-pointer {
+        cursor: pointer !important;
+    }
+
+    .outline-none {
+        outline: none !important;
+    }
+
+    .border-none {
+        border-width: 0 !important;
+        border-style: none;
+    }
+
+    .p-0 {
+        padding: 0 !important;
+    }
+
+    .split-button .button-icon {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .split-button .button-label[_ngcontent-vhm-c150] {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+        display: inline-block;
+        width: max-content;
+    }
+
+    .py-2 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .bg-blue-400 {
+        background-color: #0fc9b7 !important;
+    }
+
+    .p-card, .p-button, .p-dropdown, .p-inputtext, .p-inputtextarea, .p-multiselect {
+        border-radius: 5px;
+    }
+
+        .p-card .p-card-content {
+            padding: .5rem 0;
+        }
+
+    .p-card {
+        background: #fff;
+    }
+
+    .p-card {
+        background: transparent;
+        color: #495057;
+        box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, .2), 0px 1px 1px 0px rgba(0, 0, 0, .14), 0px 1px 3px 0px rgba(0, 0, 0, .12);
+        border-radius: 5px;
+    }
+
+    .h-full {
+        height: 100% !important;
+    }
+
+    .w-full {
+        width: 100% !important;
+    }
+
+    .p-component, .p-component * {
+        box-sizing: border-box;
+    }
+
+        .p-component * {
+            box-sizing: border-box;
+        }
+
+    .w-3 {
+        width: 25% !important;
+    }
+
+    .pl-3 {
+        padding-left: 1rem !important;
+    }
+
+    .h-1rem {
+        height: 1rem !important;
+    }
+
+    .w-1rem {
+        width: 1rem !important;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+
+    .ml-1 {
+        margin-left: 0.25rem !important;
+    }
+
+    .text-green-900 {
+        color: #1e4620 !important;
+    }
+
+    .align-self-end {
+        align-self: flex-end !important;
+    }
+
+    .vz-dot-xs.green-600 {
+        background-color: #419544;
+    }
+
+    .vz-dot-xs {
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .connected {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: green;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .disconnected {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: red; /* Change the color for disconnected status */
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .draft {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: blue; /* Change the color for disconnected status */
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .action-cell {
+        text-align: center;
+    }
+
+    th.k-header {
+        color: white;
+    }
+</style>
+
+<body>
+    <div>
+
+        <div class="row" style="height:auto;">
+            <div class="col-md-12">
+                @*<div class="content-wrapper" style="padding:10px;">*@
+                <div style="padding:10px;">
+                    <div class="row" style="padding-bottom: 10px;">
+                        <div class="col-md-4 font-bold text-2xl">
+                            Plugin List
+                        </div>
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4" style="text-align:right;">
+                            <button onclick="addnewconnection()" class="text-white cursor-pointer border-none outline-none p-shadow-3 bg-blue-600">
+                                <span class="button-icon py-2 px-3" style="background-color:#0fc9c09e !important;">
+                                    <i class="glyphicon glyphicon-plus "></i>
+                                </span><span class="button-label py-2 px-3 bg-blue-400"style="font-weight:bold">Add Plugin</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="connectorGrid"></div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let userCode = "";
+        if (urlParams != "") {
+           userCode  = urlParams.get('user_code');
+        }
+        else {
+            userCode = 'Blank';
+        }
+        sessionStorage.setItem("userCode", userCode);
+
+    $.ajax({
+        type: 'GET',
+        url: '@Url.Action("GellAllConnectors", "Connectors")',
+        contentType: false,
+        processData: false,
+        cache: false,
+        success: function (response) {
+            listgrid(response);
+        },
+        error: function (er) {
+            alert(er)
+            console.log(er)
+        }
+    });
+        });
+</script>
+<script>
+    function listgrid(data) {
+        try {
+            $("#connectorGrid").kendoGrid({
+                dataSource: {
+                    data: data,
+                    schema: {
+                        model: {
+                            fields: {
+                                connection_gid: { type: "string" },
+                                connection_name: { type: "string" },
+                                source_db_type: { type: "string" },
+                                source_host_name: { type: "string" },
+                                connection_status: { type: "string" },
+                                Action: { type: "String" },
+                            }
+                        }
+                    },
+                    pageSize: 15
+                },
+                height: 450,
+                width: 1058,
+
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                selectable: "single",
+                toolbar: ["excel"],
+                excel: {
+                    fileName: "ConnectorList.xlsx",
+                    filterable: true,
+                    allPages: true
+                },
+                columns: [
+                    {
+                        field: "Action",
+                        title: "Action",
+                        template: "<div class='action-cell'><i class='glyphicon glyphicon-pencil'style=color:green;cursor:pointer;' onclick=editconnection($(this)) title='Edit'></i> </t> <i class='glyphicon glyphicon-trash' style='color:red;margin-left: 20% !important;cursor:pointer;' onclick=deleteconnection($(this)) title='Delete'></i></div>",
+                        filterable: false,
+                        sortable: false,
+                        width: 80,
+
+                    },
+                    {
+                        field: "connection_gid",
+                        title: "Connection gid",
+                        width: 100,
+                        hidden: true
+                    }, {
+                        field: "connection_name",
+                        title: "Plugin Name",
+                        width: 200
+                    }, {
+                        field: "source_db_type",
+                        title: "Source Type",
+                        width: 200
+                    },
+                    {
+                        field: "source_host_name",
+                        title: "Host Name",
+                        width: 200
+                    },
+                    {
+                        field: "connection_status",
+                        title: "Connection status",
+                        width: 200,
+                        template: function (dataItem) {
+                            // Check the condition for changing the color
+                            if (dataItem.connection_status === "Active") {
+                                return "<div class='status-icon-circle connected'></div> " + dataItem.connection_status;
+                            }
+                            else if (dataItem.connection_status === "Inactive") {
+                                return "<div class='status-icon-circle disconnected'></div> " + dataItem.connection_status;
+                            }
+                            else {
+                                return "<div class='status-icon-circle draft'></div> " + dataItem.connection_status;
+                            }
+                        }
+                    }],
+                // editable: false,
+            });
+            // Ingnore Inactive Connectors
+            var grid = $("#connectorGrid").data("kendoGrid");
+            function IgnoreInActiveData() {
+                var dataSource = grid.dataSource;
+                dataSource.filter({
+                    logic: "and",
+                    filters: [
+                        { field: "connection_status", operator: "neq", value: "InActive" }
+                    ]
+                });
+            }
+            IgnoreInActiveData();
+        }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+    function addnewconnection() {
+        window.location.href = '@Url.Action("ConnectorDetails", "Connectors")';//"/Connectors/ConnectorDetails";
+    }
+
+
+
+    function editconnection(e) {
+        var entityGrid = $("#connectorGrid").data("kendoGrid");
+        var conn_gid = entityGrid.dataItem(e.select().closest("tr")).connection_gid;
+
+
+        if (conn_gid > 0) {
+            window.location.href = '@Url.Action("ConnectorDetails", "Connectors")?id=' + conn_gid; // Use the generated URL here
+            //window.location.href = "~/Connectors/ConnectorDetails?id=" + conn_gid;
+        }
+    }
+
+
+    function deleteconnection(e) {
+        let text = "Are you sure to delete?";
+        jConfirm(text, "Plugin", function (f) {
+            if (f == true) {
+                var entityGrid = $("#connectorGrid").data("kendoGrid");
+                var conn_gid = entityGrid.dataItem(e.select().closest("tr")).connection_gid;
+
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("Deleteexistingconnector", "Connectors")?id=' + conn_gid,
+                    dataType: "json",
+                    success: function (response) {
+                        jAlert(response, "Plugin", function (g) {
+                            if (g == true) {
+                                window.location.href = '@Url.Action("Connectorslist", "Connectors")';
+                            }
+                        });
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                        //alert(er)
+                    }
+                });
+
+                //$.ajax({
+                //    type: "Post",
+                //    url: '@Url.Action("Deleteexistingconnector", "Connectors")?id=' + conn_gid,
+                //    //url: "../Connectors/Deleteexistingconnector?id=" + conn_gid,
+                //    dataType: "json",
+                //    contentType: 'application/json; charset=utf-8',
+                //    success: function (response) {
+                //        jAlert(response, "Plugin", function (g) {
+                //            if (g == true) {
+                //                window.location.href = '@Url.Action("Connectorslist", "Connectors")';
+                //            }
+                //        });
+                //    },
+                //    error: function (er) {
+                //        jAlert(er, "Error");
+                //        //alert(er)
+                //    }
+                //});
+            }
+            else {
+                text = "You canceled!";
+            }
+        });
+    }
+</script>

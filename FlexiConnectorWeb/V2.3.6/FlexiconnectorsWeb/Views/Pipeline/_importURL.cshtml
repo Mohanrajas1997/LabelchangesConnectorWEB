@@ -1,0 +1,214 @@
+﻿@model Connection
+@{
+
+}
+<style></style>
+<div class="modal" tabindex="-1" role="dialog" id="importurl_Popup" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="dialog">
+        <div class="modal-content" style="width: 75%;left: 0%;box-shadow:0 0 8px 8px rgba(153, 153, 153, 0.8) !important">
+            <div class="modal-body" style="margin-top: -15%;margin-left: 3%;margin-right: 3%;">
+                <div class="row">
+                    <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Import URL</h4>
+                </div>
+                <div class="row">
+                    <label class="form-label">Paste URL, Raw text or URL...</label>
+                    <input class="form-control" type="text" id="url" name="url" />
+                </div>
+                <div class="row">
+                    <form id="theuploadformempff">
+                        <div class="form-group">
+                            <label for="Filename" class="form-label">Select Files to Import<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+                            <input type="file" class="form-control input-lg browse btn btn-primary input-lg" name="File_Import" id="File_Import" style="width: 90%;height: 30px;">
+                            <label class="col-md-6 control-label" id="FileName" hidden></label>
+                        </div>
+                    </form>
+               </div>
+                <div class="row">
+                    <textarea style="width: 100%; height: 150px; font-size: 16px; padding: 10px; border-radius: 5px;" id="shortText" name="shortText" rows="4" cols="50" maxlength="100"></textarea>
+                 </div>
+                <div class="row">
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+                     <button type="button" onclick="cancel()" class="btn btn-sm btn-danger btns">Cancel</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" onclick="confirm()" class="btn btn-sm btn-primary btns">Import</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    
+
+<script>
+    function cancel(){
+        $("#importurl_Popup").hide();
+    }
+
+     document.getElementById('File_Import').addEventListener('change', function(event) {
+        const file = event.target.files[0]; 
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('shortText').value = e.target.result;
+            };
+            reader.readAsText(file);
+            cleardata();
+        }
+    });
+
+     function confirm() {
+            const curlCommand = document.getElementById('shortText').value; // Get the content of the textarea
+                // if (curlCommand.trim() === "") {
+                //     alert("Textarea is empty. Please enter data.");
+                //     return;
+                // }
+                    let urlObj = "";
+                    let params = "";
+                const method = "GET";
+            const urlMatch = curlCommand.match(/'(http[^']+)'/);
+            const url = urlMatch ? urlMatch[1] : '';
+            if(url) {
+                try{
+                   urlObj = new URL(url);
+                    params = new URLSearchParams(urlObj.search);
+                    }catch (error) {
+            console.error("Failed to construct URL: ", error);
+        }
+            } else{
+                    console.error("URL not found in curlCommand");
+            }
+            
+
+            // header
+                const headerRegex = /--header\s+'([^:]+):\s*(.+?)'/g;
+                let matchHeader;
+                const headers = {};
+                // Extract headers
+                        while ((matchHeader = headerRegex.exec(curlCommand)) !== null) {
+                        const key = matchHeader[1].trim();
+                        const value = matchHeader[2].trim();
+                    headers[key] = value;
+                }
+           
+            // data
+                   const regex = /--data '({.*})'/;
+                   const matchData = curlCommand.match(regex);
+                   if (matchData) {
+                        const dataPart = matchData[1];
+                         const radioButton = document.getElementById('filter-raw');
+                         radioButton.checked = true;
+                         const rawDiv = document.getElementById('raw');
+                         rawDiv.style.display = 'block';
+                         const jsonOption = document.getElementById('rawoptions');
+                         jsonOption.style.display = 'block';
+                         $('#sel_data').val("Json");
+                         $('#comment').val(dataPart);
+                        } 
+
+            $('#sel').val(method);
+            $('#url').val(urlObj.origin + urlObj.pathname);
+            $('#url').val(urlObj.origin + urlObj.pathname);
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+
+            if (params.toString()) {
+            // Loop through each key-value pair in the URLSearchParams
+            for (const [key, value] of params.entries()) {
+                // Create a new row element
+                const newRow = document.createElement('tr');
+
+                // Create cells for key, value, and description
+                const keyCell = document.createElement('td');
+                const valueCell = document.createElement('td');
+                const descCell = document.createElement('td');
+
+                // Create input elements for each cell and set their values
+                const keyInput = document.createElement('input');
+                keyInput.type = 'text';
+                keyInput.className = 'form-control';
+                keyInput.value = key;
+
+                const valueInput = document.createElement('input');
+                valueInput.type = 'text';
+                valueInput.className = 'form-control';
+                valueInput.value = value;
+
+
+
+                const descInput = document.createElement('input');
+                descInput.type = 'text';
+                descInput.className = 'form-control';
+                descInput.value = '';
+
+                // Append the inputs to the respective cells
+                keyCell.appendChild(keyInput);
+                valueCell.appendChild(valueInput);
+                descCell.appendChild(descInput);
+
+                // Append the cells to the row
+                newRow.appendChild(keyCell);
+                newRow.appendChild(valueCell);
+                newRow.appendChild(descCell);
+
+                // Append the row to the table body
+                tableBody.appendChild(newRow);
+                }
+            }
+            else {
+                console.log("No query parameters found in the URL");
+            }
+   
+            const headerTableBody = document.getElementById("headerTableBody");
+
+            Object.entries(headers).forEach(([key, value]) => {
+            const row = document.createElement("tr");
+
+            const keyCell = document.createElement("td");
+            keyCell.textContent = key;
+
+            const valueCell = document.createElement("td");
+            valueCell.textContent = value;
+
+            const descriptionCell = document.createElement("td");
+            descriptionCell.textContent = "";  // You can modify this as needed
+
+            row.appendChild(keyCell);
+            row.appendChild(valueCell);
+            row.appendChild(descriptionCell);
+
+            headerTableBody.appendChild(row);
+            if(key == 'Authorization' || key == 'authorization'){
+                 if(value.startsWith("Bearer ")) {
+                     $('#sel_auth').val("bearer");
+                 } else {
+                     $('#sel_auth').val("select");
+                 }
+               }
+        });
+
+        cancel();
+
+}
+
+    function cleardata(){
+                $('#sel').val("");
+                $('#url').val("");
+                $('#url').val("");
+                $('#sel_auth').val("");
+                $('#sel_data').val("");
+                $('#comment').val("");
+                const tableBody = document.getElementById('table-body');
+    const headerTableBody = document.getElementById("headerTableBody");
+    tableBody.innerHTML = '';
+    headerTableBody.innerHTML = '';
+
+   
+   }
+
+</script>

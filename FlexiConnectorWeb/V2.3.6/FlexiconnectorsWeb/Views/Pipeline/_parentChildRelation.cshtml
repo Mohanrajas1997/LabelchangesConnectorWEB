@@ -1,0 +1,510 @@
+﻿@model Connection
+@{
+
+}
+<style>
+    .modal-custom {
+        max-width: 95% !important;
+        width: 95%;
+        margin: 14% !important;
+    }
+
+    #ds_gridmapping .k-header .k-grid-toolbar, .k-input, .k-textbox .a .span {
+        background-image: none, linear-gradient(to bottom, rgb(250, 250, 250) 0, rgb(250, 250, 250) 100%) !important;
+    }
+
+    .child-dataset-wrapper + .k-animation-container {
+        top: 195px !important;
+        width: 378px !important;
+    }
+
+    .icon_color {
+        color: #fff !important;
+    }
+</style>
+<div class="modal" tabindex="-1" role="dialog" id="parentChild_Popup" aria-hidden="true">
+    <div class="modal-dialog modal-custom" role="dialog">
+        <div class="modal-content" style="width: 75%;left: 0%;box-shadow:0 0 8px 8px rgba(153, 153, 153, 0.8) !important;height: 73vh;top: 10px;">
+            <div class="modal-body" style="margin-top: -15%;margin-left: 3%;margin-right: 3%;">
+                <div class="row">
+                    <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Parent Child Relation</h4>
+                </div>
+                <div class="row">
+                    <label id="lbl_parentDS" style="color:brown;"> </label>
+                </div>  
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <label class="form-label">Child Dataset</label>
+                            <span style="display:inline;" class="mandatory">*</span>
+                            <div class="child-dataset-wrapper">
+                            <input id="drp_child_dataset" />        
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="mapped_ds_grid"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div id="pc_mappingGrid"></div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 11px;">
+                    <input style="float: right;margin-top: 0%;" type="button" onclick="closeMappings()" class="cancel action-button-previous" value="Cancel" />
+                    <input style="float: right;margin-right: 0%;" type="button" onclick="saveMappings()" class="save" value="Save" />
+                </div>            
+            </div>
+            </div>
+    </div>
+</div>
+
+
+<script>
+
+    // Global Variables
+    var parentDSFields;
+    var childDSFields;
+
+    function loadchilddataset() {
+        var excelheader = "";
+        var datasetType = "All";
+        var pipeline_code = $("#txt_ppl_code").val();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetDataSet", "Pipeline")?pipeline_code='+pipeline_code+"&source_fields="+excelheader+"&datasetType="+datasetType,
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if(data.length > 0){
+                var parent_datasetcode = $("#txtds_code").val();
+                 var child_datasets = data.filter(item => item.dataset_code != parent_datasetcode);
+                 var combo = $("#drp_child_dataset").kendoComboBox({
+                                dataTextField: "dataset_name",
+                                dataValueField: "dataset_code",
+                                dataSource: child_datasets,
+                                placeholder: "-- Select --",
+                                filter: "contains",
+                                suggest: true,
+                                open: function () {
+                                    this.list.width(378);
+                                    this.popup.wrapper.width(378);
+                                },
+                                change: function(e) {                                   
+                                   getmappedParentChildList();
+                                   changeChidDS($(this.element));
+                                }
+                            }).data("kendoComboBox");
+                }
+            },
+            error: function (er) {
+                jAlert(er, "Error");
+            }
+        });
+    }
+
+     function changeChidDS(ds){
+           var data = {};
+           data.in_pipeline_code = $("#txt_ppl_code").val();
+           data.in_dataset_code = ds.val();
+           $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getAllDatasetFields", "Pipeline")',
+                async: false,
+                dataType: "json",
+                data: JSON.stringify(data),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    if(res.length > 0) {
+                        childDSFields = res;
+                        getmappedParentChildList();
+                        changeChidDS($(this.element));
+                        addPCFieldRow();
+                    }
+                },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+               });
+      }
+
+    function closeMappings() {
+        $("#parentChild_Popup").hide();
+        var combo = $("#drp_child_dataset").data("kendoComboBox");
+        if (combo) {
+            combo.value("");
+            combo.text("");
+        }
+    }
+
+    function mergeGridColumn(grid, fieldName) {
+        var rows = grid.tbody.find("tr");
+        var prevCell = null;
+        var span = 1;
+
+        rows.each(function () {
+            var cell = $(this).find("td:eq(" + getColumnIndex(grid, fieldName) + ")");
+
+            if (prevCell && cell.text() === prevCell.text()) {
+                span++;
+                prevCell.attr("rowspan", span);
+                cell.hide();
+            } else {
+                prevCell = cell;
+                span = 1;
+            }
+        });
+    }
+
+    function getColumnIndex(grid, fieldName) {
+        var index = -1;
+        grid.columns.forEach(function (col, i) {
+            if (col.field === fieldName) {
+                index = i;
+            }
+        });
+        return index;
+    }
+
+    function getdata(){
+      var data = [
+      {
+        "parent_child_gid": "1",
+        "pipeline_code": "PIPE_0584",
+        "parent_dataset_code": "DS566",
+        "parent_dataset_name": "Invoice Header New",
+        "child_dataset_code": "DS567",
+        "child_dataset_name": "Order Details",
+        "parent_keyfield": "location_no",
+        "child_keyfield": "location number"
+      },
+      {
+        "parent_child_gid": "2",
+        "pipeline_code": "PIPE_0584",
+        "parent_dataset_code": "DS566",
+        "parent_dataset_name": "Invoice Header New",
+        "child_dataset_code": "DS567",
+        "child_dataset_name": "Invoice Details",
+        "parent_keyfield": "Invoice_Date",
+        "child_keyfield": "Tran Date"
+      },
+      {
+        "parent_child_gid": "3",
+        "pipeline_code": "PIPE_0584",
+        "parent_dataset_code": "DS567",
+        "parent_dataset_name": "Invoice Details",
+        "child_dataset_code": "DS568",
+        "child_dataset_name": "PO Order",
+        "parent_keyfield": "location number",
+        "child_keyfield": "location number"
+      },
+      {
+        "parent_child_gid": "4",
+        "pipeline_code": "PIPE_0584",
+        "parent_dataset_code": "DS567",
+        "parent_dataset_name": "Invoice Details",
+        "child_dataset_code": "DS568",
+        "child_dataset_name": "PO Order",
+        "parent_keyfield": "invoiceDate",
+        "child_keyfield": "Po Date"
+      }  ,
+      {
+        "parent_child_gid": "5",
+        "pipeline_code": "PIPE_0584",
+        "parent_dataset_code": "DS567",
+        "parent_dataset_name": "Invoice Details",
+        "child_dataset_code": "DS568",
+        "child_dataset_name": "PO Order",
+        "parent_keyfield": "Po status",
+        "child_keyfield": "status"
+      }
+    ];
+      return data;
+    }
+
+    function loadRSGrid(dataSource){
+       $("#ds_gridmapping").remove();
+       $('#pc_mappingGrid').append('<div id="ds_gridmapping" style="height: 300px;"></div>');
+       $("#ds_gridmapping").kendoGrid({
+        dataSource: {
+            data:dataSource,
+            schema: {
+                model: {
+                    id: "parentchild_rel_gid",
+                    fields: {
+                        field_mapped: { type: "string", defaultValue: "N" },
+                        parentchild_rel_gid: { type: "string" },
+                        pipeline_code: { type: "string" },
+                        parent_ds_code: { type: "string" },
+                        parent_dskeyfield: { type: "string" },
+                        parent_field_name: { type: "string" },
+                        child_ds_code: { type: "string" },
+                        child_ds_name: { type: "string" },
+                        child_dskeyfield: { type: "string" },
+                        child_field_name: { type: "string" }
+                    }
+                }
+            }
+        },
+         toolbar:
+            "<a href='javascript:void(0)' onclick='addPCFieldRow()'>" +
+            "<span class='glyphicon glyphicon-plus icon_color'></span></a>",
+           
+       
+
+        editable: true,
+        columns: [
+             {
+                field: "field_mapped",
+                title: "Enable",
+                filterable: false,
+                template:
+                "<input type='checkbox' class='chkbx_pc_ds' " +
+                "# if (child_dskeyfield) { #" +
+                " checked='checked' " +
+                "# } # />",
+                // "<input type='checkbox' class='chkbx_pc_ds' " +
+                // "#= field_mapped === 'Y' ? 'checked=checked' : '' # />",   
+                width: 80
+             },
+              { field: "parentchild_rel_gid", hidden: true },
+            { field: "pipeline_code", hidden: true },
+            { field: "parent_ds_code", hidden: true },
+            { field: "child_ds_code", hidden: true },
+            {
+                field: "parent_field_name",
+                title: "Parent Dataset Field",
+                editor: parentDatasetEditor,
+            },
+            {
+                field: "child_field_name",
+                title: "Child Dataset Field",
+                editor: childDatasetEditor,
+            },
+            { field: "child_dskeyfield", hidden: true },
+            { field: "parent_dskeyfield", hidden: true }            
+        ]
+    });
+    }
+
+    $(document).on("change", ".chkbx_pc_ds", function () {
+        var grid = $("#ds_gridmapping").data("kendoGrid");
+        var dataItem = grid.dataItem($(this).closest("tr"));
+
+        dataItem.set("field_mapped", this.checked ? "Y" : "N");
+    });
+
+    function loadmappedDSGrid(dataSource){       
+       $("#grid_mappedDS").remove();
+       $('#mapped_ds_grid').append('<div id="grid_mappedDS" style="height: 220px; margin-top: 20px;"></div>');
+       $("#grid_mappedDS").kendoGrid({
+        dataSource: {
+            data: dataSource,
+            schema: {
+                model: {
+                    id: "parentchild_rel_gid",
+                    fields: {
+                        action: { type: "string"},
+                        parent_ds_code: { type: "string" },
+                        child_ds_code: { type: "string" },
+                        child_ds_name: { type: "string" },
+                    }
+                }
+            }
+        },        
+        columns: [   
+             {
+                field: "action",
+                title: "Action",
+                encoded: false,
+                template:
+                    "<input type='radio' name='childDsSelect' class='rd_child_ds' />" +
+                    "<i class='glyphicon glyphicon-trash btn-delete-childds' onclick='delete_child_ds($(this))'" +
+                    "style='color:red; margin-left:12px; cursor:pointer;'></i>",
+                // template: "<i class='glyphicon glyphicon-trash' onclick='delete_child_ds($(this))' style='color:red;margin-left: 40% !important'></i>",
+                width: 60
+            },
+            {
+                field: "child_ds_name",
+                title: "Mapped Child Dataset",
+            },
+        ]
+    });
+    }
+
+    function parentDatasetEditor(container, options) {
+        var select = $("<select class='k-input k-textbox' style='width:100%'></select>");
+        select.append("<option value=''>-- Select Parent --</option>");
+        $.each(parentDSFields, function (i, item) {
+            select.append(
+                $("<option></option>")
+                    .val(item.dataset_field_name)
+                    .text(item.dataset_field_desc)
+            );
+        });
+
+        select.appendTo(container);       
+        select.val(options.model.parent_field_name);
+        select.on("change", function () {
+            var selectedCode = this.value;
+            var selectedText = $(this).find("option:selected").text();
+            options.model.set("parent_dskeyfield", selectedCode);
+            options.model.set("parent_field_name", selectedText);
+            options.model.set("child_dskeyfield", "");
+            options.model.set("child_field_name", "");
+        });
+    }
+
+    function childDatasetEditor(container, options) {
+         var select = $("<select class='k-input k-textbox' style='width:100%'></select>");
+        select.append("<option value=''>-- Select Child --</option>");
+        $.each(childDSFields, function (i, item) {
+            select.append(
+                $("<option></option>")
+                    .val(item.dataset_field_name)
+                    .text(item.dataset_field_desc)
+            );
+        });
+        select.appendTo(container);
+         if (options.model.child_field_name) {
+            select.val(options.model.child_field_name);
+        }
+        select.on("change", function () {
+            var selectedCode = this.value;
+            var selectedText = $(this).find("option:selected").text();
+            options.model.set("child_dskeyfield", selectedCode);
+            options.model.set("child_field_name", selectedText);
+            var mapped = selectedCode ? "Y" : "N";
+            options.model.set("field_mapped", mapped);
+        });
+    }
+
+    function addPCFieldRow() {
+          var parent_dscode = $("#txtds_code").val();
+          var ppl_code = $("#txt_ppl_code").val();
+          var childDSCode;
+          var combo = $("#drp_child_dataset").data("kendoComboBox");
+          if (combo) {
+            var item = combo.dataItem();
+            if (item) {
+                childDSCode = item.dataset_code;
+            }
+        }
+        if(childDSCode) {
+            var grid = $("#ds_gridmapping").data("kendoGrid");
+            grid.dataSource.add({
+                    field_mapped: "N",
+                    parentchild_rel_gid: "0",
+                    pipeline_code: ppl_code,
+                    parent_ds_code: parent_dscode,
+                    parent_dskeyfield: "",
+                    parent_field_name: "",
+                    child_ds_code: childDSCode,
+                    child_ds_name: "",
+                    child_dskeyfield: "",
+                    child_field_name: ""
+            });
+            var lastRow = grid.tbody.find("tr:last");
+            grid.editRow(lastRow);              
+              setTimeout(function () {
+                var cellIndex = grid.columns.findIndex(c => c.field === "parent_dskeyfield");
+                if (cellIndex !== -1) {
+                    var cell = lastRow.find("td:eq(" + cellIndex + ")");
+                    grid.editCell(cell);
+                }
+            }, 0);
+        } else {
+            jAlert("Please Select Child Dataset", "Connector");
+        }
+
+      }
+
+    function saveMappings(){
+         var grid = $("#ds_gridmapping").data("kendoGrid");
+         grid.dataSource.sync();
+         var items = grid.dataSource._data;
+         $.ajax({
+         type: "Post",
+         url: '@Url.Action("parentchildrelation", "Pipeline")',
+         data: JSON.stringify(items),
+         dataType: "json",
+         contentType: 'application/json; charset=utf-8',
+         success: function (response) {
+             if(response) {
+                 jAlert(response, "Connector");
+                 var combo = $("#drp_child_dataset").data("kendoComboBox");
+                    if (combo) {
+                        combo.value("");
+                        combo.text("");
+                    }
+                 getmappedParentChildList();
+             } else {
+                 jAlert("Something went Wrong", "Connector");
+             }
+         },
+         error: function (er) {
+             jAlert(er, "Error");
+         }
+     });
+    }
+
+    function delete_child_ds(e) {
+           let text = "Are you sure to delete?";
+           jConfirm(text, "Connector", function (f) {
+               if (f == true) {
+                   var entityGrid = $("#grid_mappedDS").data("kendoGrid");
+                   var child_ds_code = entityGrid.dataItem(e.select().closest("tr")).child_ds_code;
+                   var parent_ds_code = $('#txtds_code').val();
+                   var pipeline_code = $("#txt_ppl_code").val();
+                   $.ajax({
+                       type: "GET",
+                       url: '@Url.Action("Deleteexistingchild_ds", "Pipeline")',
+                        data: {
+                           pipeline_code: pipeline_code,
+                           parent_ds_code: parent_ds_code,
+                           child_ds_code: child_ds_code
+                       },
+                       dataType: "json",
+                       contentType: 'application/json; charset=utf-8',
+                       success: function (response) {
+                           jAlert(response, "Connector", function (g) {
+                               if (g == true) {
+                                  getmappedParentChildList();
+                               }
+                           });                          
+                       },
+                       error: function (er) {
+                           jAlert(er, "Error");
+                       }
+                   });
+               }
+               else {
+                   text = "You canceled!";
+               }
+           });
+
+    }
+
+     $(document).on("change", ".rd_child_ds", function () {
+        var grid = $("#grid_mappedDS").data("kendoGrid");
+        if (!grid) return;
+
+        var row = $(this).closest("tr");
+        var dataItem = grid.dataItem(row);
+
+        if (!dataItem) {
+            console.error("No dataItem found for row", row);
+            return;
+        }
+        var childDsCode  = dataItem.child_ds_code;
+        var combo = $("#drp_child_dataset").data("kendoComboBox");
+        if (combo && childDsCode) {
+            combo.value(childDsCode);
+            combo.trigger("change");
+        }
+         getmappedParentChildList();
+    });
+
+</script>
