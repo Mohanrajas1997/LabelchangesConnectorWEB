@@ -1,0 +1,74 @@
+﻿@model Connection
+@{
+
+}
+<style></style>
+<div class="modal" tabindex="-1" role="dialog" id="csvColumn_Popup" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="dialog">
+        <div class="modal-content" style="width: 75%;left: 0%;box-shadow:0 0 8px 8px rgba(153, 153, 153, 0.8) !important">
+            <div class="modal-body" style="margin-top: -15%;margin-left: 3%;margin-right: 3%;">
+                <div class="row">
+                    <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">CSV Column</h4>
+                </div>
+                <div class="row">
+                    <label class="form-label">Serial No</label>
+                    <input class="form-control" type="text" id="txt_pplcsvfield_gid" name="txt_pplcsvfield_gid" style="display:none" />
+                    <input class="form-control" type="number" id="txt_serialno" name="txt_serialno" min="0" step="1" onblur="validateNumberInput(this,'serialno')" /> @* step="0.01" oninput="enforceTwoDecimals(this)" onblur="formatTwoDecimals(this)" *@
+                </div>
+                <div class="row">
+                    <label class="form-label">Column Name </label>
+                    <input class="form-control" type="text" id="txt_columnname" name="txt_columnname" />
+                </div>
+                <div class="row">
+                    <label class="form-label">Data Type</label>
+                    @* <input class="form-control" type="text" id="txt_csvcol_datatype" name="txt_csvcol_datatype" /> *@
+                    <select class="form-control" id="drp_csvcol_datatype" name="drp_csvcol_datatype" style="width:100%;height:25%">
+                        <option value="-- Select --">-- Select --</option>
+                        <option value="TEXT">TEXT</option>
+                        <option value="INTEGER">INTEGER</option>
+                        <option value="DATE">DATE</option>
+                        <option value="DATETIME">DATETIME</option>
+                        <option value="NUMERIC">NUMERIC</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-3"> </div>
+                    <div class="col-sm-6" style="margin-top: 2%;text-align: right; display:flex;">
+                        <input style="float: right;margin-top: 0%;" type="button" id="csv_cancel" onclick="CloseCsvColumns()" class="cancel action-button-previous" value="Cancel" />
+                        <input style="float: right;margin-right: 0%;" type="button" id='btn_saveCsvColumns' onclick="saveCsvColumns()" class="save" value="Save" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function CloseCsvColumns() {
+        $("#csvColumn_Popup").hide();
+    }
+
+        function enforceTwoDecimals(input) {
+        const value = input.value;
+
+        // Allow empty value for deletion
+        if (value === '') return;
+
+        // Match numbers with up to 2 decimal places
+        const match = value.match(/^\d*(\.\d{0,2})?$/);
+
+        // If input is invalid, revert to the previous valid value
+        if (!match) {
+            input.value = input.value.slice(0, -1);
+        }
+    }
+
+    function formatTwoDecimals(input) {
+        const value = parseFloat(input.value);
+        if (!isNaN(value)) {
+            input.value = value.toFixed(2);
+        }
+    }
+   
+</script>

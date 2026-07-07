@@ -1,0 +1,56 @@
+﻿<style>
+	#dsgrid, .grid_datasetfield, .k-grid-content {
+		height: 160px !important;
+	}
+</style>
+	<div class="row" style="margin-bottom: 10px;display: none;">
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-sm-4">
+					<label for="lbldatasetcode" class="form-label">Dataset Code</label>
+					<input class="form-control" type="text" id="txtdatasetcode" disabled>
+				</div>
+				<div class="col-sm-4">
+					<label for="lblmode" class="form-label">Mode</label>
+					<input class="form-control" type="text" id="txtmode" value="Create" disabled>
+				</div>
+				<div class="col-sm-4">
+					<label for="lblstatus" class="form-label">Status</label><br>
+					<input class="form-control" type="text" id="txtstatus" value="Active" disabled>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-5">
+		</div>
+		<div class="col-sm-1" style="margin-top:20px;"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<label class="form-label" for="">Dataset Name&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+			<input class="form-control" type="text" id="datasetname">
+			<input class="form-control" type="hidden" id="datasetgid" value=0;>
+		</div>
+		<div class="col-sm-4">
+			<label class="form-label" for="">Category&nbsp;<span style="font-size: 12px;color: red;font-weight: bold;">*</span></label>
+			<select id="cmbcategory" class="form-control">
+			<option value="">Select</option>
+			<option value="2">Bank Statement</option>
+			<option value="3">Ledger</option>
+			<option value="4">Dump</option>
+			</select>
+		</div>
+		<div class="col-sm-1" style="margin-top: 10px;">
+			<input style="float: right;padding: 6px !important; margin: 15px -20px 0px 0px;" onclick="DSheadersave()" type="button" id="btn_dssave" name="Save" class="next action-button" value="Save" />
+		</div>
+	</div>
+	<div class="row">
+	<ul id="cc_progressbar" style="padding: 8px;padding-left: 15px;text-align: center;">
+		<li class="active cc_tab-color" id="griddatasetTab"><a data-toggle="tab" style="color: #fff;">Dataset Fields</a></li>
+	</ul>
+</div>
+
+
+	<div id="dsgrid"> </div>
+
+
+	

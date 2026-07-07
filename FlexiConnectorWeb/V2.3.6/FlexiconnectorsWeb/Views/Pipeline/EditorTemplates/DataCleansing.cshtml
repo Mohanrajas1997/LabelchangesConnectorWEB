@@ -1,0 +1,131 @@
+﻿<body>
+    <div class="modal" tabindex="-1" role="dialog" id="viewModel1" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="margin-top: -26px;">
+                    <div class="row">
+                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-4">
+                            <h4 style="font-size: 15px;text-align: center;color: #1a9950;font-weight: 600;">Data Cleansing</h4>
+                        </div>
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+                    <hr style="margin-top:-1px; width:100%;">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div>
+                                <label class="form-label">
+                                    Cleansing Action
+                                </label>
+                                <select class="form-control" id="fieldtype" name="cleaningaction">
+                                    <option value="">-- Select --</option>
+                                    <option value="string">Find and Replace Text</option>
+                                    <option value="number">Set Default Value</option>
+                                    <option value="date" selected>Truncate Text</option>
+                                    <option value="boolean">Remove Whitespace</option>
+                                    <option value="fandR">Find and Remove Text</option>
+                                    <option value="ET">Extract Text</option>
+                                    <option value="PS">Add Prefix and Suffix</option>
+                                    <option value="CC">Change Case</option>
+                                    <option value="VM">Value Mapper</option>
+                                    <option value="BN">Boolean Number</option>
+                                    <option value="BS">Boolean to String</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div>
+                                <label>Choose Fields</label>
+                                <select class="form-control" id="fieldtype" name="cleaningaction">
+                                    <option value="" selected>-- Select --</option>
+                                    <option value="">Bank Name</option>
+                                    <option value="">Bank Branch Name</option>
+                                    <option value="">IFSC Code</option>
+                                    <option value="">Bank Branch Address</option>
+                                    <option value="">Rural Urban Branch</option>
+                                    <option value="">Pincode</option>
+                                    <option value="">created By</option>
+                                    <option value="">Entry Code</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    @*If value is Truncate start*@
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                Truncate Text
+                            </label>
+                            <select class="form-control" id="truncatetext" name="cleaningaction" onchange="changeTruncateText($('#truncatetext').val())">
+                                <option value="" selected>-- Select --</option>
+                                <option value="left">Left Only</option>
+                                <option value="right">Right Only</option>
+                                <option value="both">Both Left and Right</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"> </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="left_align" style="display:none">
+                                <label class="form-label">Number of Character from Left</label>
+                                <input class="form-control" id="" value="0" type="number" name="leftChar" />
+                            </div>
+                            <div id="right_align" style="display:none">
+                                <label class="form-label">Number of Character from Right</label>
+                                <input class="form-control" id="" value="0" type="number" name="leftChar" />
+                            </div>
+
+                        </div>
+                        <div id="both_align" class="col-md-6" style="display:none">
+                            <div>
+                                <label class="form-label">Number of Character from Right</label>
+                                <input class="form-control" id="" value="0" type="number" name="leftChar" />
+                            </div>
+                        </div>
+                    </div>
+
+                    @*If value is Truncate end*@
+
+                    <div class="row" style="padding-bottom:5px;margin-top:5px;padding-left:10px;padding-right:10px">
+                        <div class="col-sm-4">
+                        </div>
+                        <div class="col-sm-4"> </div>
+                        <div class="col-sm-4" style="margin-top: 2%;text-align: right;">
+                            @* <button type="button" class="btn btn-sm btn-success me-2" style="background: #38b55a;border-color: #38b55a;width:40%">Save</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-sm btn-success me-2" style="background: red;border-color: red;width:40%" onclick="closeModel()">Cancel</button>
+                            *@
+                            <input style="float: right;margin-right: 0%;" type="button" id='next' class="save" value="Save" />
+                            <input style=" float: right; margin-top: 0%;" type="button" id="btn_prvs" class="cancel action-button-previous" onclick="closeModel()" value="Cancel" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function changeTruncateText(getCode) {
+        if (getCode == 'right') {
+            $("#right_align").show();
+            $("#left_align").hide();
+            $("#both_align").hide();
+        } else if (getCode == 'left') {
+            $("#left_align").show();
+            $("#right_align").hide();
+            $("#both_align").hide();
+        } else if (getCode == 'both') {
+            $("#both_align").show();
+            $("#right_align").hide();
+            $("#left_align").show();
+        }
+    }
+</script>

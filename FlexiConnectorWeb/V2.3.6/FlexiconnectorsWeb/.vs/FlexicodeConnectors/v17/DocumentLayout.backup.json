@@ -1,0 +1,106 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|d:\\hema\\apollo hosted source (ap cit)\\connectorlabelchangessource\\flexiconnectorweb\\v2.3.6\\flexiconnectorsweb\\controllers\\connectorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|solutionrelative:controllers\\connectorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|d:\\hema\\apollo hosted source (ap cit)\\connectorlabelchangessource\\flexiconnectorweb\\v2.3.6\\flexiconnectorsweb\\controllers\\pipelinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|solutionrelative:controllers\\pipelinecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|d:\\hema\\apollo hosted source (ap cit)\\connectorlabelchangessource\\flexiconnectorweb\\v2.3.6\\flexiconnectorsweb\\views\\pipeline\\_parentchildrelation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|solutionrelative:views\\pipeline\\_parentchildrelation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|d:\\hema\\apollo hosted source (ap cit)\\connectorlabelchangessource\\flexiconnectorweb\\v2.3.6\\flexiconnectorsweb\\views\\pipeline\\pipelinenew.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|solutionrelative:views\\pipeline\\pipelinenew.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|d:\\hema\\apollo hosted source (ap cit)\\connectorlabelchangessource\\flexiconnectorweb\\v2.3.6\\flexiconnectorsweb\\views\\pipeline\\_apicolumns.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B1006B8F-4E42-492B-A7B0-9264305EA997}|FlexicodeConnectors.csproj|solutionrelative:views\\pipeline\\_apicolumns.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ConnectorsController.cs",
+              "DocumentMoniker": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Controllers\\ConnectorsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ConnectorsController.cs",
+              "ToolTip": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Controllers\\ConnectorsController.cs",
+              "RelativeToolTip": "Controllers\\ConnectorsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-06T10:20:12.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "_parentChildRelation.cshtml",
+              "DocumentMoniker": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Views\\Pipeline\\_parentChildRelation.cshtml",
+              "RelativeDocumentMoniker": "Views\\Pipeline\\_parentChildRelation.cshtml",
+              "ToolTip": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Views\\Pipeline\\_parentChildRelation.cshtml",
+              "RelativeToolTip": "Views\\Pipeline\\_parentChildRelation.cshtml",
+              "ViewState": "AgIAAJ4BAAAAAAAAAADgv60BAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-06T05:46:13.182Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_apiColumns.cshtml",
+              "DocumentMoniker": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Views\\Pipeline\\_apiColumns.cshtml",
+              "RelativeDocumentMoniker": "Views\\Pipeline\\_apiColumns.cshtml",
+              "ToolTip": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Views\\Pipeline\\_apiColumns.cshtml",
+              "RelativeToolTip": "Views\\Pipeline\\_apiColumns.cshtml",
+              "ViewState": "AgIAAHcBAAAAAAAAAADwv40BAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-04T08:01:22.464Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PipelineController.cs",
+              "DocumentMoniker": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Controllers\\PipelineController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PipelineController.cs",
+              "ToolTip": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Controllers\\PipelineController.cs",
+              "RelativeToolTip": "Controllers\\PipelineController.cs",
+              "ViewState": "AgIAAHQLAAAAAAAAAAAIwHcLAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-04T06:58:42.093Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PipelineNew.cshtml",
+              "DocumentMoniker": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Views\\Pipeline\\PipelineNew.cshtml",
+              "RelativeDocumentMoniker": "Views\\Pipeline\\PipelineNew.cshtml",
+              "ToolTip": "D:\\Hema\\Apollo Hosted Source (AP CIT)\\ConnectorLabelChangesSource\\FlexiConnectorWeb\\V2.3.6\\FlexiconnectorsWeb\\Views\\Pipeline\\PipelineNew.cshtml",
+              "RelativeToolTip": "Views\\Pipeline\\PipelineNew.cshtml",
+              "ViewState": "AgIAAIMsAAAAAAAAAADgv4osAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-07-03T12:10:46.669Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2143 @@
+﻿﻿@{
+Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .col-md-12 {
+        width: 100%;
+    }
+
+    .k-grid .k-table-row {
+        font-size: 14px;
+    }
+
+    .demo-wrapper {
+        grid-template-columns: 180px 1fr;
+    }
+
+    .k-h4 {
+        line-height: 26px;
+        margin-bottom: 0;
+    }
+
+    .kd-nodata-wrapper {
+        display: block !important;
+        padding-top: 20px !important;
+    }
+
+
+    /* Breakpoints for full screen demo: max:599px, min:759px and max: 959 */
+
+    .demo-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .avatar {
+        display: block !important;
+    }
+
+    .side-container {
+        display: none !important;
+    }
+
+    .main-container {
+        padding-bottom: 0;
+    }
+
+    .content-expanded {
+        border-end-end-radius: 0;
+        border-end-start-radius: 0;
+    }
+
+
+    /* Breakpoint for full screen demo: max:359px */
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .card1 {
+        z-index: 0;
+        border: none;
+        border-radius: 0.5rem;
+        position: relative;
+    }
+
+    /*form styles*/
+    #msform {
+        text-align: center;
+        position: relative;
+        padding: 0px 10px;
+    }
+
+        #msform fieldset .form-card {
+            background: white;
+            border: 0 none;
+            border-radius: 0px;
+            box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+            padding: 20px 40px 30px 40px;
+            box-sizing: border-box;
+            margin: 0px !important;
+            width: 100%;
+            /*stacking fieldsets above each other*/
+            position: relative;
+            height: 60vh;
+        }
+
+        #msform fieldset {
+            border: 0 none;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            margin: 0;
+            padding-bottom: 20px;
+            /*stacking fieldsets above each other*/
+            position: relative;
+        }
+
+            /*Hide all except first fieldset*/
+            #msform fieldset:not(:first-of-type) {
+                display: none;
+            }
+
+            #msform fieldset .form-card {
+                text-align: left;
+                height: 60vh;
+            }
+
+        /*Blue Buttons*/
+        #msform .action-button {
+            width: 100px;
+            background: #0fc9b7;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #ffff;
+            border: 0 none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+
+        /*   #msform .action-button:hover, #msform .action-button:focus {
+                                                                                                                                                            box-shadow: 0 0 0 2px #0fc9b7, 0 0 0 3px #0fc9b7;
+                                                                                                                                                        }*/
+
+        /*Previous Buttons*/
+        #msform .action-button-previous {
+            width: 100px;
+            border: 1px solid red !important;
+            background: transparent;
+            font-weight: bold;
+            color: red;
+            border: 0 none;
+            border-radius: 5px !important;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+
+    /*progressbar*/
+    #progressbar {
+        margin-bottom: 0px;
+        overflow: hidden;
+        color: #0c0c0c;
+    }
+
+        #progressbar .active {
+            color: #fff;
+            background-color: #872e7b !important;
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 14px;
+            width: 20%;
+            float: left;
+            position: relative;
+            border-left: 1px solid #fff;
+        }
+
+            /*ProgressBar before any progress*/
+            #progressbar li:before {
+                width: 50px;
+                height: 50px;
+                line-height: 45px;
+                display: block;
+                font-size: 18px;
+                color: #ffffff;
+                background: lightgray;
+                border-radius: 50%;
+                margin: 0 auto 10px auto;
+                padding: 2px;
+            }
+
+            /*ProgressBar connectors*/
+            #progressbar li:after {
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: lightgray;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                z-index: -1;
+            }
+
+            /*Color number of the step and the connector before it*/
+            #progressbar li.active:before, #progressbar li.active:after {
+                background: skyblue;
+            }
+
+
+    .tab-color {
+        background-color: grey !important;
+        padding: 12px;
+        color: #fff;
+    }
+
+    .item {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .item-card {
+        transition: 0.5s;
+        cursor: pointer;
+        background-color: #a39797;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .item-card-title {
+        font-size: 15px;
+        transition: 1s;
+        cursor: pointer;
+    }
+
+        .item-card-title i {
+            font-size: 15px;
+            transition: 1s;
+            cursor: pointer;
+            color: #ffa710
+        }
+
+    .card-title i:hover {
+        transform: scale(1.25) rotate(100deg);
+        color: #18d4ca;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 10px 10px 15px rgba(0,0,0,0.3);
+    }
+
+    .card-text {
+        height: 80px;
+    }
+
+    .card::before, .card::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: scale3d(0, 0, 1);
+        transition: transform .3s ease-out 0s;
+        background: rgba(255, 255, 255, 0.1);
+        content: '';
+        pointer-events: none;
+    }
+
+    .card::before {
+        transform-origin: left top;
+    }
+
+    .card::after {
+        transform-origin: right bottom;
+    }
+
+    .card:hover::before, .card:hover::after, .card:focus::before, .card:focus::after {
+        transform: scale3d(1, 1, 1);
+    }
+
+    .btntestconn {
+        background: #0fc9b7;
+        font-weight: bold;
+        color: white;
+        border: 0 none;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px 10px;
+        margin: -11px 0px;
+        float: right
+    }
+
+
+    .selected {
+        box-shadow: 0px 12px 22px 1px #998a8a;
+    }
+
+    #cc_progressbar {
+        margin-bottom: 0px;
+        overflow: hidden;
+        color: #0c0c0c;
+    }
+
+        #cc_progressbar .active {
+            color: #fff;
+            background-color: #872e7b !important;
+        }
+
+        #cc_progressbar li {
+            list-style-type: none;
+            font-size: 12px;
+            width: 10%;
+            float: left;
+            position: relative;
+            cursor: pointer;
+            border-left: 1px solid #fff;
+        }
+
+            /*ProgressBar before any progress*/
+            #cc_progressbar li:before {
+                width: 50px;
+                height: 50px;
+                line-height: 45px;
+                display: block;
+                font-size: 18px;
+                color: #ffffff;
+                background: lightgray;
+                border-radius: 50%;
+                margin: 0 auto 10px auto;
+                padding: 2px;
+            }
+
+            /*ProgressBar connectors*/
+            #cc_progressbar li:after {
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: lightgray;
+                position: absolute;
+                left: 0;
+                top: 25px;
+                z-index: -1;
+            }
+
+            /*Color number of the step and the connector before it*/
+            #cc_progressbar li.active:before, #cc_progressbar li.active:after {
+                background: skyblue;
+            }
+
+    .cc_tab-color {
+        background-color: grey !important;
+        padding: 6px;
+    }
+
+    .listicon {
+        padding-left: 9px;
+        padding-right: 8px;
+        left: 10px;
+        padding-top: 9px;
+        padding-bottom: 3px;
+        background: #fff;
+        color: #872e7b !important;
+        border-radius: 4px;
+    }
+
+        .listicon > a {
+            color: #872e7b !important;
+        }
+
+    .connector-item img {
+        cursor: pointer;
+        border: 3px solid transparent;
+        border-radius: 10px;
+        padding: 5px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+        .connector-item img.selected {
+            border: 2px solid #000;
+            background-color: #eef5ff;
+            transform: scale(1.15); /* Stay zoomed */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            animation: selectGlow 0.4s ease-out;
+        }
+
+    @@keyframes selectGlow {
+        0% {
+            transform: scale(0.85);
+            opacity: 0.5;
+        }
+
+        60% {
+            transform: scale(1.25);
+        }
+
+        100% {
+            transform: scale(1.15); /* Final zoom level */
+            opacity: 1;
+        }
+    }
+
+    .slider-wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        border: 1px solid #d2d6de;
+        padding: 10px 0px 10px 0px;
+        border-radius: 4px;
+    }
+
+    .slider-container {
+        overflow: hidden;
+    }
+
+    .slider-content {
+        display: flex;
+        transition: transform 0.4s ease;
+        will-change: transform;
+        margin-left: -8px;
+        margin-top: 10px;
+        height: 85px;
+        gap: 1%;
+    }
+
+    /* .connector-item {
+                            min-width: 150px;
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            text-align: center;
+                        } */
+
+    #btnPrev,
+    #btnNext {
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: #0eb8a7;
+        font-weight: bold;
+        font-size: large;
+        position: relative;
+        top: 25px;
+        margin-left: -18px;
+    }
+    /* Fixed corner buttons */
+    .slider-btn {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        z-index: 100;
+        cursor: pointer;
+    }
+
+    .prev {
+        left: 5px;
+    }
+
+    .next {
+        right: 5px;
+    }
+
+    .connector-item img {
+        pointer-events: none;
+    }
+
+</style>
+@* API style *@
+<style>
+
+    .no-border {
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        background-color: transparent !important;
+        border-style: solid;
+        border-width: 0 0 0 1px;
+        padding: 0px 5px;
+        overflow: hidden;
+        line-height: 1.6em !important;
+        height: 16px !important;
+        vertical-align: middle;
+        text-overflow: ellipsis;
+        font-size: 14px !important;
+    }
+
+        .no-border:focus {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            background-color: transparent !important;
+        }
+
+    #paramTable thead th {
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        border-color: #fff !important;
+        line-height: 1.0;
+        height: 20px;
+    }
+
+    #headerTable thead th {
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        border-color: #fff !important;
+        line-height: 1.0;
+        height: 20px;
+    }
+
+    #paramTable {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    .form-control:focus {
+        border-color: #d2d6de !important;
+    }
+
+
+    .nav-tabs > li > a {
+        border-radius: 0px 0px 0 0 !important;
+    }
+
+    .nav > li > a {
+        padding: 6px 11px !important;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .connector-item img {
+        cursor: pointer;
+        border: 3px solid transparent;
+        border-radius: 10px;
+        padding: 5px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+        .connector-item img.selected {
+            border: 2px solid #000;
+            background-color: #eef5ff;
+            transform: scale(1.15); /* Stay zoomed */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            animation: selectGlow 0.4s ease-out;
+        }
+
+    @@keyframes selectGlow {
+        0% {
+            transform: scale(0.85);
+            opacity: 0.5;
+        }
+
+        60% {
+            transform: scale(1.25);
+        }
+
+        100% {
+            transform: scale(1.15); /* Final zoom level */
+            opacity: 1;
+        }
+    }
+
+    .content-wrapper {
+        min-height: 564px !important;
+        margin-top: -13px !important;
+    }
+
+    .btns {
+        margin-top: 23px;
+    }
+
+    #authhome .table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+        #authhome .table td, .table th {
+            max-width: 200px;
+            word-wrap: break-word;
+            white-space: normal;
+            padding: 8px;
+        }
+
+            #authhome .table td:nth-child(2), .table th:nth-child(2) {
+                max-width: 400px;
+            }
+
+        #authhome .table th {
+            word-wrap: break-word;
+            text-align: center;
+            color: #fff !important;
+            background-color: #872e7b !important;
+            border: 1px solid #872e7b !important;
+            vertical-align: middle;
+            border-color: #fff !important;
+        }
+
+        #authhome .table td, .table th {
+            text-align: left;
+        }
+
+    #authhome tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    #authhome tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #auth_menu1 .table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+        #auth_menu1 .table td, .table th {
+            max-width: 200px;
+            word-wrap: break-word;
+            white-space: normal;
+            padding: 8px;
+        }
+
+            #auth_menu1 .table td:nth-child(2), .table th:nth-child(2) {
+                max-width: 400px;
+            }
+
+        #auth_menu1 .table th {
+            word-wrap: break-word;
+            text-align: center;
+            color: #fff !important;
+            background-color: #872e7b !important;
+            border: 1px solid #872e7b !important;
+            vertical-align: middle;
+            border-color: #fff !important;
+        }
+
+        #auth_menu1 .table td, .table th {
+            text-align: left;
+        }
+
+    /* Alternate row colors */
+    #auth_menu1 tbody tr:nth-child(odd) {
+        background-color: #ffffff; /* White */
+    }
+
+    #auth_menu1 tbody tr:nth-child(even) {
+        background-color: #f2f2f2; /* Light gray */
+    }
+    /*
+                .slider-btn:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                } */
+</style>
+<body>
+    <div>
+        <div style="height:auto;">
+            @*<div class="content-wrapper" style="padding:10px;">*@
+            <div style="padding:10px;">
+                <div class="card1">
+                    <div class="row">
+                        <div class="col-md-12 mx-0">
+                            <form id="msform">
+                                <div style="position: absolute; top: 2px; right: 5px; z-index: 1000; padding: 10px;">
+                                    <a href="@Url.Action("ConnectorsList", "Connectors")" class="listicon" title="Go to List">
+                                        <span class="glyphicon glyphicon-list" style="font-size:22px;" aria-hidden="true"></span>
+                                    </a>
+                                </div>
+
+                                <ul id="progressbar" style="padding: 8px 0px;">
+                                    <li class="active tab-color"><a data-toggle="tab" id="conndetails" style="color: #fff;">Plugin Details</a></li>
+                                    <li class="tab-color"><a data-toggle="tab" id="configurconn" style="color: #fff;">Plugin Configuration</a></li>
+                                </ul>
+                                <fieldset>
+                                    <div class="form-card" style="height: 68vh;">
+
+                                        <h2 class="fs-title" style="margin-top: 0px !important;">Plugin Details</h2>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div>
+                                                    <input class="form-control" type="text" id="txt_connection_gid" name="txt_connection_gid" style="display:none" />
+                                                    <input class="form-control" type="text" id="txt_connectorstatus" name="txt_connectorstatus" style="display:none" />
+
+                                                    <label class="form-label">Plugin Name </label>
+                                                    <span class="mandatory">*</span>
+                                                    <input class="form-control" type="text" id="txt_connectorname" name="txt_connectorname" />
+                                                </div>
+                                                <br />
+                                                <div id="img_source_type">
+                                                    <div class="row" style="margin-left: 0px;">
+                                                        <label class="form-label">Choose Source Type</label>
+                                                        <span class="mandatory">*</span>
+                                                    </div>
+
+                                                    <div class="slider-wrapper" id="scrollContainer">
+                                                        <input type="text" id="txt_source_type" name="txt_source_type" style="display:none;">
+                                                        <div class="row" style="margin-left: 2px;">
+                                                            <div class="col-md-1">
+                                                                <button type="button" id="btnPrev" class="slider-btn prev">&#10094;</button>
+                                                            </div>
+                                                            <div class="col-md-10 slider-container">
+                                                                <div class="slider-content">
+                                                                    <div class="connector-item">
+                                                                        <img id="MySql" value="MySql" style="height: 75px;width: 75px;" src="~/Content/images/mysql.png" onclick="handleImageClick('MySql')">
+                                                                    </div>
+
+                                                                    <div class="connector-item">
+                                                                        <img id="Postgres" value="Postgres" style="height: 75px;width: 75px;" src="~/Content/images/postgres1.png" onclick="handleImageClick('Postgres')">
+                                                                    </div>
+
+                                                                    <div class="connector-item">
+                                                                        <img id="Excel" value="Excel" style="height: 75px;width: 75px;" src="~/Content/images/excel.png" onclick="handleImageClick('Excel')">
+                                                                    </div>
+
+                                                                    <div class="connector-item">
+                                                                        <img id="CSV" value="CSV" style="height: 75px;width: 75px;" src="~/Content/images/csv.png" onclick="handleImageClick('CSV')">
+                                                                    </div>
+
+                                                                    <div class="connector-item">
+                                                                        <img id="Flatfile" value="Flatfile" style="height: 75px;width: 75px;" src="~/Content/images/flatfile.png" onclick="handleImageClick('Flatfile')">
+                                                                    </div>
+
+                                                                    <div class="connector-item">
+                                                                        <img id="API" value="API" style="height: 75px;width: 75px;" src="~/Content/images/API.png" onclick="handleImageClick('API')">
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <button type="button" id="btnNext" class="slider-btn next">&#10095;</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Plugin Description </label>
+                                                <textarea class="form-control" type="text" id="txt_connectordesc" name="txt_connectordesc" style="width: 468px; height: 196px;color: black;resize: none;"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <br />
+
+                                        @*<div class="col-md-">
+                                        <label>Connector Status</label>
+                                        <span class="mandatory">*</span>
+                                        <select class="form-control" id="conn_sts" name="conn_sts">
+                                        <option selected>Active</option>
+                                        <option>Inactive</option>
+                                        </select>
+                                        </div>*@
+
+                                        @*<div class="row" id="div_passwordprod" style="display:none;">
+                                        <div class="col-md-6" id="div_pswdprod">
+                                        <label class="form-label">Password Protected </label> <br />
+                                        <input type="radio" id="pp_yes" name="pswd_prod" value="Y" onclick="showpassword()"> Yes
+                                        <input type="radio" id="pp_no" name="pswd_prod" value="N" onclick="showpassword()" style="margin-left:8%" checked> No
+                                        </div>
+
+                                        <div class="col-md-6" id="div_prd_pswd">
+                                        <label class="form-label">Password </label>
+                                        <span class="mandatory">*</span>
+                                        <input class="form-control" type="password" id="txt_pswdprotected" name="txt_pswdprotected" />
+                                        </div>
+                                        </div>*@
+
+                                        <div style="margin-top: 15px;">
+                                        </div>
+                                    </div>
+                                    <div class="navbar fixed-bottom" style="min-height:0px;"></div>
+                                    <input style="float: right; margin-right: 0px; border-radius: 5px; margin-top: -1%;" type="button" onclick="saveAsdraft()" id='next' name="next" class="next action-button" value="Next" />
+                                </fieldset>
+                                <fieldset>
+                                    <div id="mysql_div" class="form-card" style="height: 68vh;">
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h2 class="fs-title" style="margin-top:0px !important">Plugin Configuration</h2>
+                                            </div>
+                                            <div class="col-sm-4">
+                                            </div>
+                                            <div class="col-sm-4" style="margin-top: 1%;">
+                                                <input class="btntestconn" id="btn_establish" name="btn_establish" onclick="establishconn()" value="Test Connection" type="button"></input>
+
+                                            </div>
+                                        </div>
+
+                                        <ul id="cc_progressbar" style="padding: 8px;padding-left: 0px;text-align: center;">
+                                            <li class="active cc_tab-color" id="generalTab"><a data-toggle="tab" style="color: #fff;">General</a></li>
+                                            <li class="cc_tab-color" id="sshTab"><a data-toggle="tab" style="color: #fff;">SSH</a></li>
+                                        </ul>
+                                        <div id="general_conf">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Host Name</label>
+                                                    <span class="mandatory">*</span>
+                                                    <input class="form-control" id="txt_hostname" type="text" name="txt_hostname" />
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Port</label>
+                                                    <span class="mandatory">*</span>
+                                                    <input class="form-control" id="txt_port" type="text" name="txt_port" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">User Name</label>
+                                                    <span class="mandatory">*</span>
+                                                    <input class="form-control" id="txt_username" type="text" name="txt_username" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Authentication Mode</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select class="form-control" onchange="onchange_gen_authmode()" id="gen_authe_mode" name="authe_mode">
+                                                        <option>Private key</option>
+                                                        <option selected>Password</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div id="source_password">
+                                                        <div>
+                                                            <label class="form-label">Password</label>
+                                                            <span class="mandatory">*</span>
+                                                            <input class="form-control" id="txt_password" type="password" name="pssword" />
+                                                        </div>
+                                                    </div>
+                                                    <div id="source_private_key">
+                                                        <div>
+                                                            <label class="form-label">Private Key</label>
+                                                            <span class="mandatory">*</span>
+                                                            <input type="file" id="source_key" name="source_key">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="ssh_conf" style="display:none">
+                                            <div class="row" style="margin-left: 0%;">
+                                                <input type="checkbox" onclick="using_tunnel()" id="ssh_checkbox" name="enable_ssh">
+                                                <label for="ssh_checkbox">Use SSH Tunneling</label>
+                                            </div>
+                                            <div id="ssh_tunnel_enable">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Host Name</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input class="form-control" id="txt_hostname" type="text" name="txt_hostname" />
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Port</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input class="form-control" id="txt_port" type="text" name="txt_port" />
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">User Name</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input class="form-control" id="txt_username" type="text" name="txt_username" />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label>Authentication Mode</label>
+                                                        <span class="mandatory">*</span>
+                                                        <select class="form-control" onchange="onchange_authmode()" id="authe_mode" name="authe_mode">
+                                                            <option selected>Private key</option>
+                                                            <option>Password</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div id="ssh_password">
+                                                        <label class="form-label">Password</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input class="form-control" id="txt_sshpwd" type="password" name="txt_sshpwd" />
+                                                    </div>
+                                                    <div id="private_key">
+                                                        <label class="form-label">Private Key</label>
+                                                        <span class="mandatory">*</span>
+                                                        <input type="file" id="ssh_key" name="ssh_key">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* API *@ 
+                                    
+                                       <div id="auth_div" class="form-card">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <h3 class="fs-title" style="margin-top:0px !important">API Auth URL</h3>
+                                            </div>
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-4"></div>
+                                        </div>
+                                        <div id="have_auth_div" class="row" style="margin-left: 0px;">
+                                            <input style="margin-left: 0px;" id="txt_have_auth" type="checkbox" onclick="getTokenUrl()" />
+                                            <label style="padding-left: 10px;">Have Auth URL</label>
+                                        </div>
+
+                                        <div id="div_auth_url" style="height: 50vh; display:none;">
+                                            <div class="row" style="margin-top: -2%;">
+                                                <div class="col-sm-4">
+                                                    @*  <h2 class="fs-title" style="margin-top:0px !important">API Auth URL</h2> *@
+                                                    <input hidden id="apiauthtoken_gid" name="apiauthtoken_gid"></input>
+                                                    <input hidden id="connection_code" name="connection_code"></input>
+                                                </div>
+                                                <div class="col-sm-4"></div>
+                                                <div class="col-sm-4" style="margin-bottom: 12px;">
+                                                    <input style="width: 25%;" class="btntestconn" id="btn_authvalidation" name="btn_authvalidation" onclick="validateauthurl('Yes')" value="Validate" type="button"></input>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-2">
+                                                    <label>Method</label>
+                                                    <span class="mandatory">*</span>
+                                                    <select id="txt_auth_method" class="form-control">
+                                                        <option selected value="GET">GET</option>
+                                                        <option value="POST">POST</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm-8">
+                                                    <label class="form-label">Auth Url</label>
+                                                    <span class="mandatory">*</span>
+                                                    <input class="form-control" type="text" id="txt_auth_url" name="url" />
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <label>Token Key Name</label>
+                                                    <input class="form-control" type="text" id="txt_token_key" name="url" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="row" style="margin-top: 20px;margin-left: 17px;">
+                                                    <ul class="nav nav-tabs">
+                                                        <li class="active"><a data-toggle="tab" href="#authhome">Params</a></li>
+                                                        <li><a data-toggle="tab" href="#auth_menu1">Headers</a></li>
+                                                        <li><a data-toggle="tab" href="#auth_menu2">Body</a></li>
+                                                        <li><a data-toggle="tab" href="#auth_menu3">Response</a></li>
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div id="authhome" style="padding: 0px;" class="tab-pane fade in active">
+                                                            <div class="col-xs-12" style="margin-top:10px;margin-left: -16px;">
+                                                                <table id="paramTable" class="table table-bordered table-sm table-striped" style="margin-bottom: 0px !important;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Key</th>
+                                                                            <th>Value</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                                <div style="max-height: 300px; overflow-y: auto; height: 100px;">
+                                                                    <table class="table table-bordered table-sm">
+                                                                        <tbody id="auth_table-body">
+                                                                            <tr>
+                                                                                <td><input type="text" id="key" class="form-control" /></td>
+                                                                                <td><input type="text" id="value" class="form-control" /></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="auth_menu1" class="tab-pane fade">
+                                                            <div class="col-xs-12" style="margin-top:10px;padding:0px;width:95%;">
+                                                                <table id="headerTable" class="table table-bordered table-sm" style="margin-bottom: 0px !important;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Key</th>
+                                                                            <th>Value</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                                <div style="max-height: 300px; overflow-y: auto; height: 100px;">
+                                                                    <table class="table table-bordered table-sm">
+                                                                        <tbody id="auth_headerTableBody"> </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div id="auth_menu2" class="tab-pane fade">
+                                                            <div class="row" style="width:100%;">
+                                                                <div class="col-sm-3" style="margin-top:10px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input disabled class="form-check-input" type="radio" name="radioFilter" id="filternone" value="formnone" />
+                                                                        <label class="form-check-label" for="inlineRadio1">none</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3" style="margin-top:10px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input disabled class="form-check-input" type="radio" name="radioFilter" id="filter-formdata" value="formdata" />
+                                                                        <label class="form-check-label" for="inlineRadio1">form-data</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3" style="margin-top:10px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input checked class="form-check-input" type="radio" name="radioFilter" id="filter-raw" value="raw" />
+                                                                        <label class="form-check-label" for="inlineRadio1">raw</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-sm-3" style="margin-top:10px;">
+                                                                    <div class="form-check form-check-inline" id="rawoptions" value="rawoptions">
+                                                                        <select id="sel_data" class="form-control">
+                                                                            <option selected value="Json">JSON</option>
+                                                                            <option value="Text">TEXT</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-12" style="margin-top:10px;width: 98%;padding: 0px;">
+                                                                <textarea style="height: 18vh;" class="form-control" rows="5" id="auth_comment" name="text"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div id="auth_menu3" style="padding: 0px;" class="tab-pane fade">
+                                                            <div class="col-sm-12" style="margin-top:10px;width: 98%;padding: 0px;">
+                                                                <textarea style="height: 22vh;" class="form-control" rows="10" id="auth_response" name="text"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @*  <div class="row">
+                                                <div class="col-sm-12" style="display: flex;flex-direction: row-reverse;gap: 13px;">
+                                                    <button type="button" onclick="cancelauth()" class="btn btn-sm btn-danger btns">Cancel</button>
+                                                    <button type="button" onclick="validateauthurl('Yes')" class="btn btn-sm btn-primary btns">Validate</button>
+                                                </div>
+                                            </div> *@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="navbar fixed-bottom" style="min-height:0px; margin:0px;"></div>
+                                    <input style="float: right; margin-top: 1%;    margin-right: 0%;" type="button" id="btn_nxt" name="next" onclick="save()" class="action-button" value="Submit" />
+                                    <input style=" float: right; margin-top: 1%;" type="button" id="btn_prvs" name="previous" class="previous action-button-previous" value="Previous" />
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var _user_code = "";
+    var _have_auth_url = false;
+    var _isvalidated = false;
+    $(document).ready(function () {
+        _user_code = sessionStorage.getItem("userCode");
+        $('#ssh_tunnel_enable').hide();
+        $('#ssh_password').hide();
+        $('#private_key').hide();
+        $('#source_private_key').hide();
+        $('#source_password').show
+        // var dsviewname = new kendo.data.DataSource({
+        //     data: [
+        //         { Id: 1, ViewName: "recon_trn_ttran" },
+        //         { Id: 2, ViewName: "recon_mst_tmaster" },
+        //         { Id: 3, ViewName: "recon_trn_tfile" },
+        //         { Id: 4, ViewName: "view1" },
+        //         { Id: 5, ViewName: "view2" },
+        //         { Id: 6, ViewName: "view3" },
+
+        //     ],
+        //     sort: { field: "ViewName", dir: "asc" }
+        // });
+
+        // $("#multiselect1").kendoMultiSelect({
+        //     dataTextField: "ViewName",
+        //     dataValueField: "Id",
+        //     dataSource: dsviewname,
+        //     autoHeight: true,
+        //     autoClose: false,
+        //     filter: "contains",
+        //     //placeholder: "Please select any one view...",
+        //     downArrow: true,
+        //     noDataTemplate: $("#noDataTemplate").html()
+        // });
+
+        //Fetch connector
+        var id = @ViewBag.conn_id;
+        refetch(id);
+
+        (function ($) {
+            var MultiSelectBox = window.kendo.ui.DropDownList.extend({
+                _select: function (li) { },//Prevents highlighting
+                _blur: function () { },//Prevents auto close
+            });
+
+            window.kendo.ui.plugin(MultiSelectBox);
+        })(jQuery);
+
+        function onSelect(e) {
+            var cbs = document.getElementsByName("cb");
+            var checkboxes = document.getElementsByTagName('input');
+            var ddl = $("#id").data("kendoDropDownList");
+            var id = ddl.element.attr("id");
+            multiselect();
+            var item = e.item;
+            var index = item.index();
+            if (index == 0) {
+                for (var i = 1; i < cbs.length; i++) {
+                    var selectAll = cbs[0].checked;
+                    if (cbs[0].checked) {
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i].type == 'checkbox') {
+                                checkboxes[i].checked = true;
+                            }
+                        }
+                        multiselect();
+                    }
+
+                    else {
+                        for (var i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i].type == 'checkbox') {
+                                checkboxes[i].checked = false;
+                            }
+                        }
+                        multiselect();
+                    }
+                }
+            }
+
+        }
+        showImages();
+        function multiselect() {
+            // var dataItem = this.dataItem(e.item);
+            var ddl = $("#id").data("kendoDropDownList");
+            var isAllChecked = $('#cb').prop("checked");
+            var cbs = document.getElementsByName("cb");
+            var display;
+
+            var list = [];
+            for (var i = 1; i < cbs.length; i++) {
+                if (cbs[i].checked) {
+                    list.push(cbs[i].value);
+                }
+
+            }
+
+
+            if (list.length == 0) {
+                display = "-- SelectAll --";
+
+                // $("#ReconAttr").html("Recon - All");
+            }
+            else {
+
+                display = list.join(", ");
+                //$("#ReconAttr").html("Recon - " + display + "");
+            }
+
+            ddl.text(display);
+
+        }
+
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+
+        $(".next").click(function () {
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+            if ($("#txt_connectorname").val() != "" && $("#txt_source_type").val() != "" && $("#txt_source_type").val() != "Excel" && $("#txt_source_type").val() != "CSV" && $("#txt_source_type").val() != "Flatfile")  {
+                //Add Class Active
+                if($("#txt_source_type").val() == "MySql") {
+                    $("#mysql_div").show();
+                    $("#auth_div").hide();
+                } else if($("#txt_source_type").val() == "API") {
+                    $("#mysql_div").hide();
+                    $("#auth_div").show();
+                } else {
+                    $("#mysql_div").hide();
+                    $("#auth_div").hide();
+                }
+                $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+                $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+                //show the next fieldset
+                current_fs.hide();
+                next_fs.show();
+                //hide the current fieldset with style
+                current_fs.animate({ opacity: 0 }, {
+                    step: function (now) {
+                        // for making fielset appear animation
+                        opacity = 1 - now;
+
+                        current_fs.css({
+                            'display': 'none',
+                            'position': 'relative'
+                        });
+                        next_fs.css({ 'opacity': opacity });
+                    },
+                    duration: 600
+                });
+            }
+        });
+
+        $(".previous").click(function () {
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //Remove class active
+            $("#progressbar li").eq($("fieldset").index(previous_fs)).addClass("active");
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            current_fs.hide();
+            previous_fs.show();
+
+            //hide the current fieldset with style
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
+
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    previous_fs.css({ 'opacity': opacity });
+                },
+                duration: 600
+            });
+        });
+
+        $('.radio-group .radio').click(function () {
+            $(this).parent().find('.radio').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        $(".submit").click(function () {
+            return false;
+        })
+         addAuthHeaderRow("Accept", "*/*", "", true);
+        addAuthHeaderRow("Content-Type", "application/json", "", true);
+    });
+
+</script>
+<script>
+            function establishconn() {
+                if ($("#txt_source_type").val() == "" || $("#txt_source_type").val() == null || $("#txt_source_type").val() == undefined) {
+                    jAlert("Please select source type.", "Plugin");
+                    return;
+                }
+                if ($("#txt_hostname").val() == "" || $("#txt_hostname").val() == null || $("#txt_hostname").val() == undefined) {
+                    jAlert("Please enter host name.", "Plugin");
+                    return;
+                }
+                if ($("#txt_port").val() == "" || $("#txt_port").val() == null || $("#txt_port").val() == undefined) {
+                    jAlert("Please enter port.", "Plugin");
+                    return;
+                }
+                if ($("#txt_username").val() == "" || $("#txt_username").val() == null || $("#txt_username").val() == undefined) {
+                    jAlert("Please enter user name.", "Plugin");
+                    return;
+                }
+                if ($("#txt_password").val() == "" || $("#txt_password").val() == null || $("#txt_password").val() == undefined) {
+                    jAlert("Please enter password.", "Plugin");
+                    return;
+                }
+
+                var data = {};
+                data.source_db_type = $('#txt_source_type').val();
+                data.source_host_name = $("#txt_hostname").val();
+                data.source_port = $("#txt_port").val();
+                data.source_db_user = $("#txt_username").val();
+                data.source_db_pwd = $("#txt_password").val();
+                var data1 = data;
+                $.ajax({
+                    type: "Post",
+                    url: '@Url.Action("EstablishConn", "Connectors")',
+                    data: JSON.stringify(data1),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response == "Test Connection Success..!") {
+                            $('#txt_connectorstatus').val('Active');
+                        }
+                        else {
+                            $('#txt_connectorstatus').val('Inactive');
+                        }
+                        jAlert(response, "Plugin", function (e) {
+                            if (e == true) {
+                                document.getElementById("btn_nxt").disabled = false;
+                            }
+                        });
+                    },
+                    error: function (er) {
+                        $('#txt_connectorstatus').val('Inactive');
+                        jAlert(er, "Error");
+                        //alert(er)
+                    }
+                });
+            };
+
+        $('img').click(function () {
+            $('.selected').removeClass('selected');
+            $(this).addClass('selected');
+            var imgId = $(this).attr('id');
+            if (imgId === "API") {
+                $("#auth_div").show();
+            } else {
+                $("#auth_div").hide();
+            }
+            var getAllImages = document.getElementsByTagName('img.selected');
+            $('#txt_source_type').val(this.getAttribute('value'));
+        });
+
+
+
+            function refetch(id) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Readconnector", "Connectors")' + '?id=' + id,
+                    //url: "/../Connectors/Readconnector?id=" + id,
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        console.log(response)
+                        $('#txt_connection_gid').val(response.connection_gid);
+                        $('#txt_source_type').val(response.source_db_type);
+     $('#connection_code').val(response.connection_code);
+                    $("#txt_have_auth").prop("checked", response.having_auth_url === "Y");
+                    if(response.having_auth_url === "Y" && response.source_db_type == "API") {
+                       _have_auth_url = true;
+                       refetchapiTokendetail();
+                      const haveAuth = document.getElementById("div_auth_url");
+                      haveAuth.style.display = "block";
+                    }
+
+                        $('.selected').removeClass('selected');
+                        var source_id = "#" + response.source_db_type;
+                        $(source_id).addClass('selected');
+                        focusConnector(response.source_db_type);
+                        if (response.source_db_type == "Excel") {
+                            handleImageClick(response.source_db_type);
+                            $('#txt_pswdprotected').val(response.file_password);
+                        }
+                        $('#txt_connectorname').val(response.connection_name);
+                        $('#txt_connectordesc').val(response.connection_desc);
+                        $('#txt_hostname').val(response.source_host_name);
+                        $('#txt_port').val(response.source_port);
+                        if (response.source_auth_mode == "Password") {
+                            $('#source_private_key').hide();
+                            $('#source_password').show();
+                        }
+                        else {
+                            $('#source_private_key').show();
+                            $('#source_password').hide();
+                        }
+                        $('#gen_authe_mode').val(response.source_auth_mode);
+                        $('#txt_username').val(response.source_db_user);
+                        $('#txt_password').val(response.source_db_pwd);
+                        $('#txt_connectorstatus').val(response.connection_status);
+                    },
+                    error: function (er) {
+                        jAlert(er, "Error");
+                    }
+                });
+            }
+
+            function saveAsdraft() {
+                if ($("#txt_connectorname").val() == "" || $("#txt_connectorname").val() == null || $("#txt_connectorname").val() == undefined) {
+                    jAlert("Please enter connector name.", "Plugin");
+                    return;
+                }
+                if ($("#txt_source_type").val() == "" || $("#txt_source_type").val() == null || $("#txt_source_type").val() == undefined) {
+                    jAlert("Please select source type.", "Plugin");
+                    return;
+                }
+                if ($("#txt_source_type").val() == "Excel" && $('#pp_yes').is(':checked') && $("#txt_pswdprotected").val() == "") {
+                    jAlert("Please enter password.", "Plugin");
+                    return;
+                }
+                var current_date = new Date;
+                if ($("#txt_connection_gid").val() == "") {
+                    var data = {};
+                    data.connection_gid = "0";
+                    data.connection_name = $("#txt_connectorname").val();
+                    data.connection_desc = $("#txt_connectordesc").val();
+                    data.source_db_type = $('#txt_source_type').val();
+    data.having_auth_url = "N";
+                    if ($("#txt_source_type").val() == "Excel" || $("#txt_source_type").val() == "CSV" || $("#txt_source_type").val() == "Flatfile") {
+                        data.connection_status = "Active";
+                        data.protection_type = $('input[name="pswd_prod"]:checked').val();
+                        data.file_password = $('#txt_pswdprotected').val();
+                    }
+                    else {
+                        data.connection_status = "Draft";
+                    }
+                    data.created_date = current_date;
+                    data.created_by = _user_code;
+                    var data1 = data;
+                    $.ajax({
+                        type: "Post",
+                        url: '@Url.Action("Addnewconnector", "Connectors")',
+                        data: JSON.stringify(data1),
+                        //dataType: "json",
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if ($('#txt_source_type').val() == "Excel" || $("#txt_source_type").val() == "CSV") {
+                                jAlert("Connector Details Inserted Successfully..!", "Plugin", function (e) {
+                                    if (e == true) {
+                                        window.location.href = '@Url.Action("Connectorslist", "Connectors")';// "/Connectors/Connectorslist";
+                                    }
+                                });
+                            }
+                            else if($("#txt_source_type").val() == "API"){
+                            refetch(response);
+                            refetchapiTokendetail();
+                        }
+                            else {
+                                refetch(response);
+                            }
+                        },
+                        error: function (er) {
+                            jAlert(er, "Error");
+                        }
+                    });
+                }
+                else {
+                    var updatedata = {};
+                    updatedata.connection_gid = $("#txt_connection_gid").val();
+                    updatedata.connection_name = $("#txt_connectorname").val();
+                    updatedata.connection_desc = $("#txt_connectordesc").val();
+                    updatedata.source_db_type = $('#txt_source_type').val();
+                    updatedata.protection_type = $('input[name="pswd_prod"]:checked').val();
+                    updatedata.file_password = $('#txt_pswdprotected').val();
+                    updatedata.source_host_name = $("#txt_hostname").val();
+                    updatedata.source_port = $("#txt_port").val();
+                    updatedata.source_auth_mode = $("#gen_authe_mode").val();
+                    updatedata.source_db_user = $("#txt_username").val();
+                    updatedata.source_db_pwd = $("#txt_password").val();
+    updatedata.having_auth_url = _have_auth_url ? "Y" : "N";
+                    if ($('#txt_source_type').val() == "Excel") {
+                        $('#txt_connectorstatus').val("Active");
+                    }
+                    updatedata.connection_status = $('#txt_connectorstatus').val();
+                    updatedata.updated_date = current_date;
+                    updatedata.updated_by = _user_code;
+                    var updatedata1 = updatedata;
+                    $.ajax({
+                        type: "Post",
+                        url: '@Url.Action("Updateexistingconnector", "Connectors")',
+                        data: JSON.stringify(updatedata1),
+                        dataType: "json",
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            if ($('#txt_source_type').val() == "Excel" || $("#txt_source_type").val() == "CSV" || $("#txt_source_type").val() == "Flatfile") {
+                                jAlert("Plugin Details Updated Successfully..!", "Plugin", function (e) {
+                                    if (e == true) {
+                                        window.location.href = '@Url.Action("Connectorslist", "Connectors")';// "/Connectors/Connectorslist";
+                                    }
+                                });
+                            }
+    else if($("#txt_source_type").val() == "API"){
+                            refetchapiTokendetail();
+                        }
+                            else {
+                                refetch(response);
+                            }
+                        },
+                        error: function (er) {
+                            jAlert(er, "Error");
+                        }
+                    });
+                }
+            }
+            //Save Connection
+            function save() {
+        if(($("#txt_source_type").val() == "API") && (_have_auth_url == true)) {
+                     if((_isvalidated == false)){
+                         jAlert("Please Validate the auth Url and Enter Token Key Name", "Connector");
+                        return;
+                    }
+               }
+                if ($("#txt_connectorname").val() == "" || $("#txt_connectorname").val() == null || $("#txt_connectorname").val() == undefined) {
+                    jAlert("Please enter connector name.", "Plugin");
+                    return;
+                }
+                if ($("#txt_source_type").val() == "" || $("#txt_source_type").val() == null || $("#txt_source_type").val() == undefined) {
+                    jAlert("Please select source type.", "Plugin");
+                    return;
+                }
+                var current_date = new Date;
+                if ($("#txt_connection_gid").val() == "") {
+                    var data = {};
+                    data.connection_gid = "0";
+                    data.connection_name = $("#txt_connectorname").val();
+                    data.connection_desc = $("#txt_connectordesc").val();
+                    data.source_db_type = $('#txt_source_type').val();
+                    data.source_host_name = $("#txt_hostname").val();
+                    data.source_port = $("#txt_port").val();
+                    data.source_auth_mode = $("#gen_authe_mode").val();
+                    data.source_db_user = $("#txt_username").val();
+                    data.source_db_pwd = $("#txt_password").val();
+                    data.connection_status = "Draft";
+                    //data.source_auth_file_name = $("#source_private_key").val();
+                    //data.source_auth_file_blob = null;
+                    //data.source_file = null;
+                    //data.ssh_tunneling = $("#txt_password").val();
+                    //data.ssh_host_name = $("#txt_password").val();
+                    //data.ssh_port = $("#txt_password").val();
+                    //data.ssh_user = $("#txt_password").val();
+                    //data.ssh_pwd = $("#txt_password").val();
+                    //data.ssh_auth_mode = $("#txt_password").val();
+                    //data.ssh_file_name = $("#txt_password").val();
+                    //data.ssh_file_blob = $("#txt_password").val();
+                    data.created_date = current_date;
+                    data.created_by = _user_code;
+                    var data1 = data;
+                    $.ajax({
+                        type: "Post",
+                        url: '@Url.Action("Addnewconnector", "Connectors")',
+                        data: JSON.stringify(data1),
+                        //dataType: "json",
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                            jAlert(response, "Plugin", function (e) {
+    if (($("#txt_source_type").val() == "API") && (_have_auth_url == true)){
+                               if(_isvalidated && $("#txt_token_key").val()) {
+                                    saveAPIAuthToken();
+                               }
+                              }
+                                if (e == true) {
+                                    window.location.href = "../Connectors/Connectorslist";
+                                }
+                            });
+                            //alert(response);
+                        },
+                        error: function (er) {
+                            //alert(er)
+                            jAlert(er, "Error");
+                        }
+                    });
+                }
+                else {
+                    var updatedata = {};
+                  var connection_status = "Draft";
+                  if(($("#txt_source_type").val() == "API") && (_have_auth_url == true)){
+                      if(_isvalidated && $("#txt_token_key").val()) {
+                          connection_status = "Active"
+                      }
+                  } else if(($("#txt_source_type").val() == "API") && (_have_auth_url == false)){
+                       connection_status = "Active"
+                  } else if(($("#txt_source_type").val() != "API") && $("#txt_connection_gid").val()) {
+                      connection_status = $('#txt_connectorstatus').val()
+                  } else {
+                      connection_status = "Draft"
+                  }
+                    updatedata.connection_gid = $("#txt_connection_gid").val();
+                    updatedata.connection_name = $("#txt_connectorname").val();
+                    updatedata.connection_desc = $("#txt_connectordesc").val();
+                    updatedata.source_db_type = $('#txt_source_type').val();
+                    updatedata.source_host_name = $("#txt_hostname").val();
+                    updatedata.source_port = $("#txt_port").val();
+                    updatedata.source_auth_mode = $("#gen_authe_mode").val();
+                    updatedata.source_db_user = $("#txt_username").val();
+                    updatedata.source_db_pwd = $("#txt_password").val();
+                   updatedata.connection_status =  connection_status;
+     updatedata.updated_date = current_date;
+                    updatedata.updated_by = _user_code;
+    updatedata.having_auth_url = _have_auth_url ? "Y" : "N";
+                    var updatedata1 = updatedata;
+                    $.ajax({
+                        type: "Post",
+                        url: '@Url.Action("Updateexistingconnector", "Connectors")',
+                        data: JSON.stringify(updatedata1),
+                        dataType: "json",
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (response) {
+                           if (($("#txt_source_type").val() == "API") && (_have_auth_url == true)){
+                               if(_isvalidated && $("#txt_token_key").val()) {
+                                    saveAPIAuthToken();
+                               }
+                            }
+                            jAlert("Plugin Details Updated Successfully..!", "Plugin", function (e) {
+                                if (e == true) {
+                                    window.location.href = "../Connectors/Connectorslist";
+                                }
+                            });
+                        },
+
+                        error: function (er) {
+                            jAlert(er, "Error");
+                            //showAlert("Error", "An error occurred during the request.", "error");
+                            //alert(er)
+                        }
+                    });
+                }
+            }
+
+            function showscheduled() {
+                $("#Scheduled_expression").show();
+            }
+
+            function addNew(widgetId, value) {
+                var widget = $("#" + widgetId).getKendoMultiSelect();
+                var dataSource = widget.dataSource;
+                console.log(dataSource.length)
+
+
+                if (confirm("Are you sure?")) {
+                    dataSource.add({
+                        Id: dataSource.data().length + 1,
+                        sportName: value
+                    });
+
+                    var currentValue = widget.value();
+                    currentValue.push(dataSource.data().length)
+                    widget.value(currentValue);
+                    widget.trigger("change");
+                }
+            };
+
+            function using_tunnel() {
+                var checkbox = document.getElementById("ssh_checkbox");
+                if (checkbox.checked) {
+                    $('#private_key').show();
+                    $('#ssh_tunnel_enable').show();
+                } else {
+                    $('#ssh_password').hide();
+                    $('#private_key').hide();
+                    $('#ssh_tunnel_enable').hide();
+                }
+            }
+
+            function onchange_authmode() {
+                var authenticate_mode = document.getElementById("authe_mode");
+                var v_authenticate_mode = authenticate_mode.value;
+
+                if (v_authenticate_mode == "Password") {
+                    $('#ssh_password').show();
+                    $('#private_key').hide();
+                }
+                else {
+                    $('#ssh_password').hide();
+                    $('#private_key').show();
+                }
+            }
+            function onchange_gen_authmode() {
+                var authenticate_mode = document.getElementById("gen_authe_mode");
+                var v_authenticate_mode = authenticate_mode.value;
+
+                if (v_authenticate_mode == "Password") {
+                    $('#source_password').show();
+                    $('#source_private_key').hide();
+                }
+                else {
+                    $('#source_password').hide();
+                    $('#source_private_key').show();
+                }
+            }
+
+            function handleImageClick(value) {
+                if (value == 'Excel') {
+                    $('#div_passwordprod').show();
+                    //$('#div_pswdprod').show();
+                    $('#div_prd_pswd').hide();
+                      focusConnector(value);
+                }
+                else {
+                    $('#div_passwordprod').hide();
+                    //$('#div_pswdprod').hide();
+                     focusConnector(value);
+                }
+            }
+
+            function showpassword() {
+                if ($('#pp_yes').is(':checked')) {
+                    $('#div_prd_pswd').show();
+                }
+                else {
+                    $('#div_prd_pswd').hide();
+
+                }
+            }
+
+        function getAuthToken(){
+             const authKeyName = $("#txt_token_key").val().trim();
+                    const stringauthResponse = $("#auth_response").val().trim();
+                    const authResponse = JSON.parse(stringauthResponse);
+                    const value = authResponse[authKeyName];
+                   return value;
+        }
+
+         function getHeadersJson() {
+            const headers = {};
+            const rows = document.querySelectorAll("#auth_headerTableBody tr");
+
+            rows.forEach(row => {
+                const key = row.querySelector(".headerKey")?.value.trim();
+                const val = row.querySelector(".headerVal")?.value.trim();
+
+                if (key && val) {
+                    headers[key] = val;
+                }
+            });
+
+            return JSON.stringify(headers, null, 4);
+        }
+
+
+
+        function saveAPIAuthToken(){
+            var connection_code = $("#connection_code").val();
+            var current_date = new Date;
+            const selected_type = document.querySelector('input[name="radioFilter"]:checked');
+            var data = {};
+            data.connection_code = connection_code;
+            data.auth_token_keyname = $("#txt_token_key").val();
+            data.auth_url = $("#txt_auth_url").val();
+            data.auth_method = $("#txt_auth_method").val();
+            data.auth_token = getAuthToken() ? getAuthToken() : $("#auth_response").val().trim();
+            data.auth_header_json = getHeadersJson();
+            data.auth_payload_type = selected_type.value;
+            data.auth_body_format = $("#sel_data").val();
+            data.auth_payload_json = $("#auth_comment").val();
+            data.auth_response = JSON.stringify($("#auth_response").val());
+            data.remarks = "";
+            data.delete_flag = "N";
+            if($("#apiauthtoken_gid").val() == "") {
+                data.apiauthtoken_gid = "0";
+                data.created_date = current_date;
+                data.created_by = _user_code;
+                $.ajax({
+                   type: "Post",
+                   url: '@Url.Action("AddapiauthToken", "Connectors")',
+                   data: JSON.stringify(data),
+                   dataType: "json",
+                   contentType: 'application/json; charset=utf-8',
+                   success: function (response) {
+                     jAlert("Saved Sucessfully .!", "Connector", function (e) {
+                        if (e == true) {
+                            window.location.href = "../Connectors/Connectorslist";
+                        }
+                    });
+                   },
+                   error: function (er) {
+                       jAlert(er, "Error");
+                   }
+               });
+            } else {
+                 data.apiauthtoken_gid = $("#apiauthtoken_gid").val();
+                 data.updated_date = current_date;
+                 data.updated_by = _user_code;
+                  $.ajax({
+                   type: "Post",
+                   url: '@Url.Action("UpdateapiauthToken", "Connectors")',
+                   data: JSON.stringify(data),
+                   dataType: "json",
+                   contentType: 'application/json; charset=utf-8',
+                   success: function (response) {
+                    jAlert("Updated Sucessfully .!", "Connector", function (e) {
+                        if (e == true) {
+                            window.location.href = "../Connectors/Connectorslist";
+                        }
+                    });
+                   },
+                   error: function (er) {
+                       jAlert(er, "Error");
+                   }
+               });
+            }
+        }
+
+        function refetchapiTokendetail(){
+            var connection_code = $("#connection_code").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetApiAuthToken", "Connectors")' + '?connection_code=' + connection_code,
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+                   $('#apiauthtoken_gid').val(response.apiauthtoken_gid);
+                   $("#txt_token_key").val(response.auth_token_keyname);
+                   $('#txt_auth_url').val(response.auth_url)[0].dispatchEvent(new Event('input', { bubbles: true }));
+                   $("#txt_auth_method").val(response.auth_method);
+                   $('input[name="radioFilter"][value="' + response.auth_payload_type + '"]').prop("checked", true);
+                   var authresponse = JSON.parse(response.auth_response);
+                   $("#auth_response").val(authresponse);
+                   $("#sel_data").val(response.auth_body_format);
+                   $("#auth_comment").val(response.auth_payload_json == "[]" ? "": response.auth_payload_json);
+                   if($("#auth_response").val().trim() == "" || $("#auth_response").val().trim() == "[]"
+                   || $("#auth_response").val().trim() == "{}" || $("#auth_response").val().trim() == "[{}]"){
+                       _isvalidated = false;
+                   } else {
+                       _isvalidated = true;
+                   }
+                    const { headers, authHeader } = parseApiHeaders(response.auth_header_json);
+                    const tableBody = document.getElementById("auth_headerTableBody");
+                    tableBody.innerHTML = "";
+                    headers.forEach(h => addAuthHeaderRow(h.key, h.value));
+                    addAuthHeaderRow();
+                 },
+                error: function (er) {
+                    jAlert(er, "Error");
+                }
+            });
+        }
+
+        function parseApiHeaders(rawHeaderJson) {
+                let headersArray = [];
+                if (!rawHeaderJson || rawHeaderJson === "[]" || rawHeaderJson === "") {
+                   // return { headers: [], authHeader: null };
+                   return {
+                        headers: [
+                            { key: "Content-Type", value: "application/json" },
+                            { key: "Accept", value: "*/*" }
+                        ],
+                        authHeader: null
+                    };
+                }
+                if (Array.isArray(rawHeaderJson)) {
+                    headersArray = rawHeaderJson;
+                } else if (typeof rawHeaderJson === "string") {
+                    try {
+                        const parsed = JSON.parse(rawHeaderJson);
+                        if (Array.isArray(parsed)) {
+                            headersArray = parsed;
+                        } else if (parsed && typeof parsed === "object") {
+                            // Convert object {k:v} → array of {key,value}
+                            headersArray = Object.keys(parsed).map(k => ({ key: k, value: parsed[k] }));
+                        }
+                    } catch (e) {
+                        // fallback if string is "Key: Value, Key2: Value2"
+                        headersArray = rawHeaderJson.split(/\s*,\s*/).map(pair => {
+                            const idx = pair.indexOf(":");
+                            if (idx === -1) return null;
+                            return {
+                                key: pair.slice(0, idx).trim(),
+                                value: pair.slice(idx + 1).trim(),
+                                desc: ""
+                            };
+                        }).filter(Boolean);
+                    }
+                } else if (typeof rawHeaderJson === "object") {
+                    headersArray = Object.keys(rawHeaderJson).map(k => ({ key: k, value: rawHeaderJson[k] }));
+                }
+
+                // Deduplicate + skip Authorization
+                const seenKeys = new Set();
+                const uniqueHeaders = [];
+                let authHeaderValue = null;
+
+                headersArray.forEach(h => {
+                    if (!h || !h.key) return;
+                    const key = String(h.key).trim();
+                    const value = h.value != null ? String(h.value) : "";
+                    const desc = h.desc || "";
+
+                    if (key.toLowerCase() === "authorization") {
+                        authHeaderValue = value;
+                        return; // skip adding into header table
+                    }
+
+                    const lk = key.toLowerCase();
+                    if (!seenKeys.has(lk)) {
+                        seenKeys.add(lk);
+                        uniqueHeaders.push({ key, value, desc });
+                    }
+                });
+
+                return { headers: uniqueHeaders, authHeader: authHeaderValue };
+            }
+
+        var currentIndex = 0;
+        var visibleCount = 5;
+        function showImages() {
+            var itemWidth = $(".connector-item:first").outerWidth(true);
+            var totalItems = $(".connector-item").length;
+            $(".slider-content").css(
+                "transform",
+                "translateX(-" + (currentIndex * itemWidth) + "px)"
+            );
+        }
+
+        function focusConnector(id) {
+
+        var selectedItem = $("#" + id).closest(".connector-item");
+
+        if (selectedItem.length === 0)
+            return;
+
+        currentIndex = $(".connector-item").index(selectedItem);
+
+        $(".connector-item").removeClass("selected");
+        $(".connector-item img").removeClass("selected");
+
+        selectedItem.addClass("selected");
+        selectedItem.find("img").addClass("selected");
+
+        // showImages();
+    }
+
+</script>
+<script>
+     // Get references to the tab links and content divs
+     const generalTab = document.getElementById("generalTab");
+     const sshTab = document.getElementById("sshTab");
+     const generalConf = document.getElementById("general_conf");
+     const sshConf = document.getElementById("ssh_conf");
+
+     // Add click event listeners to the tab links
+     generalTab.addEventListener("click", () => {
+         // Show the General configuration and hide SSH configuration
+         generalConf.style.display = "block";
+         sshConf.style.display = "none";
+         // Set the active tab class and remove it from the other tab
+         generalTab.classList.add("active");
+         sshTab.classList.remove("active");
+     });
+
+     sshTab.addEventListener("click", () => {
+         // Show the SSH configuration and hide General configuration
+         sshConf.style.display = "block";
+         generalConf.style.display = "none";
+         // Set the active tab class and remove it from the other tab
+         sshTab.classList.add("active");
+         generalTab.classList.remove("active");
+     });
+
+    function getTokenUrl(){
+         var checkbox = document.getElementById("txt_have_auth");
+            if (checkbox.checked) {
+                 _have_auth_url = true;
+                     const haveAuth = document.getElementById("div_auth_url");
+                   haveAuth.style.display = "block";
+            }
+            else {
+                 _have_auth_url = false;
+                    const haveAuth = document.getElementById("div_auth_url");
+                    haveAuth.style.display = "none";
+            }
+     }
+</script>
+
+@* auth url script *@
+<script>
+     let authUrlParseTimeout;
+    document.addEventListener("DOMContentLoaded", function () {
+      addAuthHeaderRow();
+      const authUrlInput = document.getElementById("txt_auth_url");
+      const paramsTableBody = document.getElementById("auth_table-body");
+
+          // ========== Add a param row ==========
+    function addAuthParamRow(key = "", value = "") {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="text" class="form-control no-border key" value="${key}"></td>
+        <td><input type="text" class="form-control no-border val" value="${value}"></td>
+      `;
+      tr.querySelectorAll("input").forEach((inp) => {
+        inp.addEventListener("input", () => authParamChanged(inp));
+      });
+      paramsTableBody.appendChild(tr);
+      return tr;
+    }
+
+    function authParamChanged(inputEl) {
+      const row = inputEl.closest("tr");
+      const key = row.querySelector(".key").value.trim();
+      const val = row.querySelector(".val").value.trim();
+      const lastRow = paramsTableBody.lastElementChild;
+
+      if (row === lastRow && (key !== "" || val !== "")) {
+        addAuthParamRow();
+      }
+
+      updateAuthUrlFromTable();
+    }
+
+    // Custom encoder that keeps double quotes as-is
+    function encodeParam(value) {
+      return encodeURIComponent(value).replace(/%22/g, '"');
+    }
+
+    // --- Build URL from table ---
+    function updateAuthUrlFromTable() {
+      const params = [];
+      const base =
+        authUrlInput.dataset.baseUrl ||
+        (authUrlInput.value.includes("?")
+          ? authUrlInput.value.split("?")[0]
+          : authUrlInput.value.split("?")[0] || "");
+
+      Array.from(paramsTableBody.querySelectorAll("tr")).forEach((row) => {
+        const key = row.querySelector(".key").value.trim();
+        const val = row.querySelector(".val").value;
+        if (key !== "") {
+          params.push(`${encodeURIComponent(key)}=${encodeParam(val)}`);
+        }
+      });
+
+      const finalUrl = params.length > 0 ? `${base}?${params.join("&")}` : base;
+
+      // ✅ Set the final URL properly
+      authUrlInput.value = finalUrl;
+    }
+
+    // --- Parse the URL into rows (manual parse to preserve quotes) ---
+    function urloninput() {
+      clearTimeout(authUrlParseTimeout);
+      authUrlParseTimeout = setTimeout(() => {
+        const full = authUrlInput.value.trim();
+        paramsTableBody.innerHTML = "";
+        let base = "";
+        let queryString = "";
+
+        if (full.includes("?")) {
+          [base, queryString] = full.split("?");
+          if (queryString) {
+            // Manually split query string by '&' and '='
+            const parts = queryString.split("&");
+            parts.forEach((p) => {
+              const [key, ...rest] = p.split("=");
+              const value = rest.join("="); // handles '=' inside value
+              if (key) {
+                // Decode but preserve double quotes
+                const decodedKey = decodeURIComponent(key);
+                const decodedValue = decodeURIComponent(value);
+                addAuthParamRow(decodedKey, decodedValue);
+              }
+            });
+          }
+        }
+
+        authUrlInput.dataset.baseUrl =
+          base || (full && !full.includes("?") ? full : "");
+
+        // Ensure at least one empty row
+        if (paramsTableBody.children.length === 0) addAuthParamRow("", "");
+
+        const last = paramsTableBody.lastElementChild;
+        if (last) {
+          const k = last.querySelector(".key").value.trim();
+          const v = last.querySelector(".val").value.trim();
+          if (k !== "" || v !== "") addAuthParamRow("", "");
+        }
+      }, 200);
+    }
+
+    // Initialize
+    urloninput();
+    authUrlInput.addEventListener("input", urloninput);
+     });
+
+
+       function addAuthHeaderRow(key = "", value = "") {
+        const tableBody = document.getElementById("auth_headerTableBody");
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>
+                <input type="text" class="form-control no-border headerKey"
+                       value="${key}"
+                       oninput="authHeaderChanged(this)">
+            </td>
+            <td>
+                <input type="text" class="form-control no-border headerVal"
+                       value="${value}"
+                       oninput="authHeaderChanged(this)">
+            </td>
+
+        `;
+        tableBody.appendChild(row);
+    }
+
+      function authHeaderChanged(inputEl) {
+        const row = inputEl.closest("tr");
+        const key = row.querySelector(".headerKey").value.trim();
+        const val = row.querySelector(".headerVal").value.trim();
+        const tableBody = document.getElementById("auth_headerTableBody");
+        const lastRow = tableBody.lastElementChild;
+        if (row === lastRow && (key !== "" || val !== "")) {
+            addAuthHeaderRow();
+        }
+    }
+
+    function validateauthurl(in_type){
+       const payload = buildauthPayload();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CallExternalApi", "Pipeline")',
+            dataType: "json",
+            data: JSON.stringify(payload),
+            contentType : 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.error) {
+                    loadapigrid([]);
+                        if(in_type == "Yes") {
+                        jAlert(response.error, "Connector");
+                    }
+                    return;
+                } else {
+                    jAlert("Validated Sucessfully .!", "Connector");
+                }
+                $("#auth_response").val(JSON.stringify(response, null, 2));
+                _isvalidated = true;
+            },
+            error: function (xhr) {
+                _isvalidated = false;
+                    var errObj;
+                    try {
+                        errObj = JSON.parse(xhr.responseText);
+                    } catch (e) {
+                        errObj = { error: "Unexpected error", content: xhr.responseText };
+                    }
+                        if(in_type == "Yes") {
+                                jAlert(errObj.error + " (" + errObj.statusCode + ")", "Error");
+                        }
+                }
+        });
+    }
+
+    function buildauthPayload(){
+         const authHeaders = {};
+        const rows = document.querySelectorAll("#auth_headerTableBody tr");
+        rows.forEach(row => {
+            const key = row.querySelector(".headerKey")?.value.trim();
+            const val = row.querySelector(".headerVal")?.value.trim();
+            if (key && val) {
+                authHeaders[key] = val;
+            }
+        });
+
+        const payload = {
+             url: $("#txt_auth_url").val(),
+             method: $("#txt_auth_method").val(),
+             body: $("#auth_comment").val(),
+             headers: authHeaders
+        };
+        return payload;
+    }
+
+</script>

@@ -1,0 +1,775 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Connection
+@{
+}
+<style>
+	th.k-header {
+		color: white;
+	}
+</style>
+
+<html>
+<body>
+	<div class="form-card" style="height: 64vh;padding-left: 20px; padding-right: 20px;">
+		<div style="margin-top: -11px;margin-bottom: -8px;">
+			<label id="lbl_info1" style="color:#0fc9b7">
+			</label>
+		</div>
+		<ul id="cc_progressbar" style="padding: 8px;padding-left: 0px;text-align: center;">
+			<li class="active cc_tab-color" id="validationTab"><a data-toggle="tab" style="color: #fff;">Validation Rule</a></li>
+			<li class="cc_tab-color" id="dataprocessingTab"><a data-toggle="tab" style="color: #fff;">Conversion Rule</a></li>
+		</ul>
+		<div id="validation_conf">
+			<div class="row" style="padding-left: 6px;">
+				<div class="col-md-4" style="margin-left: 1%;">
+
+					<div class="row">
+						<label>Validation Name</label>
+						<span class="mandatory">*</span>
+						<input style="display:none;" class="form-control" id="txt_validation_gid" type="text" name="txt_validation_gid" />
+						<input class="form-control" id="txt_validation_name" type="text" name="txt_validation_name" />
+					</div>
+					<div class="row">
+						<label>Validation Rule</label>
+						<span class="mandatory">*</span>
+						<textarea class="form-control" type="text" id="txt_validationcond" name="txt_validationcond" onclick="document.getElementById('btn_validationsave').disabled = true;" style="width:100%;height:123px;color: black;resize: none;"></textarea>
+					</div>
+					<div class="row">
+						<label>Message</label>
+						<input class="form-control" type="text" id="txt_validation_msg" name="txt_validationmsg" />
+					</div>
+					<div class="row" style="margin-top: 1%;">
+						<input type="button" id='btn_vlcheckquery' class="save query_clr" onclick="IsCheckQuery('Validation')" value="Check Query" />
+						<input style="margin-left: 2%;" type="button" id='btn_validationsave' oninput="togglebutton('Validation')" onclick="pplvalidationrulesave()" class="save" value="Save" disabled />
+						<input style="margin-left: 2%;" type="button" id='btn_clear' onclick="clearvalidation()" class="action-button-previous" value="Clear" />
+
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="row">
+						<label style="margin-left:4%;">Validation Rule List</label>
+					</div>
+					<div class="row" id="validationsearch" style="margin-top: 1%;margin-left: 1%;">
+					</div>
+					<div class="row" style="margin-top: 2%;margin-left: 2%;">
+						<input type="radio" id="rdo_abort" name="rdo_error_mode" />
+						<label>Abort on Errors</label>
+						&nbsp;&nbsp;&nbsp;
+						<input type="radio" checked id="rdo_continue" name="rdo_error_mode" />
+						<label>Continue With Errors</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" id="dataprocessing_conf">
+			<div class="col-md-5">
+				<div class="row">
+					<div class="col-md-6">
+						<label>Source Fields</label>
+						<select class="form-control" id="fieldtypes" name="fieldtypes"></select>
+					</div>
+					<div class="col-md-4">
+						<label>Sequence No</label>
+						@*<input class="form-control" type="text" id="txt_prcseqno" name="txt_prcseqno" />*@
+						@Html.TextBoxFor(model => model.dataProcessingheader.dataprocessingheader_pplfieldmapping_gid, new { @class = "form-control", @id = "txtfieldmappinggid", @type = "hidden" })
+						@Html.TextBoxFor(model => model.dataProcessingheader.dataprocessingheader_gid, new { @class = "form-control", @id = "txtDPheadergid", @type = "hidden" })
+						@Html.TextBoxFor(model => model.dataProcessingheader.dataprocessingheader_pipeline_code, new { @class = "form-control", @id = "txtpipelinecode", @type = "hidden" })
+						@Html.TextBoxFor(model => model.dataProcessingheader.dataprocessingheader_seqno, new { @class = "form-control", @id = "fieldsequence", oninput = "this.value = this.value.replace(/[^0-9]/g, '')" })
+					</div>
+
+					<div class="col-md-2">
+						<label></label>
+						<button type="button" class="save btn" id="btnSave" onclick="setprocessing('Save')" style="margin-top: 12%;width: 145%;padding: 6px;margin-left: -15%;"> Save </button>
+						<button type="button" class="save btn" id="btnUpdate" onclick="setprocessing('Update')" style="margin-top: 12%;width: 145%;padding: 6px;margin-left: -15%; "> Update </button>
+					</div>
+				</div>
+				<div class="row">
+					<label style="margin-top: 1%;margin-left: 35%;">Source Field List</label>
+					<i class="glyphicon glyphicon-plus " style="float: left;margin-left: 3%;margin-top: 1%;" onclick="source_field_clr()"></i>
+					<div style="margin-top:-19.5px" id="processingFielddiv" hidden></div>
+				</div>
+			</div>
+
+			<div class="col-md-7">
+				@*<div class="row">Processing Rules</div>*@
+				<div class="row">
+					<div class="col-md-6">
+						<label>Source Field</label>
+						<select class="form-control" id="fieldtype" name="fieldtype" disabled></select>
+					</div>
+
+				</div>
+				<div class="row">
+					<label style="margin-top: 1%;margin-left:35%;">Conversion Rules List</label>
+					<i class="glyphicon glyphicon-plus " style="float: left;margin-left: 3%; margin-top:1%;" onclick="_openModel('Create')"></i>
+					<div style="margin-top:-19.5px" id="dataprocessingList" hidden></div>
+					@*<i class='glyphicon glyphicon-check' style='color:green;margin-left: 20% !important' title='Select'></i>*@
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>
+
+<script>
+
+	$(document).ready(function () {
+		$('#btnUpdate').hide();
+		$("#fieldtypes").prop("disabled", false);
+	});
+
+	function masterData(selectedValue) {
+
+
+		$.ajax({
+			url: '@Url.Action("getMasterDatawithCode", "Pipeline")?parentCode=' + selectedValue, // Replace with your controller action URL
+			method: 'POST',
+			dataType: 'json',
+			success: function (data) {
+				// Populate the dropdown with data
+				var dropdown = $('#masterData');
+				dropdown.empty();
+				dropdown.append($('<option></option>').val('').text('--Select--')); // Add a default option
+
+				$.each(data.masterDatas, function (key, entry) {
+					dropdown.append($('<option></option>').val(entry.value).text(entry.text));
+				});
+			},
+			error: function (er) {
+				jAlert(er, "Error");
+			}
+		});
+	}
+
+	function submasterData(selectedValue) {
+
+
+		$.ajax({
+			url: '@Url.Action("getMasterDatawithCode", "Pipeline")?parentCode=' + selectedValue, // Replace with your controller action URL
+			method: 'POST',
+			dataType: 'json',
+			success: function (data) {
+				// Populate the dropdown with data
+				var dropdown = $('#subMasterdata');
+				dropdown.empty();
+				dropdown.append($('<option></option>').val('').text('--Select--')); // Add a default option
+
+				$.each(data.masterDatas, function (key, entry) {
+					dropdown.append($('<option></option>').val(entry.value).text(entry.text));
+				});
+			},
+			error: function (er) {
+				jAlert(er, "Error");
+			}
+		});
+	}
+
+	function expressions(selectedValue) {
+		$.ajax({
+			url: '@Url.Action("getMasterDatawithCode", "Pipeline")?parentCode=' + selectedValue, // Replace with your controller action URL
+			method: 'POST',
+			dataType: 'json',
+			success: function (data) {
+				// Populate the dropdown with data
+				var dropdown = $('#expressions');
+				dropdown.empty();
+				dropdown.append($('<option></option>').val('').text('--Select--')); // Add a default option
+				$.each(data.masterDatas, function (key, entry) {
+					dropdown.append($('<option></option>').val(entry.value).text(entry.text));
+				});
+			},
+			error: function (er) {
+				jAlert(er, "Error");
+			}
+		});
+	}
+
+	function _openModel(action) {
+		if (action == 'Create') {
+			$('#updateData').hide();
+			$('#saveData').show();
+			if ($("#fieldtype").val() > 0) {
+				$("#choosenfieldtype").val($("#fieldtype option:selected").text());
+				$("#choosenfieldid").val($("#fieldtype").val());
+				$("#_txtDPheadergid").val($("#txtDPheadergid").val());
+
+
+				$('#divParam0').css("display", "none");
+				$('#divParam1').css("display", "none");
+				$('#divParam2').css("display", "none");
+				$('#divParam0').val("");
+				$('#Param0').val("");
+				$('#Param1').val("");
+				$('#Param2').val("");
+				$('#param1').val("");
+				$('#param2').val("");
+				$('#param3').val("");
+				$('#orderby').val("");
+				$("#expressions").prop("disabled", true);
+				$("#expressions").val("");
+				$("#subMasterdata").val("");
+				$("#masterData").val("");
+
+				$("#rulesModel").show();
+			} else {
+				jAlert("Must to select any one of source field in the processing source field grid.", "Error")
+			}
+
+
+		}
+		else if (action == 'Edit') {
+			$('#updateData').show();
+			$('#saveData').hide();
+
+			$('#Mode').val('Edit');
+			processingruleaction(action);
+			//$("#rulesModel").show();
+		}
+
+	}
+
+	$("a[data-target=#rulesModel]").click(function (ev) {
+		ev.preventDefault();
+		var target = $(this).attr("href");
+
+		// load the url and show modal on success
+		$("#rulesModel .modal-body").load(target, function () {
+			$("#rulesModel").modal("show");
+		});
+	});
+
+	function processingruleaction(action) {
+		if (action == 'Edit') {
+			var grid = $("#processingDetailgrid").data("kendoGrid");
+			// Get the currently selected data item
+			var selectedItem = grid.dataItem(grid.select());
+			// Perform actions with the data
+
+			$("#txtDPgid").val(selectedItem.dataprocessing_gid);
+			$("#txt_ppl_gid").val(selectedItem.dataprocessing_pipeline_gid);
+			$("#orderby").val(selectedItem.dataprocessing_orderby);
+			$("#choosenfieldid").val(selectedItem.dataprocessing_pplfieldmapping_gid);
+
+			$("#param1").val(selectedItem.dataprocessing_param1);
+			$("#param2").val(selectedItem.dataprocessing_param2);
+			$("#param3").val(selectedItem.dataprocessing_param3);
+			$("#txtDPheadergid").val(selectedItem.dataprocessing_header_gid);
+			$("#choosenfieldtype").val($("#fieldtype option:selected").text());
+			$("#masterData").val(selectedItem.dataprocessing_master_code).trigger("change");
+
+
+			setTimeout(function () {
+				$("#subMasterdata").val(selectedItem.dataprocessing_parent_master_code).trigger("change");
+				//$("#rulesModel").show();
+			}, 400);
+
+			setTimeout(function () {
+				$("#expressions").val(selectedItem.dataprocessing_child_master_code).trigger("change");
+				$("#rulesModel").show();
+			}, 1000);
+
+		}
+		else if (action == 'Delete') {
+			let text = "Are you sure to delete?";
+			jConfirm(text, "Connector", function (f) {
+				if (f == true) {
+					var grid = $("#processingDetailgrid").data("kendoGrid");
+					// Get the currently selected data item
+					var selectedItem = grid.dataItem(grid.select());
+					// Perform actions with the data
+					$("#txtDPgid").val(selectedItem.dataprocessing_gid);
+					$("#txt_ppl_gid").val(selectedItem.dataprocessing_pipeline_gid);
+					$("#orderby").val(selectedItem.dataprocessing_orderby);
+					$("#choosenfieldid").val(selectedItem.dataprocessing_pplfieldmapping_gid);
+					$("#masterData").val(selectedItem.dataprocessing_master_code).trigger("change");
+					$("#subMasterdata").val(selectedItem.dataprocessing_parent_master_code).trigger("change");
+					$("#expressions").val(selectedItem.dataprocessing_child_master_code).trigger("change");
+					$("#param1").val(selectedItem.dataprocessing_param1);
+					$("#param2").val(selectedItem.dataprocessing_param2);
+					$("#param3").val(selectedItem.dataprocessing_param3);
+					$("#txtDPheadergid").val(selectedItem.dataprocessing_header_gid);
+					setDataprocessingrules(action);
+				}
+			});
+		}
+	}
+
+	function source_field_clr() {
+		$('#btnUpdate').hide();
+		$('#btnSave').show();
+		$("#fieldtypes").prop("disabled", false);
+		$('#txtDPheadergid').val("");
+		$('#fieldtypes').val("--Select--");
+		$('#fieldsequence').val("");
+	}
+
+	function setprocessing(action) {
+		var sequenceno = $('#fieldsequence').val();
+		var fieldtypes = $('#fieldtypes').val();
+		if (action != 'Delete') {
+			if (sequenceno <= 0 || sequenceno == "undefined" || sequenceno == "") {
+				jAlert("Sequence number must be greater then Zero.", "Error");
+				return;
+			}
+			else if (fieldtypes <= 0 || fieldtypes == "undefined" || fieldtypes == "") {
+				jAlert("Source field should not be empty.", "Error");
+				return;
+			} else {
+				var grid = $("#procesingFieldgrid").data("kendoGrid");
+				// Get the currently selected data item
+				for (var i = 0; i < grid._data.length; i++) {
+					if (sequenceno == grid._data[i]['dataprocessingheader_seqno']) {
+						jAlert("Duplicate Sequence No.", "Connector");
+						return;
+					}
+				}
+				//var selectedItem = grid.dataItem(grid.select());
+			}
+		}
+
+
+
+		var dataprocessingheader_gid = (action == "Save") ? 0 : $('#txtDPheadergid').val();
+		var deleteflag = (action == "Save" || action == "Update") ? 'N' : (action == "Delete") ? 'Y' : 'N';
+		var dataprocessingheader = {
+			"dataprocessingheader_gid": dataprocessingheader_gid,
+			"dataprocessingheader_pplfieldmapping_gid": (action == "Save") ? $('#fieldtypes').val() : $('#txtfieldmappinggid').val(),
+			"dataprocessingheader_pipeline_code": $('#txtpipelinecode').val(),
+			"dataprocessingheader_seqno": sequenceno,
+			"dataprocessingheader_ppl_field_name": $("#fieldtypes option:selected").text(),
+			"delete_flag": deleteflag,
+			"dataprocessingheader_dataset_code": $("#txtds_code").val(),
+		};
+
+
+
+		$.ajax({
+			url: '@Url.Action("setDataprocessingheader", "Pipeline")',
+			type: 'POST',
+			dataType: 'json',
+			data: { "dataprocessingheader": dataprocessingheader },
+			success: function (response) {
+				jAlert(response, "Message");
+				$("#fieldsequence").val(0);
+				$("#fieldtypes").prop("disabled", false);
+				$('#btnUpdate').hide();
+				$('#btnSave').show();
+				Processing("Data Processing");
+				DataprocessingLoadgrid([]);
+				// ProcessingfieldLoadgrid([]);
+			},
+			error: function (er) {
+				jAlert(er, "Error");
+			}
+		});
+	}
+
+
+	function DataprocessingLoadgrid(data) {
+		try {
+			$("#processingDetailgrid").remove();
+			$('#dataprocessingList').append('<div id="processingDetailgrid" style="width: 96%;margin-top: 18px;margin-left: 13px;"></div>');
+			$("#processingDetailgrid").kendoGrid({
+				dataSource: {
+					data: data,
+					schema: {
+						model: {
+							fields: {
+								dataprocessing_gid: { type: "number" },
+								dataprocessing_header_gid: { type: "number" },
+								dataprocessing_child_master_gid: { type: "number" },
+								dataprocessing_parent_master_gid: { type: "number" },
+								dataprocessing_master_gid: { type: "number" },
+								dataprocessing_pipeline_gid: { type: "number" },
+								dataprocessing_pplfieldmapping_gid: { type: "number" },
+								dataprocessing_orderby: { type: "number" },
+								dataprocessing_param1: { type: "string" },
+								dataprocessing_param2: { type: "string" },
+								dataprocessing_param3: { type: "string" },
+								dataprocessing_child_master_name: { type: "string" },
+								dataprocessing_parent_master_name: { type: "string" },
+								dataprocessing_master_name: { type: "string" },
+								dataprocessing_child_master_name: { type: "string" },
+								dataprocessing_master_code: { type: "string" },
+								dataprocessing_parent_master_code: { type: "string" },
+								dataprocessing_child_master_code: { type: "string" },
+								//extaraction_type: { type: "string" },
+								//process: { type: "string" },
+								//field_name: { type: "string" },
+								Action: { type: "String" },
+							}
+						}
+					},
+					pageSize: 10,
+				},
+				height: 220,
+				width: "96%",
+
+				pageable: true,
+				sortable: true,
+				filterable: true,
+				selectable: "row",
+				//selectable: "multiple",
+				//toolbar: [{ name: "create", text: " " }],
+				columns: [
+					{
+						field: "dataprocessing_gid",
+						title: "Processing Id",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_header_gid",
+						title: "dataprocessing_header_gid",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_param1",
+						title: "dataprocessing_param1",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_param2",
+						title: "dataprocessing_param2",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_param3",
+						title: "dataprocessing_param3",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_pplfieldmapping_gid",
+						title: "dataprocessing_pplfieldmapping_gid",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_pipeline_gid",
+						title: "dataprocessing_pipeline_gid",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_master_gid",
+						title: "dataprocessing_master_gid",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_parent_master_gid",
+						title: "dataprocessing_parent_master_gid",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_child_master_gid",
+						title: "dataprocessing_child_master_gid",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_master_code",
+						title: "dataprocessing_master_code",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_parent_master_code",
+						title: "dataprocessing_parent_master_code",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_child_master_code",
+						title: "dataprocessing_child_master_code",
+						width: 50,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_ppl_field_name",
+						title: "Source Field",
+						width: 200,
+						hidden: true
+					},
+					{
+						field: "dataprocessing_orderby",
+						title: "Seq.No",
+						width: 80,
+					},
+					{
+						field: "dataprocessing_master_name",
+						title: "Rule",
+						width: 200,
+					},
+
+					{
+						field: "dataprocessing_parent_master_name",
+						title: "Rule Type",
+						width: 200,
+					},
+					{
+						field: "Action",
+						title: "Action",
+						template: "<i class='glyphicon glyphicon-pencil' style='color:grey;margin-left: 20% !important' title='Edit' onclick=_openModel('Edit') ></i><i class='glyphicon glyphicon-trash' style='color:red;margin-left: 4% !important' title='Delete' onclick=processingruleaction('Delete')></i>",
+						sortable: false,
+						filterable: false,
+						width: 80
+					},
+				],
+			});
+		}
+		catch (err) {
+			jAlert(er, "Error");
+		}
+	}
+
+	function Processing(currentTabvalue) {
+		currentTabvalue = "-";
+		var ppl_code = $('#txt_ppl_code').val();
+		var ds_code = $('#txtds_code').val();
+		if (currentTabvalue == "Data Processing" || currentTabvalue == "-") {
+			$.ajax({
+				url: '@Url.Action("getMappingFieldwithCode", "Pipeline")?pipelineCode=' + ppl_code
+				+'&dataset_code='+ds_code, // Replace with your controller action URL
+				method: 'POST',
+				dataType: 'json',
+				success: function (data) {
+					// Populate the dropdown with data
+					var dropdown = $('#fieldtypes');
+					dropdown.empty();
+					dropdown.append($('<option></option>').val('').text('--Select--')); // Add a default option
+
+					$.each(data, function (key, entry) {
+						dropdown.append($('<option></option>').val(entry.value).text(entry.text));
+					});
+
+					var dropdowns = $('#fieldtype');
+					dropdowns.empty();
+					dropdowns.append($('<option></option>').val('').text('--Select--')); // Add a default option
+
+					$.each(data, function (key, entry) {
+						dropdowns.append($('<option></option>').val(entry.value).text(entry.text));
+					});
+				},
+			});
+			$("#processingFielddiv").show();
+			$("#dataprocessingList").show();
+
+
+			var pipelineCode = $('#txt_ppl_code').val();
+			var ds_code = $('#txtds_code').val();
+
+			// DataProcessingHeader Grid Dataload
+			$.ajax({
+				url: '@Url.Action("getDataprocessingheader", "Pipeline")?pipelineCode=' + pipelineCode+"&datasetCode="+ds_code, // Replace with your controller action URL
+				method: 'POST',
+				dataType: 'json',
+				success: function (data) {
+					if (data.length > 0) {
+						ProcessingfieldLoadgrid($.parseJSON(data));
+					}
+
+				},
+				error: function (er) {
+					jAlert(er, "Error");
+				}
+			});
+
+		}
+
+
+	}
+
+	function ProcessingfieldLoadgrid(data) {
+		try {
+			$("#procesingFieldgrid").remove();
+			$('#processingFielddiv').append('<div id="procesingFieldgrid" style="margin-top: 20px;margin-left: 13px;"></div>');
+			$("#procesingFieldgrid").kendoGrid({
+				dataSource: {
+					data: data,
+					schema: {
+						model: {
+							fields: {
+								dataprocessingheader_gid: { type: "number" },
+								dataprocessingheader_pplfieldmapping_gid: { type: "number" },
+								dataprocessingheader_pipeline_code: { type: "string" },
+								dataprocessingheader_seqno: { type: "number" },
+								dataprocessingheader_ppl_field_name: { type: "string" },
+								Action: { type: "String" },
+							}
+						}
+					},
+					pageSize: 10,
+				},
+				height: 220,
+				width: 1058,
+
+				pageable: true,
+				sortable: true,
+				filterable: true,
+				selectable: "row",
+				columns: [
+					{
+						field: "dataprocessingheader_gid",
+						title: "dataprocessingheader_gid",
+						width: 10,
+						hidden: true
+					},
+					{
+						field: "dataprocessingheader_pplfieldmapping_gid",
+						title: "dataprocessingheader_pplfieldmapping_gid",
+						width: 10,
+						hidden: true
+					},
+					{
+						field: "dataprocessingheader_pipeline_code",
+						title: "dataprocessingheader_pipeline_code",
+						width: 10,
+						hidden: true
+					},
+					{
+						field: "dataprocessingheader_seqno",
+						title: "Seq.No",
+						width: 50,
+					},
+					{
+						field: "dataprocessingheader_ppl_field_name",
+						title: "Source Field",
+						width: 100
+					},
+
+					{
+						field: "Action",
+						title: "Action",
+						template: "<i class='glyphicon glyphicon-check'  style='color:green;margin-left: 20% !important' onclick=processingaction('Select') title='Select'></i> <i class='glyphicon glyphicon-pencil' style='color:grey;margin-left: 4% !important' onclick=processingaction('Edit') title='Edit'></i> <i class='glyphicon glyphicon-trash' style='color:red;margin-left: 4% !important' onclick=processingaction('Delete') title='Delete'></i>",
+						sortable: false,
+						filterable: false,
+						width: 80
+					},
+				],
+			});
+		}
+		catch (err) {
+			jAlert(er, "Error");
+		}
+	}
+
+
+
+	function processingaction(action) {
+		var grid = $("#procesingFieldgrid").data("kendoGrid");
+		// Get the currently selected data item
+		var selectedItem = grid.dataItem(grid.select());
+		var headerGid = selectedItem.dataprocessingheader_gid;
+
+		if (action == 'Refresh') {
+			// DataProcessing Grid Dataload
+			$.ajax({
+				url: '@Url.Action("getDataprocessing", "Pipeline")?pipelineCode=' + $("#txt_ppl_code").val() + '&headerGid=' + headerGid, // Replace with your controller action URL
+				method: 'POST',
+				dataType: 'json',
+				success: function (data) {
+					if (data.length > 0) {
+						DataprocessingLoadgrid($.parseJSON(data));
+					}
+
+				},
+				error: function (er) {
+					jAlert(er, "Error");
+				}
+			});
+		}
+		else if (action == 'Select') {
+			var grid = $("#procesingFieldgrid").data("kendoGrid");
+			// Get the currently selected data item
+			var selectedItem = grid.dataItem(grid.select());
+			// Perform actions with the data
+			$("#fieldtype").val(selectedItem.dataprocessingheader_pplfieldmapping_gid).trigger("change");
+			$("#txtDPheadergid").val(selectedItem.dataprocessingheader_gid);
+			headerGid = selectedItem.dataprocessingheader_gid;
+			// DataProcessing Grid Dataload
+			$.ajax({
+				url: '@Url.Action("getDataprocessing", "Pipeline")?pipelineCode=' + selectedItem.dataprocessingheader_pipeline_code + '&headerGid=' + headerGid, // Replace with your controller action URL
+				method: 'POST',
+				dataType: 'json',
+				success: function (data) {
+					if (data.length > 0) {
+						DataprocessingLoadgrid($.parseJSON(data));
+					}
+				},
+				error: function (er) {
+					jAlert(er, "Error");
+				}
+			});
+		}
+		else if (action == 'Edit') {
+			var grid = $("#procesingFieldgrid").data("kendoGrid");
+			// Get the currently selected data item
+			var selectedItem = grid.dataItem(grid.select());
+			// Perform actions with the data
+			$("#fieldtypes").val(selectedItem.dataprocessingheader_pplfieldmapping_gid).trigger("change");
+			$("#fieldsequence").val(selectedItem.dataprocessingheader_seqno);
+			$("#txtDPheadergid").val(selectedItem.dataprocessingheader_gid);
+			$("#txtpipelinecode").val(selectedItem.dataprocessingheader_pipeline_code);
+			$("#txtfieldmappinggid").val(selectedItem.dataprocessingheader_pplfieldmapping_gid);
+			$('#btnUpdate').show();
+			$('#btnSave').hide();
+			$("#fieldtypes").prop("disabled", true);
+		}
+
+		else if (action == 'Delete') {
+			let text = "Are you sure to delete?";
+			jConfirm(text, "Connector", function (f) {
+				if (f == true) {
+					var grid = $("#procesingFieldgrid").data("kendoGrid");
+					// Get the currently selected data item
+					var selectedItem = grid.dataItem(grid.select());
+					// Perform actions with the data
+					$("#fieldtypes").val(selectedItem.dataprocessingheader_pplfieldmapping_gid).trigger("change");
+					$("#fieldsequence").val(selectedItem.dataprocessingheader_seqno);
+					$("#txtDPheadergid").val(selectedItem.dataprocessingheader_gid);
+					$("#txtpipelinecode").val(selectedItem.dataprocessingheader_pipeline_code);
+					$("#txtfieldmappinggid").val(selectedItem.dataprocessingheader_pplfieldmapping_gid);
+					$("#fieldtypes").prop("disabled", true);
+					setprocessing(action);
+				}
+				else {
+					// text = "Deletion has been Canceled.!";
+					// jAlert(text, "Connector");
+				}
+			});
+		}
+	}
+
+	function clearvalidation(){
+		const fields = [
+		  "txt_validation_name",
+		  "txt_validationcond",
+		  "txt_validation_msg",
+		  "btn_vlcheckquery",
+		  "btn_validationsave"
+	  ];
+		 fields.forEach(id => {
+		  const element = document.getElementById(id);
+		  if (element) {
+			  element.disabled = false;
+		      element.classList.remove("custom-disabled");			  
+		  }
+	  });
+	    $('#txt_validation_gid').val("");
+		$('#txt_validation_name').val("");
+		$('#txt_validationcond').val("");
+		$('#txt_validation_msg').val("");
+	}
+
+</script>
