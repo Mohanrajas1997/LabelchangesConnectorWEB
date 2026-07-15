@@ -1240,7 +1240,66 @@ Layout = "~/Views/Shared/_Layout.cshtml";
         $(".submit").click(function () {
             return false;
         })
-         addAuthHeaderRow("Accept", "*/*", "", true);
+              $(document).keydown(function (e) {
+
+            if (e.which == 37) { // Left Arrow
+                $("#btnPrev").trigger("click");
+                showImages();
+            }
+
+            if (e.which == 39) { // Right Arrow
+                $("#btnNext").trigger("click");
+                showImages();
+            }
+
+        });
+
+
+        $("#btnNext").on("click", function () {
+            var selectedIndex = $(".connector-item").index(
+                $(".connector-item:has(img.selected)")
+            );
+
+            if (selectedIndex < $(".connector-item").length - 1) {
+
+                $(".connector-item").removeClass("selected");
+                $(".connector-item img").removeClass("selected");
+
+                selectedIndex++;
+
+                showImages();
+
+                $(".connector-item").eq(selectedIndex).addClass("selected");
+                $(".connector-item").eq(selectedIndex).find("img").addClass("selected");
+
+                currentIndex = selectedIndex;
+                $("#txt_source_type").val($(".connector-item").eq(selectedIndex).find("img").attr("value"));
+
+                showImages();
+            }
+        });
+
+        $("#btnPrev").on("click", function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showImages();
+
+             // Remove selected from all items and images
+            $(".connector-item").removeClass("selected");
+            $(".connector-item img").removeClass("selected");
+
+            // Add selected to current item
+            $(".connector-item").eq(currentIndex).addClass("selected");
+            $(".connector-item").eq(currentIndex).find("img").addClass("selected");
+
+            $("#txt_source_type").val($(".connector-item").eq(currentIndex).find("img").attr("value"));
+
+             showImages();
+
+            }
+        });
+
+        addAuthHeaderRow("Accept", "/", "", true);
         addAuthHeaderRow("Content-Type", "application/json", "", true);
     });
 
