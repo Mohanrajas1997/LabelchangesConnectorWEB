@@ -229,8 +229,8 @@
     }
 
     /*  div#spinner {
-                                        display: none !important;
-                                    } */
+                                                display: none !important;
+                                            } */
 
     .content-wrapper {
         min-height: 564px !important;
@@ -607,9 +607,9 @@
         }
 
     /*  #msform fieldset .form-card {
-                                                                        text-align: left;
-                                                                        height: 60vh;
-                                                                    } */
+                                                                                text-align: left;
+                                                                                height: 60vh;
+                                                                            } */
 
     /*Blue Buttons*/
     #msform .action-button {
@@ -625,9 +625,9 @@
         margin: 10px 5px;
     }
     /*
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #msform .action-button:hover, #msform .action-button:focus {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #msform .action-button:hover, #msform .action-button:focus {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }*/
 
     /*Previous Buttons*/
     #msform .action-button-previous {
@@ -644,8 +644,8 @@
     }
 
     /*   #msform .action-button-previous:hover, #msform .action-button-previous:focus {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    box-shadow: 0 0 0 2px white, 0 0 0 3px #616161;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            box-shadow: 0 0 0 2px white, 0 0 0 3px #616161;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        }*/
 
     /*Dropdown List Exp Date*/
     select.list-dt {
@@ -938,7 +938,7 @@
         cursor: not-allowed !important;
         opacity: 1;
         /* cursor: default !important;
-                                                                                                                                                                                                                                            opacity:0.5%; */
+                                                                                                                                                                                                                                                    opacity:0.5%; */
     }
 
     .custom-disabled {
@@ -946,10 +946,10 @@
     }
 
     /*    .enable_disable{
-                                                                        background: #0fc9b759;
-                                                                        cursor: not-allowed !important;
-                                                                        opacity: 1;
-                                                                    } */
+                                                                                background: #0fc9b759;
+                                                                                cursor: not-allowed !important;
+                                                                                opacity: 1;
+                                                                            } */
 
     .btntestconn {
         background: #0fc9b7;
@@ -1041,12 +1041,12 @@
         }
 
     /* .panelborder {
-                                                                                        border: 1px solid #000;
-                                                                                        padding-bottom: 7px;
-                                                                                        margin-left: 1px;
-                                                                                        padding-top: 5px;
-                                                                                        border-radius: 7px;
-                                                                                    } */
+                                                                                                border: 1px solid #000;
+                                                                                                padding-bottom: 7px;
+                                                                                                margin-left: 1px;
+                                                                                                padding-top: 5px;
+                                                                                                border-radius: 7px;
+                                                                                            } */
 
     .panelborder {
         border: 1px solid #000 !important;
@@ -4125,22 +4125,23 @@
                    contentType: 'application/json; charset=utf-8',
                    success: function (data) {
 
-    var multiSelect = $("#keyfield_drp").data("kendoMultiSelect");
+                    var multiSelect = $("#keyfield_drp").data("kendoMultiSelect");
 
-       // Clear selected values
-       multiSelect.value([]);
+                       // Clear selected values
+                       multiSelect.value([]);
 
-       // Optional: Clear existing data source
-       multiSelect.setDataSource(new kendo.data.DataSource({ data: [] }));                    dskeyfield = new kendo.data.DataSource({
-                           data: data,
-                           sort: { field: "name", dir: "asc" }
-                       });
-                              // console.log("dskeyfield", dskeyfield);
-                       $("#keyfield_drp").data("kendoMultiSelect").setDataSource(dskeyfield);
-                   },
-                   error: function (er) {
-                       jAlert(er, "Error");
-                   }
+                       // Optional: Clear existing data source
+                       multiSelect.setDataSource(new kendo.data.DataSource({ data: [] }));
+                                           dskeyfield = new kendo.data.DataSource({
+                                           data: data,
+                                           sort: { field: "name", dir: "asc" }
+                                       });
+                                              // console.log("dskeyfield", dskeyfield);
+                                       $("#keyfield_drp").data("kendoMultiSelect").setDataSource(dskeyfield);
+                                   },
+                                   error: function (er) {
+                                       jAlert(er, "Error");
+                                   }
                });
            }
        }
@@ -9592,7 +9593,7 @@
 
                 }
         }
-       
+
             function checkedheadermatched(){
             var checkbox = document.getElementById("chk_existing_ds");
             if (checkbox.checked){
